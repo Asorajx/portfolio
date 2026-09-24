@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Your Name | Portfolio</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- =========================
+       Header
+       ========================= -->
+
+  <header class="site-header">
+    <div class="container nav-wrapper">
+      <a class="logo" href="#home">Tan Jun Xiang</a>
+
+      <nav class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+
+  <!-- =========================
+       Main Content
+       ========================= -->
+
+  <main>
+
+    <!-- =========================
+         Hero
+         ========================= -->
+
+    <section id="home" class="section hero">
+      <div class="container">
+        <p class="eyebrow">Hello, I'm</p>
+
+        <h1>Jun Xiang</h1>
+
+        <h2>Cybersecurity Student</h2>
+
+        <p class="hero-text">
+          I enjoy bringing structure and clarity to designs, turning rough ideas into clean and meaningful experiences.
+        </p>
+
+        <a class="primary-button" href="#projects">
+          View projects
+        </a>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         About
+         ========================= -->
+
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">About</p>
+          <h2>About me</h2>
+        </div>
+
+        <div class="about-layout">
+          <div>
+            <p class="about-title">
+              Cybersecurity & Digital Systems Security Student
+            </p>
+            <p class="about-school">
+              SIM University of Wollongong
+            </p>
+            <p class="about-text">
+              I am passionate about cybersecurity and web development,
+              and I am always eager to learn new skills and technologies.
+            </p>
+          </div>
+
+          <div>
+            <h3>Technical Skills</h3>
+
+            <div class="skills">
+              <span>HTML</span>
+              <span>CSS</span>
+              <span>JavaScript</span>
+              <span>Git</span>
+              <span>Python</span>
+              <span>SQL</span>
+              <span>PL/SQL</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         Projects
+         ========================= -->
+
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="projects-header">
+          <div class="section-heading">
+            <p class="eyebrow">Projects</p>
+            <h2>My projects</h2>
+          </div>
+
+          <div class="slider-controls">
+            <button
+              id="previousProject"
+              class="slider-button"
+              type="button"
+              aria-label="Previous project"
+            >
+              ←
+            </button>
+
+            <button
+              id="nextProject"
+              class="slider-button"
+              type="button"
+              aria-label="Next project"
+            >
+              →
+            </button>
+          </div>
+        </div>
+
+        <!-- Project cards are generated automatically from projects.js. -->
+        <div id="projectSlider" class="project-slider"></div>
+      </div>
+    </section>
+
+
+    <!-- =========================
+         Contact
+         ========================= -->
+
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Contact</p>
+          <h2>Let's connect</h2>
+        </div>
+
+        <p class="contact-text">
+          I am open to new projects, career opportunities, and meaningful challenges.
+        </p>
+
+        <p class="contact-text">
+          Let's build something meaningful together.
+        </p>
+
+        <div class="contact-links">
+          <a href="mailto:REMOVED"
+            aria-label="Email"
+          >
+            <img class="social-icon email" src="assets/icons/email.svg" alt="Email">
+          </a>
+
+          <a
+            href="https://github.com/Asorajx"
+            aria-label="GitHub"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img class="social-icon github" src="assets/icons/github.svg" alt="GitHub">
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/junx1ang/"
+            aria-label="Linkedin"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img class="social-icon linkedin" src="assets/icons/linkedin.svg" alt="Linkedin">
+          </a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       Footer
+       ========================= -->
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© Tan Jun Xiang. All rights reserved.</p>
+    </div>
+  </footer>
+
+
+  <!-- =========================
+       Project Popup
+       ========================= -->
+
+  <!-- Hidden until a project card is opened using JavaScript. -->
+  <div
+    id="projectOverlay"
+    class="project-overlay"
+    aria-hidden="true"
+  >
+    <div
+      id="projectPopup"
+      class="project-popup"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="popupTitle"
+    >
+      <!-- Contains both sides of the project card used for the flip animation. -->
+      <div
+        id="popupInner"
+        class="popup-inner"
+      >
+
+        <!-- Front side shown before the card flips. -->
+        <div class="popup-face popup-front">
+          <span
+            id="popupNumber"
+            class="project-number"
+          >
+            01
+          </span>
+
+          <div>
+            <p
+              id="popupType"
+              class="project-type"
+            >
+              Project
+            </p>
+
+            <h3 id="popupFrontTitle">
+              Project
+            </h3>
+
+            <p
+              id="popupSummary"
+              class="project-summary"
+            >
+              Project summary
+            </p>
+          </div>
+
+          <span class="project-view">
+            Opening project...
+          </span>
+        </div>
+
+        <!-- Back side contains the full project details. -->
+        <div class="popup-face popup-back">
+          <p class="eyebrow">Project</p>
+
+          <h3 id="popupTitle">
+            Project title
+          </h3>
+
+          <p
+            id="popupDate"
+            class="popup-date"
+          >
+            September 2026
+          </p>
+
+          <p
+            id="popupDescription"
+            class="popup-description"
+          >
+            Project description
+          </p>
+
+          <a
+            id="popupGithub"
+            class="popup-github"
+            href="#"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View GitHub repository →
+          </a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================
+       Scripts
+       ========================= -->
+
+  <!-- Project data is loaded first so script.js can render and use it. -->
+  <script src="projects.js"></script>
+  <script src="script.js"></script>
+
+</body>
+
+</html>
