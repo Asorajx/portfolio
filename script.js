@@ -1,4 +1,20 @@
 /* =========================
+   Banner Reveal Animation
+   ========================= */
+
+const strips = document.querySelectorAll(".banner-reveal span");
+
+const delays = [0, 120, 240, 360, 480];
+
+// Shuffle delays randomly
+delays.sort(() => Math.random() - 0.5);
+
+strips.forEach((strip, index) => {
+  strip.style.animationDelay = `${delays[index]}ms`;
+});
+
+
+/* =========================
    DOM Elements
    ========================= */
 
