@@ -352,9 +352,15 @@ button {
   line-height: 1.55;
 }
 
+.project-card h3,
+.project-summary,
+.project-view {
+  overflow-wrap: break-word;
+}
+
 .project-view {
   color: var(--accent);
-  margin-top: auto;
+  margin-top: 24px;
 }
 
 
@@ -389,7 +395,7 @@ button {
 /* Perspective allows the inner card to create a 3D flip effect. */
 .project-popup {
   width: min(520px, calc(100vw - 48px));
-  height: min(340px, calc(100vh - 80px));
+  height: clamp(340px, 60vh, 520px);
   perspective: 1500px;
   transform: translateY(30px) scale(0.82);
   opacity: 0;
@@ -435,7 +441,7 @@ button {
 .popup-front {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .popup-front h3,
@@ -460,13 +466,13 @@ button {
 }
 
 .popup-description {
-  margin-top: 24px;
+  margin-top: 16px;
   color: var(--muted);
   line-height: 1.7;
 }
 
 .popup-github {
-  margin-top: auto;
+  margin-top: 16px;
   color: var(--accent);
   font-weight: 600;
 }
@@ -546,13 +552,13 @@ button {
 
   /* Let project cards use most of the available screen width. */
   .project-card {
-    flex: 0 0 min(82vw, 340px);
-    min-height: unset;
+    flex: 0 0 calc(100vw - 48px);
+    min-height: 280px;
     height: auto;
     padding: 24px;
   }
 
   .popup-face {
-    padding: 24px;
+    padding: 20px;
   }
 }
