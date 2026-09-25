@@ -818,8 +818,35 @@ h3,
    Responsive Styles
    ========================= */
 
-/* Adjust spacing and layouts for tablets and smaller screens. */
 @media (max-width: 760px) {
+
+  /* Allow header items to wrap into separate rows. */
+  .nav-wrapper {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  /* Keep logo on the first row. */
+  .logo {
+    white-space: nowrap;
+  }
+
+  /* Place theme toggle on the first row, aligned right. */
+  .theme-toggle {
+    margin-left: auto;
+    order: 2;
+  }
+
+  /* Force navigation links onto a new row. */
+  .nav-links {
+    order: 3;
+    flex-basis: 100%;
+
+    justify-content: center;
+    gap: 18px;
+  }
+
+  /* Adjust section spacing for smaller screens. */
   .section {
     padding: 80px 0;
   }
@@ -845,4 +872,5 @@ h3,
   .popup-face {
     padding: 20px;
   }
+
 }
