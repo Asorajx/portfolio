@@ -796,17 +796,21 @@ h3,
 }
 
 .contact-links img {
-  filter: invert(0);
+  width: 26px;
+  height: 26px;
+
+  opacity: 0.85;
+  filter: none;
+  transition: opacity 160ms ease;
 }
 
-@media (prefers-color-scheme: dark) {
-  .contact-links img {
-    filter: invert(1);
-  }
+/* Invert black icons for website dark mode. */
+[data-theme="dark"] .contact-links img {
+  filter: invert(1);
 }
 
 .contact-links img:hover {
-  opacity: 0.7;
+  opacity: 1;
 }
 
 
