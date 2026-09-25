@@ -84,7 +84,7 @@ function createProjectCard(project, index) {
   /* Create the label that tells the user the card can be opened. */
   const view = document.createElement('span')
   view.className = 'project-view'
-  view.textContent = 'View project →'
+  view.textContent = 'View project'
 
   /* Combine all parts to form the complete project card. */
   card.append(projectNumber, content, view)

@@ -15,6 +15,76 @@ strips.forEach((strip, index) => {
 
 
 /* =========================
+   Spirit Lights
+   ========================= */
+
+/* Creates floating spirit dots inside selected sections. */
+/* The dots are generated here because their positions and movement are random. */
+(function spawnSpirits() {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const colors = [
+    'var(--spirit-a)',
+    'var(--spirit-b)',
+    'var(--spirit-c)'
+  ]
+
+  /* Number of spirits per section */
+  const placements = {
+    home: 3,
+    about: 1,
+    projects: 1,
+    contact: 1,
+  }
+
+  const styleEl = document.createElement('style')
+  document.head.appendChild(styleEl)
+  const sheet = styleEl.sheet
+
+  Object.entries(placements).forEach(([id, count]) => {
+    const host = document.getElementById(id)
+
+    if (!host) {
+      return
+    }
+
+    const layer = document.createElement('div')
+    layer.className = 'spirit-layer'
+    host.insertBefore(layer, host.firstChild)
+
+    for (let i = 0; i < count; i++) {
+      const dot = document.createElement('div')
+      dot.className = 'spirit'
+
+      dot.style.left = `${12 + Math.random() * 76}%`
+      dot.style.top = `${18 + Math.random() * 64}%`
+      dot.style.setProperty('--c', colors[i % colors.length])
+
+      if (!reduced) {
+        const duration = (12 + Math.random() * 10).toFixed(1)
+        const name = `wander${Math.random().toString(36).slice(2)}`
+        const d = () => (Math.random() * 50 - 25).toFixed(1)
+
+        const rule =
+          `@keyframes ${name}{` +
+          `0%{transform:translate(0,0);opacity:.25;}` +
+          `25%{transform:translate(${d()}px,${d()}px);opacity:.6;}` +
+          `50%{transform:translate(${d()}px,${d()}px);opacity:.3;}` +
+          `75%{transform:translate(${d()}px,${d()}px);opacity:.65;}` +
+          `100%{transform:translate(0,0);opacity:.25;}}`
+
+        sheet.insertRule(rule, sheet.cssRules.length)
+
+        dot.style.animation =
+          `${name} ${duration}s ease-in-out infinite`
+      }
+
+      layer.appendChild(dot)
+    }
+  })
+})()
+
+
+/* =========================
    DOM Elements
    ========================= */
 

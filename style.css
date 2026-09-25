@@ -4,36 +4,65 @@
 
 /* Shared values used throughout the website for colours, sizing, and layout. */
 :root {
+
+  /* Light Mode */
   --background: linear-gradient(
     135deg,
-    #f7f7f5 0%,
-    #eef3ff 50%,
-    #ffffff 100%
+  #f8f2df 0%,
+  #f4f0e4 55%,
+  #ffffff 100%
   );
-  --surface: #ffffff;
-  --text: #161616;
-  --muted: #6b6b6b;
-  --border: #ddddda;
-  --accent: #2459e0;
-  --accent-hover: #1745bd;
+
+  --surface: #fffdf5;
+
+  --text: #172522;
+  --muted: #68746b;
+  --border: #d8ddcc;
+
+  --accent: #693848;
+  --accent-hover: #573040;
+
+  --sage: #7fae70; /* Currently unused */
+
+  --teal: #245b55;
   --max-width: 1100px;
+  --font-heading: "Space Grotesk", system-ui, -apple-system, sans-serif;
+
+  /* Ambient spirit lights */
+  --spirit-a: #754354;
+  --spirit-b: #7fae70;
+  --spirit-c: #245b55;
 }
+
 
 @media (prefers-color-scheme: dark) {
   :root {
+
+    /* Dark Mode */
+
     --background: linear-gradient(
       135deg,
-      #2f3136 0%,
-      #25272b 45%,
-      #353840 100%
+      #17201d 0%,
+      #1d2924 50%,
+      #25332d 100%
     );
 
-    --surface: #383b42;
-    --text: #f2f2f2;
-    --muted: #c2c4c9;
-    --border: #50545c;
-    --accent: #7da2ff;
-    --accent-hover: #9bb9ff;
+    --surface: #24312b;
+
+    --text: #f5f0e4;
+    --muted: #b9c3b3;
+    --border: #435047;
+
+    --accent: #95556b;
+    --accent-hover: #b06d83;
+
+    --sage: #9acb85;
+
+    --teal: #4f8c82;
+
+    --spirit-a: #95556b;
+    --spirit-b: #9acb85;
+    --spirit-c: #4f8c82;
   }
 }
 
@@ -75,6 +104,13 @@ a {
 
 button {
   font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+.logo {
+  font-family: var(--font-heading);
 }
 
 
@@ -178,6 +214,10 @@ button {
   object-fit: cover;
 }
 
+.top-banner::after {
+  background: rgba(36, 91, 85, 0.15);
+}
+
 .banner-reveal {
   position: absolute;
   inset: 0;
@@ -257,6 +297,32 @@ button {
 .primary-button:hover {
   transform: translateY(-2px);
   background: var(--accent-hover);
+}
+
+
+/* =========================
+   Spirit Lights
+   ========================= */
+
+/* Contains a section's ambient spirit dots so they can't drift over
+   neighbouring sections. Populated and animated by script.js. */
+.spirit-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* A single soft glowing dot. Colour, position, and wander motion are
+   set per-instance in script.js so no two spirits move identically. */
+.spirit {
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--c), transparent 70%);
+  filter: blur(1.5px);
 }
 
 
@@ -341,6 +407,16 @@ button {
   border-color: #999999;
 }
 
+/* Hide slider arrows slightly until the user interacts with the controls. */
+.slider-button span {
+  display: inline-block;
+  transition: transform 180ms ease;
+}
+
+.slider-button:hover span {
+  transform: translateX(2px);
+}
+
 /* Arrange project cards horizontally and allow the row to scroll. */
 .project-slider {
   display: flex;
@@ -371,6 +447,7 @@ button {
   justify-content: flex-start;
   padding: 24px;
   border: 1px solid var(--border);
+  border-left: 3px solid var(--teal);
   border-radius: 14px;
   background: var(--surface);
   color: var(--text);
@@ -384,6 +461,10 @@ button {
     transform 180ms ease,
     box-shadow 180ms ease,
     border-color 180ms ease;
+}
+
+.project-card:nth-child(even) {
+  border-left-color: var(--accent);
 }
 
 .project-card:hover {
@@ -434,6 +515,24 @@ button {
 .project-view {
   color: var(--accent);
   margin-top: 24px;
+}
+
+/* Reveal the arrow smoothly when the user interacts with a project card. */
+.project-view::after {
+  content: "→";
+  display: inline-block;
+  margin-left: 8px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+}
+
+.project-card:hover .project-view::after,
+.project-card:focus-visible .project-view::after {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 
