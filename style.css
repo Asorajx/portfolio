@@ -48,7 +48,7 @@
   --surface: #24312b;
 
   --text: #f5f0e4;
-  --muted: #b9c3b3;
+  --muted: #c2c9bd;
   --border: #435047;
 
   --accent: #95556b;
@@ -496,13 +496,20 @@ h3,
 }
 
 .slider-button {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border: 1px solid var(--border);
   border-radius: 50%;
   background: var(--surface);
   color: var(--text);
   cursor: pointer;
+}
+
+.slider-button span {
+  display: inline-block;
+  font-size: 22px;
+  line-height: 0.8;
+  transition: transform 180ms ease;
 }
 
 .slider-button:hover {
@@ -615,8 +622,9 @@ h3,
 }
 
 .project-view {
+  margin-top: auto;
   color: var(--accent);
-  margin-top: 24px;
+  font-size: 15px;
 }
 
 /* Reveal the arrow smoothly when the user interacts with a project card. */
