@@ -127,7 +127,15 @@ h3,
 
 /* Give each main page section consistent vertical spacing. */
 .section {
+  position: relative;
   padding: 110px 0;
+  overflow: hidden;
+}
+
+/* Keeps section content above the background spirit lights. */
+.section > .container {
+  position: relative;
+  z-index: 1;
 }
 
 /* Small label displayed above major section headings. */
@@ -411,6 +419,12 @@ h3,
   border-radius: 50%;
   background: radial-gradient(circle, var(--c), transparent 70%);
   filter: blur(1.5px);
+}
+
+/* Keeps section content above the ambient spirit lights. */
+.section > .container {
+  position: relative;
+  z-index: 1;
 }
 
 

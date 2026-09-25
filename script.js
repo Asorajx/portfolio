@@ -68,10 +68,10 @@ if (themeButton) {
 
   /* Number of spirits per section */
   const placements = {
-    home: 3,
-    about: 1,
-    projects: 1,
-    contact: 1,
+    home: 4,
+    about: 2,
+    projects: 2,
+    contact: 2,
   }
 
   const styleEl = document.createElement('style')
