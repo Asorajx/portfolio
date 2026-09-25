@@ -28,6 +28,28 @@
         <a href="#about">About</a>
         <a href="#projects">Projects</a>
         <a href="#contact">Contact</a>
+
+          <!-- Button for switching between light and dark themes. -->
+          <button 
+            id="themeToggle" 
+            class="theme-toggle"
+            aria-label="Toggle colour theme"
+          >
+            <span class="theme-slider"></span>
+
+            <span class="theme-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+              </svg>
+            </span>
+
+            <span class="theme-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
+              </svg>
+            </span>
+          </button>
       </nav>
     </div>
   </header>
@@ -79,6 +101,7 @@
     <section id="about" class="section">
       <div class="container">
         <div class="section-heading">
+          <span class="section-marker"></span>
           <h2>About me</h2>
         </div>
 
@@ -122,6 +145,7 @@
       <div class="container">
         <div class="projects-header">
           <div class="section-heading">
+            <span class="section-marker"></span>
             <h2>My projects</h2>
           </div>
 
@@ -159,6 +183,7 @@
     <section id="contact" class="section">
       <div class="container">
         <div class="section-heading">
+          <span class="section-marker"></span>
           <h2>Let's connect</h2>
         </div>
 

@@ -22,7 +22,7 @@
   --accent: #693848;
   --accent-hover: #573040;
 
-  --sage: #7fae70; /* Currently unused */
+  --sage: #7fae70;
 
   --teal: #245b55;
   --max-width: 1100px;
@@ -34,37 +34,34 @@
   --spirit-c: #245b55;
 }
 
+/* Dark Mode */
+/* Applies dark colours when changed. */
+[data-theme="dark"] {
 
-@media (prefers-color-scheme: dark) {
-  :root {
+  --background: linear-gradient(
+    135deg,
+    #17201d 0%,
+    #1d2924 50%,
+    #25332d 100%
+  );
 
-    /* Dark Mode */
+  --surface: #24312b;
 
-    --background: linear-gradient(
-      135deg,
-      #17201d 0%,
-      #1d2924 50%,
-      #25332d 100%
-    );
+  --text: #f5f0e4;
+  --muted: #b9c3b3;
+  --border: #435047;
 
-    --surface: #24312b;
+  --accent: #95556b;
+  --accent-hover: #b06d83;
 
-    --text: #f5f0e4;
-    --muted: #b9c3b3;
-    --border: #435047;
+  --sage: #9acb85;
+  --teal: #4f8c82;
 
-    --accent: #95556b;
-    --accent-hover: #b06d83;
-
-    --sage: #9acb85;
-
-    --teal: #4f8c82;
-
-    --spirit-a: #95556b;
-    --spirit-b: #9acb85;
-    --spirit-c: #4f8c82;
-  }
+  --spirit-a: #95556b;
+  --spirit-b: #9acb85;
+  --spirit-c: #4f8c82;
 }
+
 
 /* =========================
    Base Styles
@@ -91,6 +88,10 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
+
+  transition:
+    background 300ms ease,
+    color 300ms ease;
 }
 
 /* Prevent the page behind the project popup from scrolling. */
@@ -150,6 +151,19 @@ h3,
   letter-spacing: -0.025em;
 }
 
+/* Small accent marker used to separate major page sections. */
+.section-marker {
+  display: block;
+
+  width: 32px;
+  height: 3px;
+
+  margin-bottom: 18px;
+
+  background: var(--accent);
+  border-radius: 999px;
+}
+
 
 /* =========================
    Header
@@ -193,6 +207,80 @@ h3,
 
 .nav-links a:hover {
   color: var(--text);
+}
+
+/* =========================
+   Theme Toggle
+   ========================= */
+
+/* Creates the pill-shaped theme switch. */
+.theme-toggle {
+  position: relative;
+
+  width: 62px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  padding: 0;
+
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  background: var(--surface);
+  color: var(--muted);
+
+  cursor: pointer;
+}
+
+/* Moving circle that shows the selected theme. */
+.theme-slider {
+  position: absolute;
+
+  width: 24px;
+  height: 24px;
+
+  top: 2px;
+  left: 3px;
+
+  border-radius: 50%;
+
+  background: var(--accent);
+
+  transition: transform 250ms ease;
+}
+
+/* Gives each icon an equal area. */
+.theme-icon {
+  position: relative;
+  z-index: 1;
+
+  width: 24px;
+  height: 24px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Controls SVG size. */
+.theme-icon svg {
+  width: 13px;
+  height: 13px;
+
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  fill: none;
+}
+
+/* Moves the slider behind the moon icon. */
+[data-theme="dark"] .theme-slider {
+  transform: translateX(31px);
 }
 
 

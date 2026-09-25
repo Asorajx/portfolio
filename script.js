@@ -15,6 +15,44 @@ strips.forEach((strip, index) => {
 
 
 /* =========================
+   Theme Toggle
+   ========================= */
+
+/* Button used to switch between light and dark themes. */
+const themeButton = document.getElementById('themeToggle')
+
+/* Restore the user's previous theme choice. */
+const savedTheme = localStorage.getItem('theme')
+
+if (!savedTheme) {
+  document.documentElement.dataset.theme = 'light'
+}
+
+/* Use light mode for first-time visitors. */
+if (!savedTheme) {
+  document.documentElement.dataset.theme = 'light'
+}
+
+/* Change the theme when the toggle is clicked. */
+if (themeButton) {
+    themeButton.addEventListener('click', () => {
+    const currentTheme =
+      document.documentElement.dataset.theme
+
+    const newTheme =
+      currentTheme === 'dark'
+        ? 'light'
+        : 'dark'
+
+    document.documentElement.dataset.theme = newTheme
+
+    /* Save the choice so it remains after refresh. */
+    localStorage.setItem('theme', newTheme)
+  })
+}
+
+
+/* =========================
    Spirit Lights
    ========================= */
 
