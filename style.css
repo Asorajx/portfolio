@@ -4,13 +4,12 @@
 
 /* Shared values used throughout the website for colours, sizing, and layout. */
 :root {
-
-  /* Light Mode */
+  /* Light mode */
   --background: linear-gradient(
     135deg,
-  #f8f2df 0%,
-  #f4f0e4 55%,
-  #ffffff 100%
+    #f8f2df 0%,
+    #f4f0e4 55%,
+    #ffffff 100%
   );
 
   --surface: #fffdf5;
@@ -23,21 +22,19 @@
   --accent-hover: #573040;
 
   --sage: #7fae70;
-
   --teal: #245b55;
+
   --max-width: 1100px;
   --font-heading: "Space Grotesk", system-ui, -apple-system, sans-serif;
 
-  /* Ambient spirit lights */
+  /* Colours used by the ambient spirit lights. */
   --spirit-a: #754354;
   --spirit-b: #7fae70;
   --spirit-c: #245b55;
 }
 
-/* Dark Mode */
-/* Applies dark colours when changed. */
+/* Dark mode colours replace the shared variables above. */
 [data-theme="dark"] {
-
   --background: linear-gradient(
     135deg,
     #17201d 0%,
@@ -88,7 +85,6 @@ body {
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
   transition:
     background 300ms ease,
     color 300ms ease;
@@ -132,7 +128,7 @@ h3,
   overflow: hidden;
 }
 
-/* Keeps section content above the background spirit lights. */
+/* Keep section content above decorative background elements. */
 .section > .container {
   position: relative;
   z-index: 1;
@@ -162,12 +158,9 @@ h3,
 /* Small accent marker used to separate major page sections. */
 .section-marker {
   display: block;
-
   width: 32px;
   height: 3px;
-
   margin-bottom: 18px;
-
   background: var(--accent);
   border-radius: 999px;
 }
@@ -217,6 +210,7 @@ h3,
   color: var(--text);
 }
 
+
 /* =========================
    Theme Toggle
    ========================= */
@@ -224,69 +218,76 @@ h3,
 /* Creates the pill-shaped theme switch. */
 .theme-toggle {
   position: relative;
-
   width: 62px;
   height: 30px;
-
   display: flex;
   align-items: center;
   justify-content: space-around;
-
   padding: 0;
-
   border: 1px solid var(--border);
   border-radius: 999px;
-
   background: var(--surface);
   color: var(--muted);
-
   cursor: pointer;
 }
 
 /* Moving circle that shows the selected theme. */
 .theme-slider {
   position: absolute;
-
-  width: 24px;
-  height: 24px;
-
   top: 2px;
   left: 3px;
-
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-
   background: var(--accent);
-
   transition: transform 250ms ease;
 }
 
-/* Gives each icon an equal area. */
+/* Give each theme icon an equal area inside the toggle. */
 .theme-icon {
   position: relative;
   z-index: 1;
-
   width: 24px;
   height: 24px;
-
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* Controls SVG size. */
+/* Give each theme icon an equal area inside the toggle. */
+.theme-icon {
+  position: relative;
+  z-index: 1;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  transition: color 250ms ease;
+}
+
+/* Make the sun bright when light mode is selected. */
+.theme-slider + .theme-icon {
+  color: #ffffff;
+}
+
+/* Return the sun to its normal colour in dark mode. */
+[data-theme="dark"] .theme-slider + .theme-icon {
+  color: var(--muted);
+}
+
 .theme-icon svg {
   width: 13px;
   height: 13px;
-
+  fill: none;
   stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-
-  fill: none;
 }
 
-/* Moves the slider behind the moon icon. */
+/* Move the slider behind the moon icon in dark mode. */
 [data-theme="dark"] .theme-slider {
   transform: translateX(31px);
 }
@@ -297,11 +298,11 @@ h3,
    ========================= */
 
 .top-banner {
+  position: relative;
   width: 100%;
   height: 350px;
-  overflow: hidden;
-  position: relative;
   margin-bottom: 50px;
+  overflow: hidden;
 }
 
 .top-banner img {
@@ -314,6 +315,7 @@ h3,
   background: rgba(36, 91, 85, 0.15);
 }
 
+/* Cover the banner with strips that slide away when the page loads. */
 .banner-reveal {
   position: absolute;
   inset: 0;
@@ -326,7 +328,6 @@ h3,
   background: rgba(0, 0, 0, 0.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-
   transform: translateX(0);
   animation: strip-reveal 900ms ease forwards;
 }
@@ -400,18 +401,18 @@ h3,
    Spirit Lights
    ========================= */
 
-/* Contains a section's ambient spirit dots so they can't drift over
-   neighbouring sections. Populated and animated by script.js. */
+/* Contains each section's ambient spirit dots so they stay inside that section. */
+/* script.js creates and animates the dots. */
 .spirit-layer {
   position: absolute;
   inset: 0;
+  z-index: 0;
   overflow: hidden;
   pointer-events: none;
-  z-index: 0;
 }
 
-/* A single soft glowing dot. Colour, position, and wander motion are
-   set per-instance in script.js so no two spirits move identically. */
+/* Represents one soft glowing spirit dot. */
+/* Its colour, position, and movement are set individually in script.js. */
 .spirit {
   position: absolute;
   width: 13px;
@@ -419,12 +420,6 @@ h3,
   border-radius: 50%;
   background: radial-gradient(circle, var(--c), transparent 70%);
   filter: blur(1.5px);
-}
-
-/* Keeps section content above the ambient spirit lights. */
-.section > .container {
-  position: relative;
-  z-index: 1;
 }
 
 
@@ -440,10 +435,10 @@ h3,
 }
 
 .about-title {
-  font-weight: 600;
   margin: 0;
   color: var(--text);
   font-size: 17px;
+  font-weight: 600;
   line-height: 1.4;
 }
 
@@ -484,8 +479,8 @@ h3,
 
 .projects-header {
   display: flex;
-  justify-content: space-between;
   align-items: flex-end;
+  justify-content: space-between;
   gap: 24px;
 }
 
@@ -516,12 +511,6 @@ h3,
   border-color: #999999;
 }
 
-/* Hide slider arrows slightly until the user interacts with the controls. */
-.slider-button span {
-  display: inline-block;
-  transition: transform 180ms ease;
-}
-
 .slider-button:hover span {
   transform: translateX(2px);
 }
@@ -530,8 +519,8 @@ h3,
 .project-slider {
   display: flex;
   gap: 18px;
-  overflow-x: auto;
   padding: 8px 2px 20px;
+  overflow-x: auto;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   scroll-behavior: smooth;
@@ -560,12 +549,12 @@ h3,
   border-radius: 14px;
   background: var(--surface);
   color: var(--text);
+  outline: none;
   cursor: pointer;
   scroll-snap-align: start;
   user-select: none;
   -webkit-user-select: none;
   -webkit-tap-highlight-color: transparent;
-  outline: none;
   transition:
     transform 180ms ease,
     box-shadow 180ms ease,
@@ -585,7 +574,7 @@ h3,
   color: var(--text);
 }
 
-/* Show a clear focus indicator when the card is selected using a keyboard. */
+/* Show a clear focus indicator when a card is selected using a keyboard. */
 .project-card:focus-visible {
   border-color: rgba(36, 89, 224, 0.55);
   box-shadow: 0 0 0 3px rgba(36, 89, 224, 0.12);
@@ -650,7 +639,7 @@ h3,
    Project Popup
    ========================= */
 
-/* Cover the full screen and centre the project popup above the page. */
+/* Cover the screen and centre the project popup above the page. */
 .project-overlay {
   position: fixed;
   inset: 0;
@@ -668,7 +657,7 @@ h3,
     visibility 280ms ease;
 }
 
-/* The open class is added by JavaScript when a project is selected. */
+/* JavaScript adds this class when a project is selected. */
 .project-overlay.open {
   opacity: 1;
   visibility: visible;
@@ -679,16 +668,16 @@ h3,
   width: min(520px, calc(100vw - 48px));
   height: clamp(340px, 60vh, 520px);
   perspective: 1500px;
-  transform: translateY(30px) scale(0.82);
   opacity: 0;
+  transform: translateY(30px) scale(0.82);
   transition:
     transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
     opacity 300ms ease;
 }
 
 .project-overlay.open .project-popup {
-  transform: translateY(0) scale(1);
   opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
 /* Hold the front and back faces together as one flipping card. */
@@ -696,13 +685,13 @@ h3,
   position: relative;
   width: 100%;
   height: 100%;
-  transform-style: preserve-3d;
   transform: rotateY(0deg);
+  transform-style: preserve-3d;
   transition:
     transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* JavaScript adds the flipped class after the popup opens. */
+/* JavaScript adds this class shortly after the popup opens. */
 .project-overlay.flipped .popup-inner {
   transform: rotateY(180deg);
 }
@@ -715,9 +704,9 @@ h3,
   border: 1px solid var(--border);
   border-radius: 18px;
   background: var(--surface);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.2);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.2);
 }
 
 .popup-front {
@@ -798,13 +787,12 @@ h3,
 .contact-links img {
   width: 26px;
   height: 26px;
-
   opacity: 0.85;
   filter: none;
   transition: opacity 160ms ease;
 }
 
-/* Invert black icons for website dark mode. */
+/* Invert dark icons so they remain visible in dark mode. */
 [data-theme="dark"] .contact-links img {
   filter: invert(1);
 }
@@ -831,34 +819,32 @@ h3,
    ========================= */
 
 @media (max-width: 760px) {
-
   /* Allow header items to wrap into separate rows. */
   .nav-wrapper {
     flex-wrap: wrap;
     justify-content: flex-start;
   }
 
-  /* Keep logo on the first row. */
+  /* Keep the logo on the first row. */
   .logo {
     white-space: nowrap;
   }
 
-  /* Place theme toggle on the first row, aligned right. */
+  /* Keep the theme toggle on the first row and align it to the right. */
   .theme-toggle {
-    margin-left: auto;
     order: 2;
+    margin-left: auto;
   }
 
   /* Force navigation links onto a new row. */
   .nav-links {
     order: 3;
     flex-basis: 100%;
-
     justify-content: center;
     gap: 18px;
   }
 
-  /* Adjust section spacing for smaller screens. */
+  /* Reduce general page spacing on smaller screens. */
   .section {
     padding: 80px 0;
   }
@@ -884,5 +870,4 @@ h3,
   .popup-face {
     padding: 20px;
   }
-
 }

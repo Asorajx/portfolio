@@ -2,16 +2,16 @@
    Banner Reveal Animation
    ========================= */
 
-const strips = document.querySelectorAll(".banner-reveal span");
+/* Give each banner strip a different delay so they do not move together. */
+const strips = document.querySelectorAll('.banner-reveal span')
+const delays = [0, 120, 240]
 
-const delays = [0, 120, 240, 360, 480];
-
-// Shuffle delays randomly
-delays.sort(() => Math.random() - 0.5);
+/* Shuffle the delays so the reveal order changes each time the page loads. */
+delays.sort(() => Math.random() - 0.5)
 
 strips.forEach((strip, index) => {
-  strip.style.animationDelay = `${delays[index]}ms`;
-});
+  strip.style.animationDelay = `${delays[index]}ms`
+})
 
 
 /* =========================
@@ -21,12 +21,8 @@ strips.forEach((strip, index) => {
 /* Button used to switch between light and dark themes. */
 const themeButton = document.getElementById('themeToggle')
 
-/* Restore the user's previous theme choice. */
+/* Check whether the user has previously selected a theme. */
 const savedTheme = localStorage.getItem('theme')
-
-if (!savedTheme) {
-  document.documentElement.dataset.theme = 'light'
-}
 
 /* Use light mode for first-time visitors. */
 if (!savedTheme) {
@@ -35,9 +31,8 @@ if (!savedTheme) {
 
 /* Change the theme when the toggle is clicked. */
 if (themeButton) {
-    themeButton.addEventListener('click', () => {
-    const currentTheme =
-      document.documentElement.dataset.theme
+  themeButton.addEventListener('click', () => {
+    const currentTheme = document.documentElement.dataset.theme
 
     const newTheme =
       currentTheme === 'dark'
@@ -46,7 +41,7 @@ if (themeButton) {
 
     document.documentElement.dataset.theme = newTheme
 
-    /* Save the choice so it remains after refresh. */
+    /* Save the choice so it remains available after a refresh. */
     localStorage.setItem('theme', newTheme)
   })
 }
@@ -56,17 +51,18 @@ if (themeButton) {
    Spirit Lights
    ========================= */
 
-/* Creates floating spirit dots inside selected sections. */
-/* The dots are generated here because their positions and movement are random. */
+/* Create floating spirit dots inside selected sections. */
+/* Their positions and movement are generated randomly when the page loads. */
 (function spawnSpirits() {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
   const colors = [
     'var(--spirit-a)',
     'var(--spirit-b)',
-    'var(--spirit-c)'
+    'var(--spirit-c)',
   ]
 
-  /* Number of spirits per section */
+  /* Set how many spirit dots appear in each section. */
   const placements = {
     home: 4,
     about: 2,
@@ -74,13 +70,16 @@ if (themeButton) {
     contact: 2,
   }
 
+  /* Store generated animations in a new stylesheet. */
   const styleEl = document.createElement('style')
   document.head.appendChild(styleEl)
+
   const sheet = styleEl.sheet
 
   Object.entries(placements).forEach(([id, count]) => {
     const host = document.getElementById(id)
 
+    /* Skip a section if it cannot be found. */
     if (!host) {
       return
     }
@@ -89,19 +88,23 @@ if (themeButton) {
     layer.className = 'spirit-layer'
     host.insertBefore(layer, host.firstChild)
 
+    /* Create the required number of spirit dots for this section. */
     for (let i = 0; i < count; i++) {
       const dot = document.createElement('div')
       dot.className = 'spirit'
 
+      /* Give each spirit a random position and cycle through the theme colours. */
       dot.style.left = `${12 + Math.random() * 76}%`
       dot.style.top = `${18 + Math.random() * 64}%`
       dot.style.setProperty('--c', colors[i % colors.length])
 
+      /* Only animate the spirits when reduced motion is not requested. */
       if (!reduced) {
         const duration = (12 + Math.random() * 10).toFixed(1)
         const name = `wander${Math.random().toString(36).slice(2)}`
         const d = () => (Math.random() * 50 - 25).toFixed(1)
 
+        /* Generate a unique movement path for this spirit. */
         const rule =
           `@keyframes ${name}{` +
           `0%{transform:translate(0,0);opacity:.25;}` +
@@ -135,7 +138,7 @@ const nextButton = document.getElementById('nextProject')
 const overlay = document.getElementById('projectOverlay')
 const popup = document.getElementById('projectPopup')
 
-/* Elements that display the selected project's information. */
+/* Elements used to display the selected project's information. */
 const popupNumber = document.getElementById('popupNumber')
 const popupType = document.getElementById('popupType')
 const popupFrontTitle = document.getElementById('popupFrontTitle')
@@ -150,10 +153,8 @@ const popupGithub = document.getElementById('popupGithub')
    Popup State
    ========================= */
 
-/* Tracks whether the project popup is currently open. */
+/* Track whether the popup is open and keep its flip timer available to cancel. */
 let popupOpen = false
-
-/* Stores the popup flip timer so it can be cancelled when needed. */
 let flipTimer = null
 
 
@@ -161,7 +162,7 @@ let flipTimer = null
    Project Rendering
    ========================= */
 
-/* Render the project cards if ProjectManager has been loaded. */
+/* Render the project cards after projects.js has loaded ProjectManager. */
 if (window.ProjectManager) {
   window.ProjectManager.render(slider)
 }
@@ -171,7 +172,7 @@ if (window.ProjectManager) {
    Project Slider
    ========================= */
 
-/* Calculate how far the slider should move when an arrow button is pressed. */
+/* Calculate how far the slider should move for one project card. */
 function getScrollDistance() {
   const card = slider.querySelector('.project-card')
 
@@ -180,11 +181,11 @@ function getScrollDistance() {
     return 360
   }
 
-  /* Move by one card width plus the space between cards. */
+  /* Move by one card width plus the gap between cards. */
   return card.getBoundingClientRect().width + 18
 }
 
-/* Move the slider to the next project. */
+/* Move to the next project. */
 nextButton.addEventListener('click', () => {
   slider.scrollBy({
     left: getScrollDistance(),
@@ -192,7 +193,7 @@ nextButton.addEventListener('click', () => {
   })
 })
 
-/* Move the slider to the previous project. */
+/* Move to the previous project. */
 previousButton.addEventListener('click', () => {
   slider.scrollBy({
     left: -getScrollDistance(),
@@ -202,19 +203,19 @@ previousButton.addEventListener('click', () => {
 
 
 /* =========================
-   Open Project Popup
+   Project Popup
    ========================= */
 
 /* Open the popup and fill it with information from the selected card. */
 function openProject(card) {
-  /* Prevent the popup from being opened again while it is already open. */
+  /* Prevent the popup from opening again while it is already visible. */
   if (popupOpen) {
     return
   }
 
   popupOpen = true
 
-  /* Copy the selected project's data into the popup. */
+  /* Copy the selected project's stored data into the popup. */
   popupNumber.textContent = card.dataset.number
   popupType.textContent = card.dataset.type
   popupFrontTitle.textContent = card.dataset.title
@@ -236,11 +237,6 @@ function openProject(card) {
   }, 260)
 }
 
-
-/* =========================
-   Close Project Popup
-   ========================= */
-
 /* Close the popup and reset its animation state. */
 function closeProject() {
   /* Stop if the popup is already closed. */
@@ -250,7 +246,7 @@ function closeProject() {
 
   popupOpen = false
 
-  /* Cancel the flip animation if it has not started yet. */
+  /* Cancel the flip if it has not started yet. */
   clearTimeout(flipTimer)
 
   /* Flip the popup back before hiding it completely. */
@@ -268,7 +264,7 @@ function closeProject() {
    Project Card Events
    ========================= */
 
-/* Event delegation allows dynamically generated project cards to work automatically. */
+/* Event delegation lets dynamically generated project cards use one listener. */
 slider.addEventListener('click', event => {
   const card = event.target.closest('.project-card')
 
@@ -278,9 +274,8 @@ slider.addEventListener('click', event => {
   }
 })
 
-/* Allow project cards to be opened using the keyboard. */
+/* Allow project cards to be opened using Enter or Space. */
 slider.addEventListener('keydown', event => {
-  /* Only respond to Enter or Space. */
   if (event.key !== 'Enter' && event.key !== ' ') {
     return
   }
@@ -288,7 +283,7 @@ slider.addEventListener('keydown', event => {
   const card = event.target.closest('.project-card')
 
   if (card && slider.contains(card)) {
-    /* Prevent Space from scrolling the page when activating a card. */
+    /* Prevent Space from scrolling the page while activating a card. */
     event.preventDefault()
     openProject(card)
   }
@@ -296,25 +291,20 @@ slider.addEventListener('keydown', event => {
 
 
 /* =========================
-   Popup Background Click
+   Popup Events
    ========================= */
 
-/* Close the popup when the user clicks the background overlay. */
+/* Close the popup when the user clicks its background overlay. */
 overlay.addEventListener('click', event => {
   if (event.target === overlay) {
     closeProject()
   }
 })
 
-/* Prevent clicks inside the popup from reaching the overlay. */
+/* Keep clicks inside the popup from reaching the background overlay. */
 popup.addEventListener('click', event => {
   event.stopPropagation()
 })
-
-
-/* =========================
-   Escape Key
-   ========================= */
 
 /* Close the popup when the Escape key is pressed. */
 document.addEventListener('keydown', event => {

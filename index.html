@@ -3,13 +3,17 @@
 <html lang="en">
 
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Tan Jun Xiang | Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -30,9 +34,9 @@
         <a href="#contact">Contact</a>
       </nav>
 
-      <!-- Button for switching between light and dark themes. -->
-      <button 
-        id="themeToggle" 
+      <!-- Switches between the light and dark colour themes. -->
+      <button
+        id="themeToggle"
         class="theme-toggle"
         aria-label="Toggle colour theme"
       >
@@ -56,19 +60,15 @@
 
 
   <!-- =========================
-       Main Content
+       Hero
        ========================= -->
 
   <main>
-
-    <!-- =========================
-         Hero
-         ========================= -->
-
     <section id="home" class="hero">
       <div class="top-banner">
         <img src="assets/banner.jpg" alt="Banner image">
-    
+
+        <!-- Animated by script.js when the page loads. -->
         <div class="banner-reveal">
           <span></span>
           <span></span>
@@ -110,9 +110,11 @@
             <p class="about-title">
               Cybersecurity & Digital Systems Security Student
             </p>
+
             <p class="about-school">
               SIM University of Wollongong
             </p>
+
             <p class="about-text">
               I am passionate about cybersecurity and web development,
               and I am always eager to learn new skills and technologies.
@@ -170,7 +172,7 @@
           </div>
         </div>
 
-        <!-- Project cards are generated automatically from projects.js. -->
+        <!-- Project cards are generated from the data in projects.js. -->
         <div id="projectSlider" class="project-slider"></div>
       </div>
     </section>
@@ -196,10 +198,15 @@
         </p>
 
         <div class="contact-links">
-          <a href="mailto:xaranjin@gmail.com"
+          <a
+            href="mailto:xaranjin@gmail.com"
             aria-label="Email"
           >
-            <img class="social-icon email" src="assets/icons/email.svg" alt="Email">
+            <img
+              class="social-icon email"
+              src="assets/icons/email.svg"
+              alt="Email"
+            >
           </a>
 
           <a
@@ -208,7 +215,11 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img class="social-icon github" src="assets/icons/github.svg" alt="GitHub">
+            <img
+              class="social-icon github"
+              src="assets/icons/github.svg"
+              alt="GitHub"
+            >
           </a>
 
           <a
@@ -217,12 +228,15 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img class="social-icon linkedin" src="assets/icons/linkedin.svg" alt="Linkedin">
+            <img
+              class="social-icon linkedin"
+              src="assets/icons/linkedin.svg"
+              alt="Linkedin"
+            >
           </a>
         </div>
       </div>
     </section>
-
   </main>
 
 
@@ -254,13 +268,13 @@
       aria-modal="true"
       aria-labelledby="popupTitle"
     >
-      <!-- Contains both sides of the project card used for the flip animation. -->
+      <!-- Both sides are kept together so CSS can create the flip animation. -->
       <div
         id="popupInner"
         class="popup-inner"
       >
 
-        <!-- Front side shown before the card flips. -->
+        <!-- Front side shown before the popup flips. -->
         <div class="popup-face popup-front">
           <span
             id="popupNumber"
@@ -294,7 +308,7 @@
           </span>
         </div>
 
-        <!-- Back side contains the full project details. -->
+        <!-- Back side contains the selected project's full details. -->
         <div class="popup-face popup-back">
           <p class="eyebrow">Project</p>
 
@@ -336,7 +350,6 @@
        Scripts
        ========================= -->
 
-  <!-- Project data is loaded first so script.js can render and use it. -->
   <script src="projects.js"></script>
   <script src="script.js"></script>
 
