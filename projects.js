@@ -6,7 +6,7 @@
 /* Add another object to this array when adding a new project. */
 const projects = [
   {
-    type: 'Web Development',
+    type: 'Full-Stack Development',
     title: 'Secure Data Sharing Platform for Collaborative Research',
     summary: 'Final Year Capstone Project.',
     date: 'July 2026 - Present',
@@ -22,7 +22,17 @@ const projects = [
     date: 'August 2026',
     description:
       'A cybersecurity project using a honeypot server to capture, monitor, and analyse malicious SSH access attempts.',
-    github: 'https://github.com/Asorajx/P01-honeypot-simulation',
+    github: 'https://github.com/Asorajx/honeypot-simulation',
+  },
+  {
+    type: 'Web Application',
+    title: 'WritePretty',
+    summary: 'Rule-based text cleanup and formatting tool.',
+    date: 'Ongoing',
+    description:
+      'A client-side text processing tool that detects spelling issues, corrects clear capitalisation and formatting problems, '
+      + 'and preserves Markdown structure without AI rewriting.',
+    github: 'https://github.com/Asorajx/writepretty',
   },
 ]
 
