@@ -28,7 +28,7 @@ const projects = [
     type: 'Web Application',
     title: 'WritePretty',
     summary: 'Rule-based text cleanup and formatting tool.',
-    date: 'Ongoing',
+    date: 'September 2026',
     description:
       'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, '
       + 'browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
