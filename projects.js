@@ -30,8 +30,8 @@ const projects = [
     summary: 'Rule-based text cleanup and formatting tool.',
     date: 'Ongoing',
     description:
-      'A client-side text processing tool that detects spelling issues, corrects clear capitalisation and formatting problems, '
-      + 'and preserves Markdown structure without AI rewriting.',
+      'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, '
+      + 'browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
     github: 'https://github.com/Asorajx/writepretty',
   },
 ]
