@@ -34,6 +34,16 @@ const projects = [
       + 'browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
     github: 'https://github.com/Asorajx/writepretty',
   },
+  {
+    type: 'Web Application',
+    title: 'LOOP',
+    summary: 'Interactive visualizer for learning Python OOP.',
+    date: 'October 2026',
+    description:
+      'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, '
+      + 'object interactions, state changes, inheritance, and source code in real time.',
+    github: 'https://github.com/Asorajx/LOOP',
+  },
 ]
 
 
