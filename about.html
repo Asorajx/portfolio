@@ -12,7 +12,10 @@
 
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/portfolio-favicon-32.png">
   <script>
-    try { document.documentElement.dataset.theme = localStorage.getItem('theme') || 'dark'; } catch (error) {}
+    try {
+      document.documentElement.dataset.theme =
+        localStorage.getItem('portfolio-theme') || 'dark';
+    } catch (error) {}
   </script>
   <link rel="stylesheet" href="style.css">
 </head>

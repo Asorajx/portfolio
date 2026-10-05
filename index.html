@@ -14,7 +14,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/portfolio-favicon-16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/portfolio-apple-icon.png">
   <script>
-    try { document.documentElement.dataset.theme = localStorage.getItem('theme') || 'dark'; } catch (error) {}
+    try {
+      document.documentElement.dataset.theme =
+        localStorage.getItem('portfolio-theme') || 'dark';
+    } catch (error) {}
   </script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="projects.css">

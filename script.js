@@ -3,17 +3,20 @@
    ========================= */
 
 const themeButton = document.getElementById('themeToggle')
-document.documentElement.dataset.theme = localStorage.getItem('theme') || 'dark'
+document.documentElement.dataset.theme =
+  localStorage.getItem('portfolio-theme') || 'dark'
 
 themeButton?.addEventListener('click', () => {
-  const theme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+  const theme =
+    document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+
   document.documentElement.dataset.theme = theme
-  localStorage.setItem('theme', theme)
+  localStorage.setItem('portfolio-theme', theme)
 })
 
 
 /* =========================
-   Spirit lights
+   Spirit Lights
    ========================= */
 
 ;(function spawnSpiritLights() {
@@ -52,7 +55,7 @@ themeButton?.addEventListener('click', () => {
 
 
 /* =========================
-   Project popup
+   Project Popup
    ========================= */
 
 const projectContainer = document.getElementById('projectSlider')
@@ -139,7 +142,7 @@ document.addEventListener('keydown', event => { if (event.key === 'Escape' && po
 
 
 /* =========================
-   Copy email button
+   Copy Email Button
    ========================= */
 
 ;(function setupEmailCopy() {
