@@ -1,365 +1,253 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Tan Jun Xiang | Portfolio</title>
+  <meta name="description" content="Jin Xaran — cybersecurity student and developer. Selected projects in security, full-stack development, and interactive tools.">
+  <title>Jun Xiang | Projects</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Favicons -->
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/portfolio-favicon-32.png">
-
   <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/portfolio-favicon-16.png">
-
   <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/portfolio-apple-icon.png">
-
+  <script>
+    try { document.documentElement.dataset.theme = localStorage.getItem('theme') || 'dark'; } catch (error) {}
+  </script>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="projects.css">
 </head>
 
 <body>
-
-  <!-- =========================
-       Header
-       ========================= -->
-
+  <!-- Site header and primary navigation -->
   <header class="site-header">
     <div class="container nav-wrapper">
-      <a class="logo" href="#home">Tan Jun Xiang</a>
+      <a class="logo" href="#home" aria-label="Jun Xiang home">
+        <span class="logo-mark" aria-hidden="true">俊</span>
+        <span>Jun Xiang</span>
+      </a>
 
-      <nav class="nav-links">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a class="active" href="#projects">Projects</a>
+        <a href="about.html">About</a>
         <a href="#contact">Contact</a>
       </nav>
 
-      <!-- Switches between the light and dark colour themes. -->
-      <button
-        id="themeToggle"
-        class="theme-toggle"
-        aria-label="Toggle colour theme"
-      >
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle colour theme">
         <span class="theme-slider"></span>
-
-        <span class="theme-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-          </svg>
+        <span class="theme-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
         </span>
-
-        <span class="theme-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path>
-          </svg>
+        <span class="theme-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
         </span>
       </button>
     </div>
   </header>
 
-
-  <!-- =========================
-       Hero
-       ========================= -->
-
   <main>
+  <!-- Hero: name, actions, contact note, and magic-circle decoration -->
     <section id="home" class="hero">
-      <div class="top-banner">
-        <img src="assets/banner.jpg" alt="Banner image">
-
-        <!-- Animated by script.js when the page loads. -->
-        <div class="banner-reveal">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-      </div>
-
-      <div class="container">
-        <p class="eyebrow">Hello, I'm</p>
-
-        <h1>Jun Xiang</h1>
-
-        <h2>Cybersecurity Student</h2>
-
-        <p class="hero-text">
-          I enjoy bringing structure and clarity to designs, turning rough ideas into clean and meaningful experiences.
-        </p>
-
-        <a class="primary-button" href="#projects">
-          View projects
-        </a>
-      </div>
-    </section>
-
-
-    <!-- =========================
-         About
-         ========================= -->
-
-    <section id="about" class="section">
-      <div class="container">
-        <div class="section-heading">
-          <span class="section-marker"></span>
-          <h2>About me</h2>
-        </div>
-
-        <div class="about-layout">
-          <div>
-            <p class="about-title">
-              Cybersecurity & Digital Systems Security Student
-            </p>
-
-            <p class="about-school">
-              SIM University of Wollongong
-            </p>
-
-            <p class="about-text">
-              I am passionate about cybersecurity and web development,
-              and I am always eager to learn new skills and technologies.
-            </p>
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <h1>Jun Xiang</h1>
+          <div class="hero-actions hero-actions-minimal">
+            <a class="primary-button" href="#projects">View projects</a>
+            <a class="text-link" href="about.html">About me <span aria-hidden="true">↗</span></a>
           </div>
+        </div>
 
-          <div>
-            <h3>Technical Skills</h3>
+        <div id="contact" class="hero-note-wrap">
+          <svg class="magic-circle" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
+            <defs>
+              <filter id="magicGlow" x="-35%" y="-35%" width="170%" height="170%">
+                <feGaussianBlur stdDeviation="1.35" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <g class="magic-glyph" filter="url(#magicGlow)">
+              <circle class="magic-ring magic-ring-outer" cx="180" cy="180" r="151"/>
+              <circle class="magic-ring magic-ring-inner" cx="180" cy="180" r="140"/>
+              <path class="magic-triangle" d="M180 61 L286 249 L74 249 Z"/>
+              <circle class="magic-core" cx="180" cy="174" r="43"/>
+              <circle class="magic-seal" cx="180" cy="91" r="14"/>
+              <circle class="magic-seal" cx="112" cy="226" r="14"/>
+              <circle class="magic-seal" cx="248" cy="226" r="14"/>
+              <path class="magic-base" d="M75 249 H285"/>
+            </g>
+          </svg>
 
-            <div class="skills">
-              <span>HTML</span>
-              <span>CSS</span>
-              <span>JavaScript</span>
-              <span>Git</span>
-              <span>Python</span>
-              <span>SQL</span>
-              <span>PL/SQL</span>
+          <aside class="apothecary-note contact-note" aria-label="Contact information">
+            <div class="note-topline">
+              <span>Contact</span>
+              <span>Details</span>
             </div>
-          </div>
+
+            <div class="contact-note-body contact-note-compact">
+              <div class="contact-email-block">
+                <span class="contact-detail-label">Email</span>
+                <div class="contact-email-line">
+                  <a class="contact-email-address" href="mailto:xaranjin@gmail.com">xaranjin@gmail.com</a>
+                  <div class="contact-email-actions">
+                    <a class="contact-icon-link" href="mailto:xaranjin@gmail.com" aria-label="Send email">
+                      <img src="assets/icons/email.svg" alt="">
+                    </a>
+                    <button class="contact-copy-button" type="button" data-copy-email="xaranjin@gmail.com" aria-label="Copy email address" title="Copy email address">
+                      <svg class="copy-symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="1.5"></rect><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-10A1.5 1.5 0 0 0 3 5.5v10A1.5 1.5 0 0 0 4.5 17H8"></path></svg>
+                      <svg class="copy-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"></path></svg>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="contact-social-row" aria-label="Social links">
+                <a class="contact-icon-link" href="https://github.com/Asorajx" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.svg" alt=""></a>
+                <a class="contact-icon-link" href="https://www.linkedin.com/in/junx1ang/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="assets/icons/linkedin.svg" alt=""></a>
+              </div>
+            </div>
+          </aside>
         </div>
       </div>
     </section>
 
-
-    <!-- =========================
-         Projects
-         ========================= -->
-
-    <section id="projects" class="section">
+  <!-- Project cabinet: books are inserted by projects.js -->
+    <section id="projects" class="section projects-section">
       <div class="container">
         <div class="projects-header">
           <div class="section-heading">
-            <span class="section-marker"></span>
-            <h2>My projects</h2>
-          </div>
-
-          <div class="slider-controls">
-            <button
-              id="previousProject"
-              class="slider-button"
-              type="button"
-              aria-label="Previous project"
-            >
-              <span aria-hidden="true">‹</span>
-            </button>
-
-            <button
-              id="nextProject"
-              class="slider-button"
-              type="button"
-              aria-label="Next project"
-            >
-              <span aria-hidden="true">›</span>
-            </button>
+            <h2>Selected projects</h2>
           </div>
         </div>
 
-        <!-- Project cards are generated from the data in projects.js. -->
-        <div id="projectSlider" class="project-slider"></div>
+        <div class="bookshelf-stage">
+          <div class="bookshelf" aria-label="Project bookshelf">
+            <div class="shelf-potions" aria-hidden="true">
+              <div class="potion-fixture potion-top-left">
+                <span class="potion-bracket potion-bracket-short"></span>
+                <svg class="potion-bottle potion-round" viewBox="0 0 64 82" focusable="false">
+                  <path class="potion-glass" d="M25 5h14v14c0 5 3 8 8 12 8 7 12 17 12 27 0 14-11 21-27 21S5 72 5 58c0-10 4-20 12-27 5-4 8-7 8-12V5Z"/>
+                  <path class="potion-neck" d="M23 4h18v8H23z"/>
+                  <path class="potion-liquid potion-liquid-teal" d="M10 54c7-5 15-6 22-3 8 4 16 3 22-1 1 3 2 6 2 9 0 11-9 17-24 17S8 70 8 59c0-2 1-4 2-5Z"/>
+                  <path class="potion-shine" d="M18 31c-6 6-9 13-9 20"/>
+                </svg>
+              </div>
+
+              <div class="potion-fixture potion-upper-right">
+                <span class="potion-vial-bracket"></span>
+                <svg class="potion-bottle potion-vial" viewBox="0 0 42 92" focusable="false">
+                  <path class="potion-glass" d="M13 5h16v15l5 8v50c0 7-5 11-13 11S8 85 8 78V28l5-8V5Z"/>
+                  <path class="potion-neck" d="M11 4h20v7H11z"/>
+                  <path class="potion-liquid potion-liquid-lilac" d="M11 48h20v29c0 6-4 9-10 9s-10-3-10-9V48Z"/>
+                  <path class="potion-shine" d="M15 27v16"/>
+                </svg>
+              </div>
+
+              <div class="potion-fixture potion-mid-left">
+                <span class="potion-ledge"></span>
+                <svg class="potion-bottle potion-pear" viewBox="0 0 58 82" focusable="false">
+                  <path class="potion-glass" d="M23 5h12v15c0 5 2 8 7 13 8 8 12 17 12 27 0 12-10 19-25 19S4 72 4 60c0-10 4-19 12-27 5-5 7-8 7-13V5Z"/>
+                  <path class="potion-neck" d="M20 4h18v7H20z"/>
+                  <path class="potion-liquid potion-liquid-amber" d="M9 56c6-5 14-6 20-3 7 4 14 3 20-1 1 2 2 5 2 8 0 10-8 15-22 15S7 70 7 60c0-1 1-3 2-4Z"/>
+                  <path class="potion-shine" d="M16 36c-4 5-6 10-7 15"/>
+                </svg>
+              </div>
+
+              <div class="potion-fixture potion-mid-right">
+                <span class="potion-flask-stand"></span>
+                <svg class="potion-bottle potion-flask" viewBox="0 0 76 86" focusable="false">
+                  <path class="potion-glass" d="M31 5h14v17c0 4 2 7 6 10 12 8 20 19 20 31 0 13-13 20-33 20S5 76 5 63c0-12 8-23 20-31 4-3 6-6 6-10V5Z"/>
+                  <path class="potion-neck" d="M28 4h20v8H28z"/>
+                  <path class="potion-liquid potion-liquid-blue" d="M11 58c9-6 18-8 27-4 10 5 19 4 27-1 1 3 2 6 2 9 0 11-11 17-29 17S9 73 9 62c0-1 1-3 2-4Z"/>
+                  <path class="potion-shine" d="M22 34c-7 6-10 12-11 19"/>
+                </svg>
+              </div>
+
+              <div class="potion-fixture potion-lower-left">
+                <span class="potion-cage"></span>
+                <svg class="potion-bottle potion-tube" viewBox="0 0 34 88" focusable="false">
+                  <path class="potion-glass" d="M9 5h16v63c0 11-4 17-8 17S9 79 9 68V5Z"/>
+                  <path class="potion-neck" d="M7 4h20v7H7z"/>
+                  <path class="potion-liquid potion-liquid-ruby" d="M12 49h10v19c0 9-2 13-5 13s-5-4-5-13V49Z"/>
+                  <path class="potion-shine" d="M14 20v23"/>
+                </svg>
+              </div>
+
+              <div class="potion-fixture potion-bottom-right potion-pair">
+                <span class="potion-ledge potion-ledge-wide"></span>
+                <svg class="potion-bottle potion-small-round" viewBox="0 0 46 62" focusable="false">
+                  <path class="potion-glass" d="M18 4h10v10c0 4 2 6 6 9 6 5 9 12 9 19 0 10-8 16-20 16S3 52 3 42c0-7 3-14 9-19 4-3 6-5 6-9V4Z"/>
+                  <path class="potion-neck" d="M15 3h16v7H15z"/>
+                  <path class="potion-liquid potion-liquid-gold" d="M7 39c5-3 10-4 16-2 6 3 11 2 16 0 1 2 1 4 1 6 0 8-6 12-17 12S6 51 6 43c0-1 0-3 1-4Z"/>
+                </svg>
+                <svg class="potion-bottle potion-small-square" viewBox="0 0 44 66" focusable="false">
+                  <path class="potion-glass" d="M15 4h14v12l7 7v33c0 5-4 8-14 8S8 61 8 56V23l7-7V4Z"/>
+                  <path class="potion-neck" d="M13 3h18v7H13z"/>
+                  <path class="potion-liquid potion-liquid-violet" d="M11 39h22v16c0 4-3 6-11 6s-11-2-11-6V39Z"/>
+                </svg>
+              </div>
+
+              <div class="mortar-set" aria-hidden="true">
+                <span class="mortar-pestle"></span>
+                <span class="mortar-bowl">
+                  <span class="mortar-rim"></span>
+                  <span class="mortar-herb"></span>
+                </span>
+              </div>
+            </div>
+            <div id="projectSlider" class="project-library" aria-live="polite"></div>
+          </div>
+        </div>
       </div>
     </section>
 
-
-    <!-- =========================
-         Contact
-         ========================= -->
-
-    <section id="contact" class="section">
-      <div class="container">
-        <div class="section-heading">
-          <span class="section-marker"></span>
-          <h2>Let's connect</h2>
-        </div>
-
-        <p class="contact-text">
-          I am open to new projects, career opportunities, and meaningful challenges.
-        </p>
-
-        <p class="contact-text">
-          Let's build something meaningful together.
-        </p>
-
-        <div class="contact-links">
-          <a
-            href="mailto:xaranjin@gmail.com"
-            aria-label="Email"
-          >
-            <img
-              class="social-icon email"
-              src="assets/icons/email.svg"
-              alt="Email"
-            >
-          </a>
-
-          <a
-            href="https://github.com/Asorajx"
-            aria-label="GitHub"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              class="social-icon github"
-              src="assets/icons/github.svg"
-              alt="GitHub"
-            >
-          </a>
-
-          <a
-            href="https://www.linkedin.com/in/junx1ang/"
-            aria-label="Linkedin"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              class="social-icon linkedin"
-              src="assets/icons/linkedin.svg"
-              alt="Linkedin"
-            >
-          </a>
-        </div>
-      </div>
-    </section>
   </main>
 
-
-  <!-- =========================
-       Footer
-       ========================= -->
-
+  <!-- Site footer -->
   <footer class="site-footer">
-    <div class="container">
-      <p>© Tan Jun Xiang. All rights reserved.</p>
+    <div class="container footer-inner">
+      <p>© Jun Xiang. All rights reserved.</p>
     </div>
   </footer>
 
-
-  <!-- =========================
-       Project Popup
-       ========================= -->
-
-  <!-- Hidden until a project card is opened using JavaScript. -->
-  <div
-    id="projectOverlay"
-    class="project-overlay"
-    aria-hidden="true"
-  >
-    <div
-      id="projectPopup"
-      class="project-popup"
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="popupTitle"
-    >
-      <!-- Both sides are kept together so CSS can create the flip animation. -->
-      <div
-        id="popupInner"
-        class="popup-inner"
-      >
-
-        <!-- Front side shown before the popup flips. -->
+  <!-- Project detail overlay. The front/back faces are populated by script.js. -->
+  <div id="projectOverlay" class="project-overlay" aria-hidden="true">
+    <div id="projectPopup" class="project-popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <div id="popupInner" class="popup-inner">
         <div class="popup-face popup-front">
-          <span
-            id="popupNumber"
-            class="project-number"
-          >
-            01
-          </span>
-
-          <div>
-            <p
-              id="popupType"
-              class="project-type"
-            >
-              Project
-            </p>
-
-            <h3 id="popupFrontTitle">
-              Project
-            </h3>
-
-            <p
-              id="popupSummary"
-              class="project-summary"
-            >
-              Project summary
-            </p>
+          <div class="record-label">
+            <span id="popupNumber" class="project-number">01</span>
+            <span>Project</span>
           </div>
-
-          <span class="project-view">
-            Opening project...
-          </span>
+          <div>
+            <p id="popupType" class="project-type">Project</p>
+            <h3 id="popupFrontTitle">Project</h3>
+            <p id="popupSummary" class="project-summary">Project summary</p>
+          </div>
+          <span class="project-view">Opening project...</span>
         </div>
 
-        <!-- Back side contains the selected project's full details. -->
         <div class="popup-face popup-back">
+          <button id="popupClose" class="popup-close" type="button" aria-label="Close project">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 7l10 10M17 7 7 17"></path></svg>
+          </button>
+          <div class="record-label popup-record-label"><span>Project details</span></div>
           <p class="eyebrow">Project</p>
-
-          <h3 id="popupTitle">
-            Project title
-          </h3>
-
-          <p
-            id="popupDate"
-            class="popup-date"
-          >
-            September 2026
-          </p>
-
-          <p
-            id="popupDescription"
-            class="popup-description"
-          >
-            Project description
-          </p>
-
-          <a
-            id="popupGithub"
-            class="popup-github"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            View GitHub repository →
-          </a>
+          <h3 id="popupTitle">Project title</h3>
+          <p id="popupDate" class="popup-date">September 2026</p>
+          <p id="popupDescription" class="popup-description">Project description</p>
+          <a id="popupGithub" class="popup-github" href="#" target="_blank" rel="noopener noreferrer">View GitHub repository <span aria-hidden="true">↗</span></a>
         </div>
-
       </div>
     </div>
   </div>
 
-
-  <!-- =========================
-       Scripts
-       ========================= -->
-
+  <!-- Project data/renderer must load before the interaction script. -->
   <script src="projects.js"></script>
   <script src="script.js"></script>
-
 </body>
-
 </html>

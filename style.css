@@ -1,62 +1,76 @@
 /* =========================
-   Variables
+   Theme Colors
    ========================= */
 
-/* Shared values used throughout the website for colours, sizing, and layout. */
 :root {
-  /* Light mode */
-  --background: linear-gradient(
-    135deg,
-    #f8f2df 0%,
-    #f4f0e4 55%,
-    #ffffff 100%
-  );
-
-  --surface: #fffdf5;
-
-  --text: #172522;
-  --muted: #68746b;
-  --border: #d8ddcc;
-
-  --accent: #693848;
-  --accent-hover: #573040;
-
-  --sage: #7fae70;
-  --teal: #245b55;
-
-  --max-width: 1100px;
-  --font-heading: "Space Grotesk", system-ui, -apple-system, sans-serif;
-
-  /* Colours used by the ambient spirit lights. */
+  --paper: #f3eedf;
+  --paper-deep: #e9e0c9;
+  --surface: #faf6e9;
+  --surface-2: #f0ead8;
+  --ink: #25312b;
+  --muted: #697168;
+  --line: #c9c2ad;
+  --green: #536f52;
+  --green-deep: #344c3d;
+  --plum: #7a4855;
+  --plum-deep: #5e3440;
+  --gold: #9a7b45;
+  --max-width: 1120px;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --shadow: 0 18px 50px rgba(63, 54, 37, 0.08);
+  --shelf: #725b46;
+  --shelf-dark: #46382c;
+  --shelf-back: #5f4d3c;
+  --shelf-back-deep: #4d3e31;
+  --projects-bg: #e5ddcf;
+  --projects-bg-deep: #d8cdbc;
+  --projects-accent: #927f72;
+  --magic: #a56d43;
+  --magic-glow: rgba(165, 109, 67, .18);
+  --toggle-slider: #c8d3b5;
+  --toggle-active-ink: #24342b;
   --spirit-a: #754354;
   --spirit-b: #7fae70;
   --spirit-c: #245b55;
+  --spirit-low: .20;
+  --spirit-high: .48;
+  --spirit-end: .30;
 }
 
-/* Dark mode colours replace the shared variables above. */
+
+/* Dark mode overrides the shared theme colors above. */
 [data-theme="dark"] {
-  --background: linear-gradient(
-    135deg,
-    #17201d 0%,
-    #1d2924 50%,
-    #25332d 100%
-  );
-
-  --surface: #24312b;
-
-  --text: #f5f0e4;
-  --muted: #c2c9bd;
-  --border: #435047;
-
-  --accent: #95556b;
-  --accent-hover: #b06d83;
-
-  --sage: #9acb85;
-  --teal: #4f8c82;
-
+  --paper: #19211d;
+  --paper-deep: #202a24;
+  --surface: #232e28;
+  --surface-2: #29362f;
+  --ink: #eee9da;
+  --muted: #b7b9ad;
+  --line: #465249;
+  --green: #90aa7f;
+  --green-deep: #bfd0a6;
+  --plum: #c07c8f;
+  --plum-deep: #d59aae;
+  --gold: #c7a869;
+  --shadow: 0 18px 55px rgba(0, 0, 0, 0.24);
+  --shelf: #4d4136;
+  --shelf-dark: #2f2822;
+  --shelf-back: #40362d;
+  --shelf-back-deep: #332b24;
+  --projects-bg: #292724;
+  --projects-bg-deep: #332d2c;
+  --projects-accent: #8f7c74;
+  --magic: #d18a54;
+  --magic-glow: rgba(209, 138, 84, .28);
+  --toggle-slider: #a9bd91;
+  --toggle-active-ink: #18251f;
   --spirit-a: #95556b;
   --spirit-b: #9acb85;
   --spirit-c: #4f8c82;
+  --spirit-low: .27;
+  --spirit-high: .58;
+  --spirit-end: .38;
 }
 
 
@@ -64,222 +78,140 @@
    Base Styles
    ========================= */
 
-/* Include padding and borders inside an element's total width and height. */
-* {
-  box-sizing: border-box;
-}
-
-/* Smoothly scroll to sections when navigation links are used. */
-html {
-  scroll-behavior: smooth;
-}
-
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
-  background: var(--background);
-  color: var(--text);
-  font-family:
-    Segoe UI,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  transition:
-    background 300ms ease,
-    color 300ms ease;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(122, 72, 85, 0.055), transparent 24rem),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  transition: background 240ms ease, color 240ms ease;
 }
 
-/* Prevent the page behind the project popup from scrolling. */
-body.popup-open {
-  overflow: hidden;
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(80, 65, 43, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(80, 65, 43, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(to bottom, #000, transparent 75%);
 }
 
-a {
-  text-decoration: none;
-}
-
-button {
-  font-family: inherit;
-}
-
-h1,
-h2,
-h3,
-.logo {
-  font-family: var(--font-heading);
-}
+body.popup-open { overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; }
+img { max-width: 100%; }
 
 
 /* =========================
    Shared Layout
    ========================= */
 
-/* Keep page content centred and prevent it from becoming too wide. */
-.container {
-  width: min(calc(100% - 48px), var(--max-width));
-  margin-inline: auto;
-}
-
-/* Give each main page section consistent vertical spacing. */
-.section {
-  position: relative;
-  padding: 110px 0;
-  overflow: hidden;
-}
-
-/* Keep section content above decorative background elements. */
-.section > .container {
-  position: relative;
-  z-index: 1;
-}
-
-/* Small label displayed above major section headings. */
+.container { width: min(calc(100% - 48px), var(--max-width)); margin-inline: auto; }
+.section { position: relative; padding: 96px 0; overflow: hidden; }
+.section > .container, .hero > .container { position: relative; z-index: 2; }
 .eyebrow {
   margin: 0 0 12px;
-  color: var(--accent);
-  font-size: 13px;
+  color: var(--plum);
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-}
-
-.section-heading {
-  margin-bottom: 42px;
-}
-
-.section-heading h2 {
-  margin: 0;
-  color: var(--text);
-  font-size: clamp(32px, 5vw, 48px);
-  letter-spacing: -0.025em;
-}
-
-/* Small accent marker used to separate major page sections. */
-.section-marker {
-  display: block;
-  width: 32px;
-  height: 3px;
-  margin-bottom: 18px;
-  background: var(--accent);
-  border-radius: 999px;
 }
 
 
 /* =========================
-   Header
+   Header and Navigation
    ========================= */
 
-/* Keep the navigation visible at the top while the user scrolls. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid var(--border);
-  background: color-mix(
-    in srgb,
-    var(--background) 85%,
-    transparent
-  );
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
   backdrop-filter: blur(14px);
 }
-
-.nav-wrapper {
-  min-height: 68px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
+.nav-wrapper { min-height: 66px; display: flex; align-items: center; gap: 32px; }
 .logo {
-  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-right: auto;
   font-weight: 700;
 }
-
-.nav-links {
-  display: flex;
-  gap: 28px;
+.logo-mark {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--plum);
+  color: var(--plum);
+  font-family: var(--font-serif);
+  font-size: 17px;
+  transform: rotate(-3deg);
 }
-
-.nav-links a {
-  color: var(--muted);
-  transition: color 160ms ease;
+.nav-links { display: flex; align-items: center; gap: 26px; }
+.nav-links a { position: relative; color: var(--muted); font-size: 14px; font-weight: 600; }
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -8px;
+  height: 1px;
+  background: var(--plum);
+  transition: right 180ms ease;
 }
+.nav-links a:hover, .nav-links a.active { color: var(--ink); }
+.nav-links a:hover::after, .nav-links a.active::after { right: 0; }
 
-.nav-links a:hover {
-  color: var(--text);
-}
-
-
-/* =========================
-   Theme Toggle
-   ========================= */
-
-/* Creates the pill-shaped theme switch. */
+/* Theme Toggle */
 .theme-toggle {
   position: relative;
-  width: 62px;
-  height: 30px;
+  width: 58px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: space-around;
   padding: 0;
-  border: 1px solid var(--border);
+  border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--surface);
-  color: var(--muted);
   cursor: pointer;
 }
-
-/* Moving circle that shows the selected theme. */
 .theme-slider {
   position: absolute;
   top: 2px;
   left: 3px;
-  width: 24px;
-  height: 24px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
-  background: var(--accent);
-  transition: transform 250ms ease;
+  background: var(--toggle-slider);
+  transition: transform 220ms ease, background 220ms ease;
 }
-
-/* Give each theme icon an equal area inside the toggle. */
+[data-theme="dark"] .theme-slider { transform: translateX(29px); }
 .theme-icon {
   position: relative;
   z-index: 1;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: color-mix(in srgb, var(--muted) 72%, var(--ink));
 }
-
-/* Give each theme icon an equal area inside the toggle. */
-.theme-icon {
-  position: relative;
-  z-index: 1;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--muted);
-  transition: color 250ms ease;
-}
-
-/* Make the sun bright when light mode is selected. */
-.theme-slider + .theme-icon {
-  color: #ffffff;
-}
-
-/* Return the sun to its normal colour in dark mode. */
-[data-theme="dark"] .theme-slider + .theme-icon {
-  color: var(--muted);
-}
-
+.theme-icon:first-of-type { color: var(--toggle-active-ink); }
+[data-theme="dark"] .theme-icon:first-of-type { color: var(--muted); }
+[data-theme="dark"] .theme-icon:last-of-type { color: var(--toggle-active-ink); }
 .theme-icon svg {
-  width: 13px;
-  height: 13px;
+  width: 12px;
+  height: 12px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2;
@@ -287,518 +219,335 @@ h3,
   stroke-linejoin: round;
 }
 
-/* Move the slider behind the moon icon in dark mode. */
-[data-theme="dark"] .theme-slider {
-  transform: translateX(31px);
-}
-
 
 /* =========================
-   Top Banner
+   Home Hero
    ========================= */
 
-.top-banner {
+.hero { position: relative; min-height: 610px; padding: 82px 0 44px; overflow: hidden; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(390px, 0.86fr);
+  gap: 52px;
+  align-items: center;
+}
+.hero-copy { padding: 20px 0; }
+.hero-note-wrap {
   position: relative;
-  width: 100%;
-  height: 350px;
-  margin-bottom: 50px;
-  overflow: hidden;
+  width: min(100%, 430px);
+  min-height: 410px;
+  display: grid;
+  align-items: center;
+  justify-self: end;
+  isolation: isolate;
+  scroll-margin-top: 96px;
 }
 
-.top-banner img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.top-banner::after {
-  background: rgba(36, 91, 85, 0.15);
-}
-
-/* Cover the banner with strips that slide away when the page loads. */
-.banner-reveal {
+/* Decorative alchemy circle behind the contact note. */
+.magic-circle {
+  --magic-low: .17;
+  --magic-high: .34;
   position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
+  z-index: 0;
+  width: 370px;
+  height: 370px;
+  right: -72px;
+  top: 18px;
+  color: var(--magic);
+  fill: none;
+  stroke: currentColor;
+  opacity: var(--magic-low);
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: magic-breathe 6.8s ease-in-out infinite;
 }
 
-.banner-reveal span {
-  flex: 1;
-  background: rgba(0, 0, 0, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transform: translateX(0);
-  animation: strip-reveal 900ms ease forwards;
+.magic-glyph { stroke-linecap: round; stroke-linejoin: round; }
+.magic-ring-outer { stroke-width: 2.5; }
+.magic-ring-inner { stroke-width: 1.25; opacity: .84; }
+.magic-triangle { stroke-width: 2.2; }
+.magic-core { stroke-width: 2; }
+.magic-seal { stroke-width: 1.7; }
+.magic-base { stroke-width: 1.55; }
+[data-theme="dark"] .magic-circle { --magic-low: .27; --magic-high: .48; }
+
+@keyframes magic-breathe {
+0%, 100% {
+  opacity: var(--magic-low);
+  transform: scale(.992);
+  filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magic) 16%, transparent));
+}
+50% {
+  opacity: var(--magic-high);
+  transform: scale(1.008);
+  filter: drop-shadow(0 0 8px var(--magic-glow)) drop-shadow(0 0 18px color-mix(in srgb, var(--magic) 11%, transparent));
+}
 }
 
-@keyframes strip-reveal {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(100%);
-  }
-}
-
-
-/* =========================
-   Hero
-   ========================= */
-
-/* Fill the remaining screen height below the sticky header. */
-.hero {
-  min-height: calc(100vh - 68px);
-  display: flex;
-  flex-direction: column;
-  padding-top: 0;
-}
-
-.hero h1 {
+.hero h1, .about-page h1 {
   margin: 0;
-  color: var(--text);
-  font-size: clamp(52px, 10vw, 100px);
-  line-height: 0.95;
-  letter-spacing: -0.045em;
-}
-
-.hero h2 {
-  margin: 24px 0 0;
-  color: var(--muted);
-  font-size: clamp(24px, 4vw, 38px);
-  font-weight: 500;
-}
-
-.hero-text {
-  max-width: 620px;
-  margin-top: 30px;
-  color: var(--muted);
-  font-size: 18px;
-  line-height: 1.75;
-}
-
-.primary-button {
-  display: inline-flex;
-  margin-top: 24px;
-  padding: 12px 17px;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #ffffff;
+  font-family: var(--font-serif);
+  font-size: clamp(72px, 11vw, 126px);
   font-weight: 600;
-  transition:
-    transform 180ms ease,
-    background 180ms ease;
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+}
+.hero-actions { display: flex; align-items: center; gap: 12px; margin-top: 30px; }
+.hero-actions-minimal { margin-top: 40px; }
+
+/* Keep the two hero actions visually related while preserving hierarchy. */
+.primary-button,
+.hero-actions .text-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 18px;
+  border: 1px solid var(--green-deep);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
+.primary-button { background: var(--green-deep); color: var(--surface); }
 .primary-button:hover {
   transform: translateY(-2px);
-  background: var(--accent-hover);
+  background: var(--plum-deep);
+  border-color: var(--plum-deep);
+}
+.hero-actions .text-link {
+  border-color: color-mix(in srgb, var(--plum) 68%, var(--line));
+  background: color-mix(in srgb, var(--surface) 20%, transparent);
+  color: var(--plum);
+}
+.hero-actions .text-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--plum);
+  background: color-mix(in srgb, var(--plum) 11%, transparent);
+}
+.text-link { color: var(--plum); font-size: 14px; font-weight: 700; }
+.text-link span { display: inline-block; transition: transform 160ms ease; }
+.text-link:hover span { transform: translate(2px, -2px); }
+
+/* Shared sticky note used for contact/profile notes. */
+.apothecary-note {
+  position: relative;
+  min-height: 390px;
+  padding: 24px 24px 22px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  box-shadow: var(--shadow);
+  transform: rotate(1.3deg);
 }
 
-
-/* =========================
-   Spirit Lights
-   ========================= */
-
-/* Contains each section's ambient spirit dots so they stay inside that section. */
-/* script.js creates and animates the dots. */
-.spirit-layer {
+.apothecary-note::before, .apothecary-note::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-  pointer-events: none;
+  width: 54px;
+  height: 18px;
+  background: rgba(150, 129, 79, 0.17);
+  border: 1px solid rgba(150, 129, 79, 0.14);
 }
-
-/* Represents one soft glowing spirit dot. */
-/* Its colour, position, and movement are set individually in script.js. */
-.spirit {
-  position: absolute;
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--c), transparent 70%);
-  filter: blur(1.5px);
-}
-
-
-/* =========================
-   About
-   ========================= */
-
-/* Split the introduction and skills into two columns on larger screens. */
-.about-layout {
-  display: grid;
-  grid-template-columns: 1.3fr 1fr;
-  gap: 80px;
-}
-
-.about-title {
-  margin: 0;
-  color: var(--text);
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.4;
-}
-
-.about-school {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 17px;
-  line-height: 1.4;
-}
-
-.about-text {
-  margin-top: 32px;
-  color: var(--muted);
-  font-size: 17px;
-  line-height: 1.8;
-}
-
-/* Allow skill tags to move onto another row when space becomes limited. */
-.skills {
+.apothecary-note::before { top: -10px; left: 38px; transform: rotate(-4deg); }
+.apothecary-note::after { right: 30px; bottom: -9px; transform: rotate(5deg); }
+.note-topline, .record-label {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.skills span {
-  padding: 7px 11px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: var(--surface);
-  color: var(--text);
-  font-size: 13px;
-}
-
-
-/* =========================
-   Projects
-   ========================= */
-
-.projects-header {
-  display: flex;
-  align-items: flex-end;
   justify-content: space-between;
-  gap: 24px;
-}
-
-.slider-controls {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 42px;
-}
-
-.slider-button {
-  width: 40px;
-  height: 40px;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-}
-
-.slider-button span {
-  display: inline-block;
-  font-size: 22px;
-  line-height: 0.8;
-  transition: transform 180ms ease;
-}
-
-.slider-button:hover {
-  border-color: #999999;
-}
-
-.slider-button:hover span {
-  transform: translateX(2px);
-}
-
-/* Arrange project cards horizontally and allow the row to scroll. */
-.project-slider {
-  display: flex;
   gap: 18px;
-  padding: 8px 2px 20px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  scroll-behavior: smooth;
-}
-
-/* Hide the horizontal scrollbar in WebKit-based browsers. */
-.project-slider::-webkit-scrollbar {
-  display: none;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 
 /* =========================
-   Project Cards
+   Contact Note
    ========================= */
 
-.project-card {
-  flex: 0 0 340px;
-  min-height: 280px;
-  height: auto;
+.contact-note {
+  z-index: 2;
+  width: 305px;
+  min-height: 232px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 24px;
-  border: 1px solid var(--border);
-  border-left: 3px solid var(--teal);
-  border-radius: 14px;
-  background: var(--surface);
-  color: var(--text);
-  outline: none;
-  cursor: pointer;
-  scroll-snap-align: start;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  transition:
-    transform 180ms ease,
-    box-shadow 180ms ease,
-    border-color 180ms ease;
+  justify-self: start;
 }
-
-.project-card:nth-child(even) {
-  border-left-color: var(--accent);
+.contact-note-body { display: grid; gap: 18px; padding: 24px 4px 3px; }
+.contact-note-compact { margin-top: auto; }
+.contact-email-block {
+  display: grid;
+  gap: 9px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
 }
-
-.project-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
-}
-
-.project-card:focus {
-  color: var(--text);
-}
-
-/* Show a clear focus indicator when a card is selected using a keyboard. */
-.project-card:focus-visible {
-  border-color: rgba(36, 89, 224, 0.55);
-  box-shadow: 0 0 0 3px rgba(36, 89, 224, 0.12);
-}
-
-.project-number {
-  color: #999999;
-  font-size: 13px;
-}
-
-.project-type {
-  margin: 0 0 8px;
+.contact-detail-label {
   color: var(--muted);
-  font-size: 13px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+.contact-email-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.contact-email-address {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
 }
 
-.project-card h3 {
-  margin: 0;
-  color: var(--text);
-  font-size: 23px;
-  line-height: 1.2;
-}
-
-.project-summary {
-  margin: 12px 0 20px;
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-.project-card h3,
-.project-summary,
-.project-view {
-  overflow-wrap: break-word;
-}
-
-.project-view {
-  margin-top: auto;
-  color: var(--accent);
-  font-size: 15px;
-}
-
-/* Reveal the arrow smoothly when the user interacts with a project card. */
-.project-view::after {
-  content: "→";
-  display: inline-block;
-  margin-left: 8px;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition:
-    opacity 180ms ease,
-    transform 180ms ease;
-}
-
-.project-card:hover .project-view::after,
-.project-card:focus-visible .project-view::after {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-
-/* =========================
-   Project Popup
-   ========================= */
-
-/* Cover the screen and centre the project popup above the page. */
-.project-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
+.contact-email-address:hover { text-decoration: underline; }
+.contact-email-actions, .contact-social-row { display: flex; align-items: center; gap: 9px; }
+.contact-social-row { padding-top: 1px; }
+.contact-icon-link,
+.contact-copy-button {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
   display: grid;
   place-items: center;
-  padding: 24px;
-  background: rgba(10, 13, 20, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  opacity: 0;
-  visibility: hidden;
-  transition:
-    opacity 280ms ease,
-    visibility 280ms ease;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+  background: color-mix(in srgb, var(--surface-2) 52%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
-/* JavaScript adds this class when a project is selected. */
-.project-overlay.open {
-  opacity: 1;
-  visibility: visible;
+.contact-icon-link:hover, .contact-copy-button:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--plum) 58%, var(--line));
+  background: color-mix(in srgb, var(--surface-2) 78%, transparent);
 }
-
-/* Perspective allows the inner card to create a 3D flip effect. */
-.project-popup {
-  width: min(520px, calc(100vw - 48px));
-  height: clamp(340px, 60vh, 520px);
-  perspective: 1500px;
-  opacity: 0;
-  transform: translateY(30px) scale(0.82);
-  transition:
-    transform 520ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 300ms ease;
+.contact-icon-link:focus-visible, .contact-copy-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--green) 64%, #fff);
+  outline-offset: 3px;
 }
-
-.project-overlay.open .project-popup {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.contact-icon-link img { width: 17px; height: 17px; opacity: .80; filter: none; }
+[data-theme="dark"] .contact-icon-link img { filter: invert(1); opacity: .88; }
+.contact-copy-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-
-/* Hold the front and back faces together as one flipping card. */
-.popup-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  transform: rotateY(0deg);
-  transform-style: preserve-3d;
-  transition:
-    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* JavaScript adds this class shortly after the popup opens. */
-.project-overlay.flipped .popup-inner {
-  transform: rotateY(180deg);
-}
-
-/* Both popup faces occupy the same space but face opposite directions. */
-.popup-face {
-  position: absolute;
-  inset: 0;
-  padding: 30px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--surface);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.2);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-
-.popup-front {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
-.popup-front h3,
-.popup-back h3 {
-  margin: 0;
-  color: var(--text);
-  font-size: 30px;
-  line-height: 1.2;
-}
-
-/* Rotate the back face so it appears correctly after the card flips. */
-.popup-back {
-  display: flex;
-  flex-direction: column;
-  transform: rotateY(180deg);
-}
-
-.popup-date {
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 13px;
-}
-
-.popup-description {
-  margin-top: 16px;
-  color: var(--muted);
-  line-height: 1.7;
-}
-
-.popup-github {
-  margin-top: 16px;
-  color: var(--accent);
-  font-weight: 600;
-}
-
-.popup-github:hover {
-  text-decoration: underline;
+.contact-copy-button .copy-check { display: none; }
+.contact-copy-button.is-copied .copy-symbol { display: none; }
+.contact-copy-button.is-copied .copy-check { display: block; }
+.contact-copy-button.is-copied {
+  color: var(--green-deep);
+  border-color: color-mix(in srgb, var(--green) 62%, var(--line));
 }
 
 
 /* =========================
-   Contact
+   Ambient Spirit Lights
    ========================= */
 
-.contact-text {
-  max-width: 600px;
-  color: var(--muted);
-  line-height: 1.75;
+.spirit-layer { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.spirit-light {
+  position: absolute;
+  width: var(--spirit-size, 13px);
+  height: var(--spirit-size, 13px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--spirit-colour) 0 13%,
+    color-mix(in srgb, var(--spirit-colour) 78%, transparent) 30%,
+    color-mix(in srgb, var(--spirit-colour) 30%, transparent) 52%,
+    transparent 72%
+  );
+
+  box-shadow:
+    0 0 9px 2px color-mix(in srgb, var(--spirit-colour) 36%, transparent),
+    0 0 18px 4px color-mix(in srgb, var(--spirit-colour) 14%, transparent);
+  filter: blur(1.15px);
+  opacity: var(--spirit-end);
+  animation: spirit-drift var(--spirit-duration) ease-in-out var(--spirit-delay) infinite alternate;
+
 }
 
-.contact-links {
-  display: flex;
-  gap: 22px;
-  margin-top: 30px;
+.spirit-light:nth-child(3n) { filter: blur(1.45px); }
+.spirit-light:nth-child(4n) { filter: blur(.85px); }
+.spirit-light.still { animation: none; opacity: var(--spirit-end); }
+
+@keyframes spirit-drift {
+0% { transform: translate(0, 0) scale(.82); opacity: var(--spirit-low); }
+50% { opacity: var(--spirit-high); }
+100% {
+  transform: translate(var(--spirit-x), var(--spirit-y)) scale(1.1);
+  opacity: var(--spirit-end);
+}
 }
 
-.contact-links a {
-  color: var(--accent);
+
+/* =========================
+   About Page
+   ========================= */
+
+.about-page { min-height: calc(100vh - 130px); padding-top: 108px; }
+.about-page-grid {
+  display: grid;
+  grid-template-columns: .85fr 1.15fr;
+  gap: 82px;
+  align-items: start;
+}
+.about-page h1 { font-size: clamp(70px, 9vw, 112px); }
+.about-enjoy { margin: 34px 0 30px; max-width: 560px; }
+.about-enjoy h2 {
+  margin: 0 0 14px;
+  font-family: var(--font-serif);
+  font-size: 32px;
   font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--green-deep);
 }
-
-.social-icon {
-  width: 26px;
-  height: 26px;
+.about-enjoy p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.8; }
+.about-dossier { padding: 30px; }
+.profile-note {
+  min-height: 0;
+  transform: rotate(-.55deg);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
 }
-
-.linkedin {
-  width: 30px;
-  height: 30px;
+.profile-note::before { left: 54px; transform: rotate(3deg); }
+.profile-note::after { right: 52px; transform: rotate(-4deg); }
+.dossier-section { padding: 34px 0; border-bottom: 1px solid var(--line); }
+.dossier-section h2 {
+  margin: 0 0 20px;
+  font-family: var(--font-serif);
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.02em;
 }
-
-.contact-links img {
-  width: 26px;
-  height: 26px;
-  opacity: 0.85;
-  filter: none;
-  transition: opacity 160ms ease;
-}
-
-/* Invert dark icons so they remain visible in dark mode. */
-[data-theme="dark"] .contact-links img {
-  filter: invert(1);
-}
-
-.contact-links img:hover {
-  opacity: 1;
+.dossier-section p { margin: 0; color: var(--muted); line-height: 1.75; }
+.skills { display: flex; flex-wrap: wrap; gap: 8px; }
+.skills span {
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
 }
 
 
@@ -807,67 +556,75 @@ h3,
    ========================= */
 
 .site-footer {
-  padding: 30px 0;
-  border-top: 1px solid var(--border);
+  padding: 28px 0;
+  border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 14px;
+  font-size: 12px;
 }
+.footer-inner { display: flex; justify-content: space-between; gap: 20px; }
+.footer-inner p { margin: 0; }
 
 
 /* =========================
-   Responsive Styles
+   Responsive adjustments
    ========================= */
 
-@media (max-width: 760px) {
-  /* Allow header items to wrap into separate rows. */
-  .nav-wrapper {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
+@media (max-width: 840px) {
+.hero { min-height: auto; padding-top: 56px; }
+.hero-grid, .about-page-grid { grid-template-columns: 1fr; }
+.hero-grid { gap: 44px; }
+.apothecary-note { max-width: 500px; }
+.about-page-grid { gap: 48px; }
+}
 
-  /* Keep the logo on the first row. */
-  .logo {
-    white-space: nowrap;
-  }
+@media (max-width: 680px) {
+.container { width: min(calc(100% - 30px), var(--max-width)); }
+.site-header { position: relative; }
+.nav-wrapper { min-height: 72px; flex-wrap: wrap; gap: 12px 18px; padding: 12px 0; }
+.logo { flex: 1; }
+.nav-links {
+  order: 3;
+  width: 100%;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 7px;
+  border-top: 1px solid var(--line);
+}
+.nav-links a { font-size: 13px; }
+.theme-toggle { margin-left: auto; }
+.hero { padding-top: 44px; }
+.hero h1 { font-size: clamp(68px, 23vw, 94px); }
 
-  /* Keep the theme toggle on the first row and align it to the right. */
-  .theme-toggle {
-    order: 2;
-    margin-left: auto;
-  }
+.hero-actions { align-items: flex-start; flex-direction: column; gap: 16px; }
+.hero-note-wrap { width: 100%; min-height: 360px; justify-self: stretch; }
+.apothecary-note { min-height: 0; padding: 20px; transform: none; }
+.contact-note { width: min(86%, 320px); min-height: 224px; }
+.contact-note-body { padding: 20px 2px 2px; }
+.contact-email-line { align-items: flex-start; }
+.contact-email-address { font-size: 18px; }
+.magic-circle {
+  width: 300px;
+  height: 300px;
+  right: -18px;
+  top: 28px;
+  --magic-low: .14;
+  --magic-high: .29;
+}
+[data-theme="dark"] .magic-circle { --magic-low: .23; --magic-high: .41; }
 
-  /* Force navigation links onto a new row. */
-  .nav-links {
-    order: 3;
-    flex-basis: 100%;
-    justify-content: center;
-    gap: 18px;
-  }
+.section { padding: 72px 0; }
+.about-page { padding-top: 64px; }
+.about-page h1 { font-size: 72px; }
+.about-dossier { padding: 22px; }
+.footer-inner { flex-direction: column; gap: 8px; }
+}
 
-  /* Reduce general page spacing on smaller screens. */
-  .section {
-    padding: 80px 0;
-  }
-
-  .container {
-    width: calc(100% - 32px);
-  }
-
-  /* Stack the About section into one column on smaller screens. */
-  .about-layout {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
-
-  /* Let project cards use most of the available screen width. */
-  .project-card {
-    flex: 0 0 calc(100vw - 48px);
-    min-height: 280px;
-    height: auto;
-    padding: 24px;
-  }
-
-  .popup-face {
-    padding: 20px;
-  }
+/* Reduced motion on mobile. */
+@media (prefers-reduced-motion: reduce) {
+*, *::before, *::after {
+  scroll-behavior: auto !important;
+  transition-duration: .01ms !important;
+  animation-duration: .01ms !important;
+  animation-iteration-count: 1 !important;
+}
 }
