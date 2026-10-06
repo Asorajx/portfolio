@@ -29,6 +29,104 @@ if (themeButton) {
 
 
 /* =========================
+   Page Transition
+   ========================= */
+
+;(function setupPageTransition() {
+  const transition = document.querySelector('.page-transition')
+  const transitionLinks = document.querySelectorAll(
+    'a[href="about.html"], a[href^="index.html"]',
+  )
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const arrivingFromTransition =
+    document.documentElement.dataset.pageTransition === 'ready'
+
+  if (!transition) return
+
+  function clearArrivalState() {
+    document.documentElement.removeAttribute('data-page-transition')
+    document.documentElement.classList.remove('page-transition-active')
+    transition.classList.remove('is-revealing')
+  }
+
+  if (arrivingFromTransition) {
+    try {
+      sessionStorage.removeItem('portfolio-page-transition')
+    } catch {}
+
+    if (reducedMotion) {
+      clearArrivalState()
+    } else {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          transition.classList.add('is-revealing')
+        })
+      })
+
+      transition.addEventListener('transitionend', clearArrivalState, { once: true })
+      setTimeout(clearArrivalState, 1180)
+    }
+  }
+
+  transitionLinks.forEach(link => {
+    link.addEventListener('click', event => {
+      const destination = new URL(link.href, window.location.href)
+      const current = new URL(window.location.href)
+      const sameDocument =
+        destination.origin === current.origin &&
+        destination.pathname === current.pathname &&
+        destination.search === current.search
+
+      if (
+        sameDocument ||
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        (link.target && link.target !== '_self')
+      ) {
+        return
+      }
+
+      if (reducedMotion) return
+
+      event.preventDefault()
+
+      try {
+        sessionStorage.setItem('portfolio-page-transition', 'ready')
+      } catch {}
+
+      document.documentElement.classList.add('page-transition-active')
+      transition.classList.add('is-covering')
+
+      setTimeout(() => {
+        window.location.href = destination.href
+      }, 1120)
+    })
+  })
+})()
+
+
+
+/* Clear any frozen transition state when the browser restores a cached page. */
+window.addEventListener('pageshow', event => {
+  if (!event.persisted) return
+
+  const transition = document.querySelector('.page-transition')
+
+  try {
+    sessionStorage.removeItem('portfolio-page-transition')
+  } catch {}
+
+  document.documentElement.removeAttribute('data-page-transition')
+  document.documentElement.classList.remove('page-transition-active')
+  transition?.classList.remove('is-covering', 'is-revealing')
+})
+
+
+/* =========================
    Magic Contact Circle
    ========================= */
 
