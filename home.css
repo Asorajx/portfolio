@@ -684,29 +684,36 @@
 
   .hero-note-wrap {
     width: 100%;
-    min-height: 485px;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-self: stretch;
+    gap: 28px;
   }
 
-  .hero-note-wrap::after { display: none; }
+  .hero-note-wrap::after {
+    display: none;
+  }
 
   .contact-note {
+    order: 1;
     width: min(86%, 320px);
     min-height: 180px;
     margin-top: 0;
     margin-left: 0;
+    align-self: flex-start;
     transform: none;
   }
 
-  .contact-note-body { padding: 18px 2px 2px; }
-  .contact-email-line { align-items: flex-start; }
-  .contact-email-address { font-size: 18px; }
-
   .magic-circle-stage {
-    width: 300px;
-    height: 300px;
-    top: 168px;
-    right: -18px;
+    order: 2;
+    position: relative;
+    width: 290px;
+    height: 290px;
+    top: auto;
+    right: auto;
+    flex: 0 0 auto;
   }
 
   .magic-circle {
