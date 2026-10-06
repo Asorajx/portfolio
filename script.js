@@ -29,6 +29,45 @@ if (themeButton) {
 
 
 /* =========================
+   Magic Contact Circle
+   ========================= */
+
+;(function setupMagicContactCircle() {
+  const stage = document.querySelector('.magic-circle-stage')
+  const links = document.querySelectorAll('[data-magic-node]')
+
+  if (!stage || !links.length) return
+
+  let activeNode = null
+
+  function activate(link) {
+    const node = link.dataset.magicNode
+    if (!node) return
+
+    if (activeNode) stage.classList.remove(`is-${activeNode}`)
+    activeNode = node
+    stage.classList.add('is-resonating', `is-${node}`)
+  }
+
+  function deactivate() {
+    stage.classList.remove('is-resonating')
+
+    if (activeNode) {
+      stage.classList.remove(`is-${activeNode}`)
+      activeNode = null
+    }
+  }
+
+  links.forEach(link => {
+    link.addEventListener('mouseenter', () => activate(link))
+    link.addEventListener('mouseleave', deactivate)
+    link.addEventListener('focus', () => activate(link))
+    link.addEventListener('blur', deactivate)
+  })
+})()
+
+
+/* =========================
    Spirit Lights
    ========================= */
 
@@ -152,6 +191,97 @@ overlay?.addEventListener('click', event => { if (event.target === overlay) clos
 popup?.addEventListener('click', event => event.stopPropagation())
 popupClose?.addEventListener('click', closeProject)
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && popupOpen) closeProject() })
+
+
+/* =========================
+   Contact Form
+   ========================= */
+
+const contactModal = document.getElementById('contactModal')
+const contactDialog = document.getElementById('contactDialog')
+const contactClose = document.getElementById('contactClose')
+const contactForm = document.getElementById('contactForm')
+const contactOpeners = document.querySelectorAll('[data-open-contact]')
+let contactFormOpen = false
+let lastContactTrigger
+
+/* Open the form and move keyboard focus into the dialog. */
+function openContactForm(trigger) {
+  if (!contactModal || contactFormOpen) return
+  contactFormOpen = true
+  lastContactTrigger = trigger
+  contactModal.classList.add('open')
+  contactModal.setAttribute('aria-hidden', 'false')
+  document.body.classList.add('popup-open')
+  document.getElementById('contactName')?.focus()
+}
+
+/* Close the form and return focus to the button that opened it. */
+function closeContactForm() {
+  if (!contactModal || !contactFormOpen) return
+  contactFormOpen = false
+  contactModal.classList.remove('open')
+  contactModal.setAttribute('aria-hidden', 'true')
+  document.body.classList.remove('popup-open')
+  lastContactTrigger?.focus()
+}
+
+contactOpeners.forEach(button => {
+  button.addEventListener('click', () => openContactForm(button))
+})
+
+contactClose?.addEventListener('click', closeContactForm)
+
+contactModal?.addEventListener('click', event => {
+  if (event.target === contactModal) closeContactForm()
+})
+
+contactDialog?.addEventListener('click', event => event.stopPropagation())
+
+/* Keep Tab focus inside the open contact dialog. */
+contactDialog?.addEventListener('keydown', event => {
+  if (event.key !== 'Tab') return
+
+  const focusable = [
+    ...contactDialog.querySelectorAll(
+      'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), a[href]',
+    ),
+  ]
+
+  if (!focusable.length) return
+
+  const first = focusable[0]
+  const last = focusable[focusable.length - 1]
+
+  if (event.shiftKey && document.activeElement === first) {
+    event.preventDefault()
+    last.focus()
+  } else if (!event.shiftKey && document.activeElement === last) {
+    event.preventDefault()
+    first.focus()
+  }
+})
+
+/* This static portfolio uses the visitor's email app instead of a form service. */
+contactForm?.addEventListener('submit', event => {
+  event.preventDefault()
+
+  const formData = new FormData(contactForm)
+  const name = String(formData.get('name') || '').trim()
+  const email = String(formData.get('email') || '').trim()
+  const message = String(formData.get('message') || '').trim()
+
+  const subject = encodeURIComponent(`Portfolio message from ${name}`)
+  const body = encodeURIComponent(
+    `Name: ${name}\nEmail: ${email}\n\n${message}`,
+  )
+
+  window.location.href = `mailto:xaranjin@gmail.com?subject=${subject}&body=${body}`
+})
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && contactFormOpen) closeContactForm()
+})
 
 
 /* =========================

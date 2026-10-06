@@ -20,11 +20,13 @@
     } catch (error) {}
   </script>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="projects.css">
 </head>
 
 <body>
-  <!-- Site header and primary navigation -->
+
+  <!-- Site Header and Primary Navigation -->
   <header class="site-header">
     <div class="container nav-wrapper">
       <a class="logo" href="#home" aria-label="Jun Xiang home">
@@ -75,7 +77,8 @@
   </header>
 
   <main>
-  <!-- Hero: name, actions, contact note, and magic-circle decoration -->
+
+  <!-- Name, Actions, Contact Note, and Magic Circle -->
     <section id="home" class="hero">
       <div class="container hero-grid">
         <div class="hero-copy">
@@ -87,27 +90,118 @@
         </div>
 
         <div id="contact" class="hero-note-wrap">
-          <svg class="magic-circle" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
-            <defs>
-              <filter id="magicGlow" x="-35%" y="-35%" width="170%" height="170%">
-                <feGaussianBlur stdDeviation="1.35" result="blur"/>
-                <feMerge>
-                  <feMergeNode in="blur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            <g class="magic-glyph" filter="url(#magicGlow)">
-              <circle class="magic-ring magic-ring-outer" cx="180" cy="180" r="151"/>
-              <circle class="magic-ring magic-ring-inner" cx="180" cy="180" r="140"/>
-              <path class="magic-triangle" d="M180 61 L286 249 L74 249 Z"/>
-              <circle class="magic-core" cx="180" cy="174" r="43"/>
-              <circle class="magic-seal" cx="180" cy="91" r="14"/>
-              <circle class="magic-seal" cx="112" cy="226" r="14"/>
-              <circle class="magic-seal" cx="248" cy="226" r="14"/>
-              <path class="magic-base" d="M75 249 H285"/>
-            </g>
-          </svg>
+          <div class="magic-circle-stage" aria-label="Contact links">
+            <svg class="magic-circle" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
+              <defs>
+                <filter id="magicGlow" x="-35%" y="-35%" width="170%" height="170%">
+                  <feGaussianBlur stdDeviation="1.35" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <g class="magic-glyph" filter="url(#magicGlow)">
+
+                <circle class="magic-ring magic-ring-outer" cx="180" cy="180" r="151"/>
+                <circle class="magic-ring magic-ring-inner" cx="180" cy="180" r="139"/>
+
+                <path class="magic-ring-marks" d="M180 29V43 M180 317V331 M29 180H43 M317 180H331"/>
+                <path class="magic-ring-marks magic-ring-marks-diagonal" d="M76 76L85 85 M275 275L284 284 M275 85L284 76 M76 284L85 275"/>
+                <path class="magic-triangle" d="M180 55 L286 247 L74 247 Z"/>
+                <path class="magic-node-spokes" d="M180 78V132 M95 235L150 198 M265 235L210 198"/>
+
+                <circle class="magic-core-orbit" cx="180" cy="174" r="55"/>
+                <circle class="magic-core" cx="180" cy="174" r="37"/>
+
+                <path class="magic-core-mark" d="M180 143 L207 158 L207 190 L180 205 L153 190 L153 158 Z"/>
+
+                <circle class="magic-core-dot" cx="180" cy="174" r="6"/>
+
+                <circle class="magic-node-halo magic-node-email" cx="180" cy="55" r="23"/>
+                <circle class="magic-seal magic-node-email" cx="180" cy="55" r="16"/>
+
+                <circle class="magic-node-halo magic-node-github" cx="74" cy="247" r="23"/>
+                <circle class="magic-seal magic-node-github" cx="74" cy="247" r="16"/>
+
+                <circle class="magic-node-halo magic-node-linkedin" cx="286" cy="247" r="23"/>
+                <circle class="magic-seal magic-node-linkedin" cx="286" cy="247" r="16"/>
+
+                <path class="magic-node-ticks" d="M180 29V35 M50 260L56 257 M310 260L304 257"/>
+                <path
+                  class="magic-orbit-segments"
+                  d="
+                    M77 126 Q105 79 151 62
+                    M88 138 Q112 99 151 83
+
+                    M209 62 Q255 79 283 126
+                    M209 83 Q248 99 272 138
+
+                    M92 276 Q180 316 268 276
+                    M110 266 Q180 295 250 266
+                  "
+                />
+                <path
+                  class="magic-bridge-marks"
+                  d="
+                    M126 151L108 143
+                    M234 151L252 143
+                    M180 247V264
+                  "
+                />
+                <path
+                  class="magic-rune-marks"
+                  d="
+                    M104 105l5 5-5 5
+                    M256 105l-5 5 5 5
+                    M170 288h20
+                    M176 283l4 5 4-5
+                  "
+                />
+                <circle class="magic-rune-dot" cx="97" cy="128" r="2"/>
+                <circle class="magic-rune-dot" cx="263" cy="128" r="2"/>
+                <circle class="magic-rune-dot" cx="180" cy="301" r="2"/>
+
+              </g>
+            </svg>
+
+            <div class="magic-socials">
+              <button
+                class="magic-social-link magic-social-email"
+                type="button"
+                data-open-contact
+                data-magic-node="email"
+                aria-label="Open contact form"
+                title="Email"
+              >
+                <span class="magic-social-icon magic-social-icon-email" aria-hidden="true"></span>
+              </button>
+
+              <a
+                class="magic-social-link magic-social-github"
+                data-magic-node="github"
+                href="https://github.com/Asorajx"
+                aria-label="GitHub"
+                title="GitHub"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="magic-social-icon magic-social-icon-github" aria-hidden="true"></span>
+              </a>
+
+              <a
+                class="magic-social-link magic-social-linkedin"
+                data-magic-node="linkedin"
+                href="https://www.linkedin.com/in/junx1ang/"
+                aria-label="LinkedIn"
+                title="LinkedIn"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span class="magic-social-icon magic-social-icon-linkedin" aria-hidden="true"></span>
+              </a>
+            </div>
+          </div>
 
           <aside class="apothecary-note contact-note" aria-label="Contact information">
             <div class="note-topline">
@@ -116,38 +210,36 @@
             </div>
 
             <div class="contact-note-body contact-note-compact">
+
               <div class="contact-email-block">
                 <span class="contact-detail-label">Email</span>
                 <div class="contact-email-line">
+
                   <a class="contact-email-address" href="mailto:xaranjin@gmail.com">xaranjin@gmail.com</a>
-                  <div class="contact-email-actions">
-                    <a class="contact-icon-link" href="mailto:xaranjin@gmail.com" aria-label="Send email">
-                      <img src="assets/icons/email.svg" alt="">
-                    </a>
-                    <button class="contact-copy-button" type="button" data-copy-email="xaranjin@gmail.com" aria-label="Copy email address" title="Copy email address">
-                      <svg class="copy-symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="1.5"></rect><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-10A1.5 1.5 0 0 0 3 5.5v10A1.5 1.5 0 0 0 4.5 17H8"></path></svg>
-                      <svg class="copy-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"></path></svg>
-                    </button>
-                  </div>
+                  <button class="contact-copy-button" type="button" data-copy-email="xaranjin@gmail.com" aria-label="Copy email address" title="Copy email address">
+                    <svg class="copy-symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="1.5"></rect><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-10A1.5 1.5 0 0 0 3 5.5v10A1.5 1.5 0 0 0 4.5 17H8"></path></svg>
+                    <svg class="copy-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"></path></svg>
+                  </button>
+
                 </div>
               </div>
 
-              <div class="contact-social-row" aria-label="Social links">
-                <a class="contact-icon-link" href="https://github.com/Asorajx" aria-label="GitHub" target="_blank" rel="noopener noreferrer"><img src="assets/icons/github.svg" alt=""></a>
-                <a class="contact-icon-link" href="https://www.linkedin.com/in/junx1ang/" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer"><img src="assets/icons/linkedin.svg" alt=""></a>
-              </div>
+              <button class="contact-form-button" type="button" data-open-contact>
+                Contact me <span aria-hidden="true">→</span>
+              </button>
+
             </div>
           </aside>
         </div>
       </div>
     </section>
 
-  <!-- Project cabinet: books are inserted by projects.js -->
+  <!-- Project Cabinet: Books are inserted by projects.js -->
     <section id="projects" class="section projects-section">
       <div class="container">
         <div class="projects-header">
           <div class="section-heading">
-            <h2>Selected projects</h2>
+            <h2>Selected Projects</h2>
           </div>
         </div>
 
@@ -234,14 +326,71 @@
 
   </main>
 
-  <!-- Site footer -->
+  <!-- Site Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© Jun Xiang. All rights reserved.</p>
     </div>
   </footer>
 
-  <!-- Project detail overlay. The front/back faces are populated by script.js. -->
+
+  <!-- =========================
+       Contact Form
+       ========================= -->
+
+  <div id="contactModal" class="contact-modal" aria-hidden="true">
+    <div
+      id="contactDialog"
+      class="contact-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="contactDialogTitle"
+      aria-describedby="contactFormNote"
+    >
+      <button id="contactClose" class="contact-dialog-close" type="button" aria-label="Close contact form">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"></path></svg>
+      </button>
+
+      <div class="note-topline">
+        <span>Message</span>
+        <span>Contact</span>
+      </div>
+
+      <div class="contact-dialog-heading">
+        <p class="eyebrow">Get in touch</p>
+        <h2 id="contactDialogTitle">Contact me</h2>
+      </div>
+
+      <form id="contactForm" class="contact-form">
+        <label class="contact-field">
+          <span>Name</span>
+          <input id="contactName" name="name" type="text" autocomplete="name" required>
+        </label>
+
+        <label class="contact-field">
+          <span>Email</span>
+          <input name="email" type="email" autocomplete="email" required>
+        </label>
+
+        <label class="contact-field">
+          <span>Message</span>
+          <textarea name="message" rows="5" required></textarea>
+        </label>
+
+        <p id="contactFormNote" class="contact-form-note">
+          Sending opens your email app with this message filled in.
+        </p>
+
+        <button class="primary-button contact-submit" type="submit">Send message</button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- =========================
+       Project Detail Overlay
+       ========================= -->
+
   <div id="projectOverlay" class="project-overlay" aria-hidden="true">
     <div id="projectPopup" class="project-popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
       <div id="popupInner" class="popup-inner">

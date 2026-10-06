@@ -1,0 +1,725 @@
+/* =========================
+   Home Hero
+   ========================= */
+
+.hero { position: relative; min-height: 610px; padding: 82px 0 44px; overflow: hidden; }
+.hero > .container { position: relative; z-index: 2; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(390px, 0.86fr);
+  gap: 52px;
+  align-items: center;
+}
+
+.hero-copy { padding: 20px 0; }
+.hero-note-wrap {
+  position: relative;
+  width: min(100%, 430px);
+  min-height: 540px;
+  display: grid;
+  align-items: start;
+  justify-self: end;
+  isolation: isolate;
+  scroll-margin-top: 96px;
+}
+
+/* A subtle leader line makes the note read as an annotation of the sigil. */
+.hero-note-wrap::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  top: 198px;
+  left: 196px;
+  width: 44px;
+  height: 18px;
+  border-right: 1px solid color-mix(in srgb, var(--magic) 54%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--magic) 54%, transparent);
+  pointer-events: none;
+  opacity: .72;
+}
+
+/* Keep the contact links aligned with the three seal circles. */
+.magic-circle-stage {
+  position: absolute;
+  z-index: 0;
+  width: 370px;
+  height: 370px;
+  top: 145px;
+  right: -48px;
+}
+
+.magic-circle {
+  --magic-low: .17;
+  --magic-high: .34;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--magic);
+  fill: none;
+  stroke: currentColor;
+  opacity: var(--magic-low);
+  pointer-events: none;
+  transform-origin: 50% 50%;
+  animation: magic-breathe 6.8s ease-in-out infinite;
+}
+
+.magic-socials {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.magic-social-link {
+  position: absolute;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--magic) 78%, var(--line));
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--surface) 92%, var(--magic) 8%);
+  color: color-mix(in srgb, var(--ink) 92%, var(--magic));
+  box-shadow:
+    inset 0 0 0 3px color-mix(in srgb, var(--surface) 88%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--magic) 30%, transparent),
+    0 0 8px color-mix(in srgb, var(--magic) 12%, transparent);
+  cursor: pointer;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  animation: magic-social-idle 4.8s ease-in-out infinite;
+  transition:
+    background 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    color 160ms ease,
+    filter 160ms ease,
+    transform 160ms ease;
+}
+
+.magic-social-email { animation-delay: 0s; }
+.magic-social-github { animation-delay: 1.6s; }
+.magic-social-linkedin { animation-delay: 3.2s; }
+
+.magic-social-link:hover,
+.magic-social-link:focus-visible {
+  border-color: color-mix(in srgb, var(--magic) 88%, var(--ink));
+  background: color-mix(in srgb, var(--surface) 78%, var(--magic) 22%);
+  color: var(--ink);
+  box-shadow:
+    inset 0 0 0 3px color-mix(in srgb, var(--surface) 82%, transparent),
+    0 0 0 2px color-mix(in srgb, var(--magic) 48%, transparent),
+    0 0 18px color-mix(in srgb, var(--magic) 52%, transparent);
+  filter: drop-shadow(0 0 7px color-mix(in srgb, var(--magic) 48%, transparent));
+  animation-play-state: paused;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.magic-social-link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--green) 62%, #fff);
+  outline-offset: 5px;
+}
+
+.magic-social-icon {
+  width: 21px;
+  height: 21px;
+  display: block;
+  background: currentColor;
+  opacity: 1;
+  transition: opacity 160ms ease, transform 160ms ease;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.magic-social-icon-email {
+  -webkit-mask-image: url("assets/icons/email.svg");
+  mask-image: url("assets/icons/email.svg");
+}
+
+.magic-social-icon-github {
+  -webkit-mask-image: url("assets/icons/github.svg");
+  mask-image: url("assets/icons/github.svg");
+}
+
+.magic-social-icon-linkedin {
+  -webkit-mask-image: url("assets/icons/linkedin.svg");
+  mask-image: url("assets/icons/linkedin.svg");
+}
+
+.magic-social-icon-email { width: 20px; height: 20px; }
+.magic-social-icon-github { width: 22px; height: 22px; }
+.magic-social-icon-linkedin { width: 21px; height: 21px; }
+
+.magic-social-link:hover .magic-social-icon,
+.magic-social-link:focus-visible .magic-social-icon {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+/* Match the interactive icons to the three SVG seal centers. */
+.magic-social-email {
+  top: 15.28%;
+  left: 50%;
+}
+
+.magic-social-github {
+  top: 68.61%;
+  left: 20.56%;
+}
+
+.magic-social-linkedin {
+  top: 68.61%;
+  left: 79.44%;
+}
+
+.magic-glyph {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.magic-ring-outer { stroke-width: 2.4; }
+.magic-ring-inner { stroke-width: 1; opacity: .72; }
+
+.magic-ring-marks {
+  stroke-width: 1.1;
+  opacity: .56;
+}
+
+.magic-ring-marks-diagonal { opacity: .38; }
+
+.magic-triangle {
+  stroke-width: 2;
+  opacity: .92;
+}
+
+.magic-node-spokes {
+  stroke-width: 1;
+  opacity: .48;
+}
+
+.magic-core-orbit {
+  stroke-width: .9;
+  stroke-dasharray: 3 7;
+  opacity: .46;
+}
+
+.magic-core { stroke-width: 1.6; }
+
+.magic-core-mark {
+  stroke-width: .9;
+  opacity: .46;
+}
+
+.magic-core-dot {
+  fill: currentColor;
+  stroke: none;
+  opacity: .52;
+}
+
+.magic-node-halo {
+  stroke-width: .9;
+  opacity: .34;
+  transition: opacity 160ms ease, stroke-width 160ms ease;
+}
+
+.magic-seal {
+  fill: color-mix(in srgb, var(--surface) 18%, transparent);
+  stroke-width: 1.45;
+  opacity: .72;
+  transition: fill 160ms ease, opacity 160ms ease, stroke-width 160ms ease;
+}
+
+.magic-node-ticks {
+  stroke-width: 1;
+  opacity: .42;
+}
+
+/* Curved bands fill the outer wedges without turning the sigil into a grid. */
+.magic-orbit-segments {
+  stroke-width: .85;
+  opacity: .34;
+}
+
+.magic-bridge-marks {
+  stroke-width: 1;
+  opacity: .46;
+}
+
+.magic-rune-marks {
+  stroke-width: 1;
+  opacity: .44;
+}
+
+.magic-rune-dot {
+  fill: currentColor;
+  stroke: none;
+  opacity: .48;
+}
+
+.magic-circle-stage.is-resonating .magic-glyph {
+  animation: magic-resonate 190ms linear infinite;
+}
+
+.magic-circle-stage.is-email .magic-node-email,
+.magic-circle-stage.is-github .magic-node-github,
+.magic-circle-stage.is-linkedin .magic-node-linkedin {
+  stroke-width: 2.3;
+  opacity: 1;
+}
+
+.magic-circle-stage.is-email .magic-node-email.magic-node-halo,
+.magic-circle-stage.is-github .magic-node-github.magic-node-halo,
+.magic-circle-stage.is-linkedin .magic-node-linkedin.magic-node-halo {
+  opacity: .82;
+}
+
+.magic-circle-stage.is-email .magic-node-email.magic-seal,
+.magic-circle-stage.is-github .magic-node-github.magic-seal,
+.magic-circle-stage.is-linkedin .magic-node-linkedin.magic-seal {
+  fill: color-mix(in srgb, var(--magic) 18%, var(--surface));
+  opacity: 1;
+}
+
+[data-theme="dark"] .magic-circle { --magic-low: .27; --magic-high: .48; }
+
+@keyframes magic-breathe {
+  0%, 100% {
+    opacity: var(--magic-low);
+    transform: scale(.992);
+    filter: drop-shadow(0 0 3px color-mix(in srgb, var(--magic) 16%, transparent));
+  }
+
+  50% {
+    opacity: var(--magic-high);
+    transform: scale(1.008);
+    filter:
+      drop-shadow(0 0 8px var(--magic-glow))
+      drop-shadow(0 0 18px color-mix(in srgb, var(--magic) 11%, transparent));
+  }
+}
+
+@keyframes magic-social-idle {
+  0%, 76%, 100% {
+    box-shadow:
+      inset 0 0 0 3px color-mix(in srgb, var(--surface) 88%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--magic) 30%, transparent),
+      0 0 8px color-mix(in srgb, var(--magic) 12%, transparent);
+  }
+
+  84% {
+    box-shadow:
+      inset 0 0 0 3px color-mix(in srgb, var(--surface) 88%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--magic) 42%, transparent),
+      0 0 13px color-mix(in srgb, var(--magic) 26%, transparent);
+  }
+
+  92% {
+    box-shadow:
+      inset 0 0 0 3px color-mix(in srgb, var(--surface) 88%, transparent),
+      0 0 0 1px color-mix(in srgb, var(--magic) 34%, transparent),
+      0 0 9px color-mix(in srgb, var(--magic) 16%, transparent);
+  }
+}
+
+@keyframes magic-resonate {
+  0%, 100% { transform: translate(0, 0) rotate(0); }
+  20% { transform: translate(.8px, -.45px) rotate(.18deg); }
+  40% { transform: translate(-.65px, .55px) rotate(-.16deg); }
+  60% { transform: translate(.45px, .65px) rotate(.12deg); }
+  80% { transform: translate(-.8px, -.35px) rotate(-.18deg); }
+}
+
+.hero h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(72px, 11vw, 126px);
+  font-weight: 600;
+  line-height: 0.82;
+  letter-spacing: -0.055em;
+}
+.hero-actions { display: flex; align-items: center; gap: 12px; margin-top: 30px; }
+.hero-actions-minimal { margin-top: 40px; }
+
+/* Keep the two hero actions visually related while preserving hierarchy. */
+.primary-button,
+.hero-actions .text-link {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 18px;
+  border: 1px solid var(--green-deep);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.primary-button { background: var(--green-deep); color: var(--surface); }
+.primary-button:hover {
+  transform: translateY(-2px);
+  background: var(--plum-deep);
+  border-color: var(--plum-deep);
+}
+.hero-actions .text-link {
+  border-color: color-mix(in srgb, var(--plum) 68%, var(--line));
+  background: color-mix(in srgb, var(--surface) 20%, transparent);
+  color: var(--plum);
+}
+.hero-actions .text-link:hover {
+  transform: translateY(-2px);
+  border-color: var(--plum);
+  background: color-mix(in srgb, var(--plum) 11%, transparent);
+}
+
+
+/* =========================
+   Contact Note
+   ========================= */
+
+.contact-note {
+  z-index: 2;
+  width: 305px;
+  min-height: 188px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  justify-self: start;
+  margin-top: 10px;
+  margin-left: -58px;
+  transform: rotate(-1.1deg);
+}
+
+.contact-note-body {
+  display: grid;
+  gap: 14px;
+  padding: 20px 4px 2px;
+}
+
+.contact-note-compact { margin-top: auto; }
+
+.contact-email-block {
+  display: grid;
+  gap: 9px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 78%, transparent);
+}
+
+.contact-detail-label {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.contact-email-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.contact-email-address {
+  min-width: 0;
+  color: var(--ink);
+  font-family: var(--font-serif);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.contact-email-address:hover { text-decoration: underline; }
+
+.contact-copy-button {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--line) 88%, transparent);
+  background: color-mix(in srgb, var(--surface-2) 52%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.contact-copy-button:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--plum) 58%, var(--line));
+  background: color-mix(in srgb, var(--surface-2) 78%, transparent);
+}
+
+.contact-copy-button:focus-visible,
+.contact-form-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--green) 64%, #fff);
+  outline-offset: 3px;
+}
+
+.contact-copy-button svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-copy-button .copy-check { display: none; }
+.contact-copy-button.is-copied .copy-symbol { display: none; }
+.contact-copy-button.is-copied .copy-check { display: block; }
+
+.contact-copy-button.is-copied {
+  color: var(--green-deep);
+  border-color: color-mix(in srgb, var(--green) 62%, var(--line));
+}
+
+.contact-form-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  padding: 10px 2px 2px;
+  border: 0;
+  background: transparent;
+  color: var(--plum);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.contact-form-button span {
+  display: inline-block;
+  transition: transform 160ms ease;
+}
+
+.contact-form-button:hover span { transform: translateX(3px); }
+
+
+/* =========================
+   Contact Form
+   ========================= */
+
+.contact-modal {
+  position: fixed;
+  z-index: 300;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(18, 24, 21, .54);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.contact-modal.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.contact-dialog {
+  position: relative;
+  width: min(100%, 470px);
+  padding: 26px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 96%, var(--paper));
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+  transform: translateY(12px) rotate(.35deg);
+  transition: transform 180ms ease;
+}
+
+.contact-modal.open .contact-dialog {
+  transform: translateY(0) rotate(.35deg);
+}
+
+/* Reserve room for the close control so it never covers the topline label. */
+.contact-dialog > .note-topline {
+  padding-right: 48px;
+}
+
+.contact-dialog-close {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--line) 84%, transparent);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.contact-dialog-close:hover {
+  border-color: color-mix(in srgb, var(--plum) 58%, var(--line));
+}
+
+.contact-dialog-close:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--green) 64%, #fff);
+  outline-offset: 3px;
+}
+
+.contact-dialog-close svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.contact-dialog-heading {
+  padding: 24px 0 20px;
+}
+
+.contact-dialog-heading .eyebrow { margin-bottom: 8px; }
+
+.contact-dialog-heading h2 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.contact-form {
+  display: grid;
+  gap: 16px;
+}
+
+.contact-field {
+  display: grid;
+  gap: 7px;
+}
+
+.contact-field span {
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  outline: 0;
+  background: color-mix(in srgb, var(--surface-2) 62%, transparent);
+  color: var(--ink);
+  font: inherit;
+  resize: vertical;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  border-color: var(--green);
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+}
+
+.contact-form-note {
+  margin: -2px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.contact-submit {
+  width: 100%;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+
+/* =========================
+   Responsive CSS
+   ========================= */
+
+@media (max-width: 840px) {
+  .hero {
+    min-height: auto;
+    padding-top: 56px;
+  }
+
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 44px;
+  }
+}
+
+@media (max-width: 680px) {
+  .hero { padding-top: 44px; }
+  .hero h1 { font-size: clamp(68px, 23vw, 94px); }
+
+  .hero-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .hero-note-wrap {
+    width: 100%;
+    min-height: 485px;
+    justify-self: stretch;
+  }
+
+  .hero-note-wrap::after { display: none; }
+
+  .contact-note {
+    width: min(86%, 320px);
+    min-height: 180px;
+    margin-top: 0;
+    margin-left: 0;
+    transform: none;
+  }
+
+  .contact-note-body { padding: 18px 2px 2px; }
+  .contact-email-line { align-items: flex-start; }
+  .contact-email-address { font-size: 18px; }
+
+  .magic-circle-stage {
+    width: 300px;
+    height: 300px;
+    top: 168px;
+    right: -18px;
+  }
+
+  .magic-circle {
+    --magic-low: .14;
+    --magic-high: .29;
+  }
+
+  [data-theme="dark"] .magic-circle {
+    --magic-low: .23;
+    --magic-high: .41;
+  }
+
+  .contact-modal { padding: 15px; }
+  .contact-dialog { padding: 22px 20px; }
+  .contact-dialog-heading h2 { font-size: 36px; }
+}
