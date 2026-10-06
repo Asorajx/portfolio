@@ -624,40 +624,104 @@ html.page-transition-active {
    Ambient Spirit Lights
    ========================= */
 
-.spirit-layer { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+.spirit-layer {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .spirit-light {
   position: absolute;
-  width: var(--spirit-size, 13px);
-  height: var(--spirit-size, 13px);
+  width: var(--spirit-size, 5px);
+  height: var(--spirit-size, 5px);
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    var(--spirit-colour) 0 13%,
-    color-mix(in srgb, var(--spirit-colour) 78%, transparent) 30%,
-    color-mix(in srgb, var(--spirit-colour) 30%, transparent) 52%,
-    transparent 72%
-  );
-
+  background: var(--spirit-colour);
   box-shadow:
-    0 0 9px 2px color-mix(in srgb, var(--spirit-colour) 36%, transparent),
-    0 0 18px 4px color-mix(in srgb, var(--spirit-colour) 14%, transparent);
-  filter: blur(1.15px);
-  opacity: var(--spirit-end);
-  animation: spirit-drift var(--spirit-duration) ease-in-out var(--spirit-delay) infinite alternate;
-
+    0 0 6px color-mix(in srgb, var(--spirit-colour) 86%, transparent),
+    0 0 14px color-mix(in srgb, var(--spirit-colour) 42%, transparent);
+  opacity: .7;
+  animation:
+    spirit-firefly-drift var(--spirit-drift-duration) ease-in-out var(--spirit-delay) infinite alternate;
 }
 
-.spirit-light:nth-child(3n) { filter: blur(1.45px); }
-.spirit-light:nth-child(4n) { filter: blur(.85px); }
-.spirit-light.still { animation: none; opacity: var(--spirit-end); }
-
-@keyframes spirit-drift {
-0% { transform: translate(0, 0) scale(.82); opacity: var(--spirit-low); }
-50% { opacity: var(--spirit-high); }
-100% {
-  transform: translate(var(--spirit-x), var(--spirit-y)) scale(1.1);
-  opacity: var(--spirit-end);
+.spirit-light::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      circle,
+      color-mix(in srgb, var(--spirit-colour) 72%, transparent) 0 18%,
+      color-mix(in srgb, var(--spirit-colour) 30%, transparent) 42%,
+      transparent 72%
+    );
+  opacity: .2;
+  transform: scale(.65);
+  animation:
+    spirit-firefly-glow var(--spirit-glow-duration) ease-in-out var(--spirit-delay) infinite;
 }
+
+.spirit-light:nth-child(3n)::before {
+  inset: -6px;
+}
+
+.spirit-light:nth-child(4n)::before {
+  inset: -4px;
+}
+
+.spirit-light.still {
+  opacity: .68;
+  animation: none;
+}
+
+.spirit-light.still::before {
+  opacity: .36;
+  transform: scale(.9);
+  animation: none;
+}
+
+[data-theme="light"] .spirit-light {
+  opacity: .62;
+  box-shadow:
+    0 0 7px color-mix(in srgb, var(--spirit-colour) 68%, transparent),
+    0 0 16px color-mix(in srgb, var(--spirit-colour) 30%, transparent);
+}
+
+[data-theme="light"] .spirit-light::before {
+  opacity: .2;
+}
+
+@keyframes spirit-firefly-glow {
+  0%, 100% {
+    opacity: .12;
+    transform: scale(.55);
+  }
+
+  50% {
+    opacity: .9;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes spirit-firefly-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  33% {
+    transform: translate(var(--spirit-x1), var(--spirit-y1));
+  }
+
+  66% {
+    transform: translate(var(--spirit-x2), var(--spirit-y2));
+  }
+
+  100% {
+    transform: translate(var(--spirit-x3), var(--spirit-y3));
+  }
 }
 
 

@@ -189,15 +189,22 @@ window.addEventListener('pageshow', event => {
 
     anchors.forEach(([x, y], index) => {
       const light = document.createElement('span')
+      const drift = () => (Math.random() * 18 - 9).toFixed(0)
+
       light.className = `spirit-light${reducedMotion ? ' still' : ''}`
-      light.style.left = `${x + Math.random() * 5 - 2.5}%`
-      light.style.top = `${y + Math.random() * 5 - 2.5}%`
+      light.style.left = `${x + Math.random() * 4 - 2}%`
+      light.style.top = `${y + Math.random() * 4 - 2}%`
       light.style.setProperty('--spirit-colour', colours[index % colours.length])
-      light.style.setProperty('--spirit-size', `${(9 + Math.random() * 4).toFixed(1)}px`)
-      light.style.setProperty('--spirit-delay', `${(-Math.random() * 8).toFixed(1)}s`)
-      light.style.setProperty('--spirit-duration', `${(9 + Math.random() * 7).toFixed(1)}s`)
-      light.style.setProperty('--spirit-x', `${(Math.random() * 42 - 21).toFixed(0)}px`)
-      light.style.setProperty('--spirit-y', `${(Math.random() * 38 - 19).toFixed(0)}px`)
+      light.style.setProperty('--spirit-size', `${(3.5 + Math.random() * 2).toFixed(1)}px`)
+      light.style.setProperty('--spirit-delay', `${(-Math.random() * 6).toFixed(1)}s`)
+      light.style.setProperty('--spirit-glow-duration', `${(3.8 + Math.random() * 2.6).toFixed(1)}s`)
+      light.style.setProperty('--spirit-drift-duration', `${(9 + Math.random() * 7).toFixed(1)}s`)
+      light.style.setProperty('--spirit-x1', `${drift()}px`)
+      light.style.setProperty('--spirit-y1', `${drift()}px`)
+      light.style.setProperty('--spirit-x2', `${drift()}px`)
+      light.style.setProperty('--spirit-y2', `${drift()}px`)
+      light.style.setProperty('--spirit-x3', `${drift()}px`)
+      light.style.setProperty('--spirit-y3', `${drift()}px`)
       layer.appendChild(light)
     })
   })
