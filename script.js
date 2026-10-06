@@ -3,16 +3,29 @@
    ========================= */
 
 const themeButton = document.getElementById('themeToggle')
-document.documentElement.dataset.theme =
-  localStorage.getItem('portfolio-theme') || 'dark'
+const savedTheme = localStorage.getItem('portfolio-theme') || 'dark'
 
-themeButton?.addEventListener('click', () => {
-  const theme =
-    document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'
+document.documentElement.dataset.theme = savedTheme
 
-  document.documentElement.dataset.theme = theme
-  localStorage.setItem('portfolio-theme', theme)
-})
+/* Keep the animated checkbox in sync with the saved portfolio theme. */
+if (themeButton) {
+  themeButton.checked = savedTheme === 'dark'
+  themeButton.setAttribute(
+    'aria-label',
+    savedTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+  )
+
+  themeButton.addEventListener('change', () => {
+    const theme = themeButton.checked ? 'dark' : 'light'
+
+    document.documentElement.dataset.theme = theme
+    localStorage.setItem('portfolio-theme', theme)
+    themeButton.setAttribute(
+      'aria-label',
+      theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme',
+    )
+  })
+}
 
 
 /* =========================
