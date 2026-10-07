@@ -16,6 +16,7 @@ const projectDetails = [
     github: 'https://github.com/fyp-26-s3-07/secure-data-sharing-platform',
     hasDemo: true,
     demo: '',
+    liveDemo: '',
   },
   {
     id: 'honeypot',
@@ -30,6 +31,7 @@ const projectDetails = [
     github: 'https://github.com/Asorajx/honeypot-simulation',
     hasDemo: false,
     demo: '',
+    liveDemo: '',
   },
   {
     id: 'writepretty',
@@ -43,7 +45,8 @@ const projectDetails = [
     description: 'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
     github: 'https://github.com/Asorajx/writepretty',
     hasDemo: true,
-    demo: '',
+    demo: 'assets/demos/WritePretty-Demo.mp4',
+    liveDemo: 'https://asorajx.github.io/writepretty/',
   },
   {
     id: 'loop',
@@ -57,7 +60,8 @@ const projectDetails = [
     description: 'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, object interactions, state changes, inheritance, and source code in real time.',
     github: 'https://github.com/Asorajx/LOOP',
     hasDemo: true,
-    demo: '',
+    demo: 'assets/demos/LOOP-Demo.mp4',
+    liveDemo: 'https://loop-duzg.onrender.com/',
   },
 ]
 
@@ -82,10 +86,9 @@ const projectDetails = [
     focus: document.getElementById('projectFocus'),
     description: document.getElementById('projectDescription'),
     demoSection: document.getElementById('projectDemoSection'),
-    demoTitle: document.getElementById('projectDemoTitle'),
-    demoText: document.getElementById('projectDemoText'),
+    demoFrame: document.querySelector('.project-demo-frame'),
     github: document.getElementById('projectGithub'),
-    demo: document.getElementById('projectDemo'),
+    liveDemo: document.getElementById('projectDemo'),
   }
 
   let switchTimer
@@ -117,44 +120,55 @@ const projectDetails = [
       fields.github.href = project.github
       fields.demoSection.hidden = !project.hasDemo
 
+      /* Demo Preview */
       if (project.hasDemo) {
-        fields.demoTitle.textContent = project.demo
-          ? `${project.shortTitle} demo`
-          : 'No preview currently available'
-        fields.demoText.textContent = project.demo
-          ? `Preview for ${project.shortTitle}.`
-          : 'A preview for this project may be added later.'
-
         if (project.demo) {
-          fields.demo.outerHTML = `
-            <a
-              id="projectDemo"
-              class="project-detail-button project-detail-button--primary"
-              href="${project.demo}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Live demo <span aria-hidden="true">↗</span>
-            </a>
+          fields.demoFrame.innerHTML = `
+            <video controls muted playsinline preload="metadata">
+              <source src="${project.demo}" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
           `
         } else {
-          fields.demo.outerHTML = `
-            <span
-              id="projectDemo"
-              class="project-detail-button project-detail-button--primary is-disabled"
-              aria-disabled="true"
-            >
-              Preview unavailable
-            </span>
+          fields.demoFrame.innerHTML = `
+            <div class="project-demo-placeholder">
+              <span>No preview currently available</span>
+              <p>A preview for this project may be added later.</p>
+            </div>
           `
         }
+      }
+
+      /* Live Demo in external website button. */
+      if (project.liveDemo) {
+        fields.liveDemo.outerHTML = `
+          <a
+            id="projectDemo"
+            class="project-detail-button project-detail-button--primary"
+            href="${project.liveDemo}"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Live demo <span aria-hidden="true">↗</span>
+          </a>
+        `
+      } else if (project.hasDemo) {
+        fields.liveDemo.outerHTML = `
+          <span
+            id="projectDemo"
+            class="project-detail-button project-detail-button--primary is-disabled"
+            aria-disabled="true"
+          >
+            Live demo unavailable
+          </span>
+        `
       } else {
-        fields.demo.outerHTML = `
+        fields.liveDemo.outerHTML = `
           <span id="projectDemo" hidden></span>
         `
       }
 
-      fields.demo = document.getElementById('projectDemo')
+      fields.liveDemo = document.getElementById('projectDemo')
 
       tabs.forEach(tab => {
         const selected = tab.dataset.projectTab === project.id

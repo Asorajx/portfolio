@@ -638,6 +638,12 @@
   object-fit: cover;
 }
 
+/* Keep screen-recording demos fully visible inside the preview frame. */
+.project-demo-frame > video {
+  object-fit: contain;
+  background: var(--surface-2);
+}
+
 .project-demo-placeholder {
   min-height: 540px;
   display: grid;
