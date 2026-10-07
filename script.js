@@ -391,15 +391,22 @@ const popupBindings = {
   popupDate: 'date',
   popupDescription: 'description',
 }
+const reducedProjectMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+const bookGrowDelay = reducedProjectMotion ? 0 : 60
+const bookGrowDuration = reducedProjectMotion ? 0 : 220
+const bookOpenDuration = reducedProjectMotion ? 0 : 400
+const bookCloseDuration = reducedProjectMotion ? 0 : 360
 let popupOpen = false
+let growTimer
 let flipTimer
 let closeFocusTimer
+let closeTimer
 let lastFocusedCard
 
 /* Render project books only when the project manager and container are available. */
 window.ProjectManager?.render(projectContainer)
 
-/* Copy the selected book's data into the popup, then trigger the card flip. */
+/* Copy the selected project into the popup and match the shelf book. */
 function openProject(card) {
   if (!overlay || !popup || popupOpen) return
   popupOpen = true
@@ -409,35 +416,70 @@ function openProject(card) {
     const element = document.getElementById(id)
     if (element) element.textContent = card.dataset[key]
   })
+
   const github = document.getElementById('popupGithub')
   if (github) github.href = card.dataset.github
 
-  overlay.classList.remove('flipped')
+  const bookStyles = getComputedStyle(card)
+  const bookCover = bookStyles.getPropertyValue('--book-cover').trim()
+  const bookInk = bookStyles.getPropertyValue('--book-ink').trim()
+  const bookBounds = card.getBoundingClientRect()
+
+  if (bookCover) popup.style.setProperty('--popup-book-cover', bookCover)
+  if (bookInk) popup.style.setProperty('--popup-book-ink', bookInk)
+
+  popup.style.setProperty('--popup-start-width', `${bookBounds.width}px`)
+  popup.style.setProperty('--popup-start-height', `${bookBounds.height}px`)
+
+  clearTimeout(growTimer)
+  clearTimeout(flipTimer)
+  clearTimeout(closeFocusTimer)
+  clearTimeout(closeTimer)
+
+  overlay.classList.remove('expanded', 'flipped')
   overlay.classList.add('open')
   overlay.setAttribute('aria-hidden', 'false')
   document.body.classList.add('popup-open')
 
-  flipTimer = setTimeout(() => {
-    overlay.classList.add('flipped')
-    closeFocusTimer = setTimeout(() => popupClose?.focus(), 680)
-  }, 240)
+  /* Grow the shelf-sized book before opening its cover. */
+  growTimer = setTimeout(() => {
+    overlay.classList.add('expanded')
+
+    flipTimer = setTimeout(() => {
+      overlay.classList.add('flipped')
+
+      closeFocusTimer = setTimeout(
+        () => popupClose?.focus(),
+        bookOpenDuration,
+      )
+    }, bookGrowDuration)
+  }, bookGrowDelay)
 }
 
-/* Reverse the flip, hide the overlay, and return keyboard focus to the book. */
+/* Close the cover before shrinking and hiding the book. */
 function closeProject() {
   if (!overlay || !popupOpen) return
   popupOpen = false
+
+  clearTimeout(growTimer)
   clearTimeout(flipTimer)
   clearTimeout(closeFocusTimer)
+  clearTimeout(closeTimer)
+
   overlay.classList.remove('flipped')
 
-  setTimeout(() => {
-    overlay.classList.remove('open')
-    overlay.setAttribute('aria-hidden', 'true')
-    document.body.classList.remove('popup-open')
-    lastFocusedCard?.focus()
-  }, 170)
+  closeTimer = setTimeout(() => {
+    overlay.classList.remove('expanded')
+
+    setTimeout(() => {
+      overlay.classList.remove('open')
+      overlay.setAttribute('aria-hidden', 'true')
+      document.body.classList.remove('popup-open')
+      lastFocusedCard?.focus()
+    }, bookGrowDuration)
+  }, bookCloseDuration)
 }
+
 
 /* Mouse/touch interaction for project books. */
 projectContainer?.addEventListener('click', event => {
