@@ -37,13 +37,68 @@ if (themeButton) {
   const transitionLinks = document.querySelectorAll(
     'a[href="about.html"], a[href^="index.html"]',
   )
+  const softDisplacement = document.querySelector(
+    '#pageTransitionWaterSoft feDisplacementMap',
+  )
+  const strongDisplacement = document.querySelector(
+    '#pageTransitionWaterStrong feDisplacementMap',
+  )
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   const arrivingFromTransition =
     document.documentElement.dataset.pageTransition === 'ready'
+  const coverDuration = 380
+  const revealDuration = 300
 
   if (!transition) return
 
+  /* Update the strength of the liquid distortion. */
+  function setDisplacement(displacement, value) {
+    if (!displacement) return
+    displacement.setAttribute('scale', value.toFixed(2))
+  }
+
+  /* Animate the liquid distortion through each strength. */
+  function animateDisplacement(displacement, values, duration) {
+    if (!displacement) return Promise.resolve()
+
+    return new Promise(resolve => {
+      let startTime = null
+      const segmentCount = values.length - 1
+
+      setDisplacement(displacement, values[0])
+
+      function update(timestamp) {
+        if (startTime === null) startTime = timestamp
+
+        const progress = Math.min((timestamp - startTime) / duration, 1)
+        const scaledProgress = progress * segmentCount
+        const segment = Math.min(Math.floor(scaledProgress), segmentCount - 1)
+        const segmentProgress = scaledProgress - segment
+
+        /* Ease each change so the effect stays smooth. */
+        const easedProgress = segmentProgress * segmentProgress * (3 - 2 * segmentProgress)
+        const startValue = values[segment]
+        const endValue = values[segment + 1]
+        const value = startValue + (endValue - startValue) * easedProgress
+
+        setDisplacement(displacement, value)
+
+        if (progress < 1) {
+          requestAnimationFrame(update)
+          return
+        }
+
+        setDisplacement(displacement, values[values.length - 1])
+        resolve()
+      }
+
+      requestAnimationFrame(update)
+    })
+  }
+
   function clearArrivalState() {
+    /* Reset the liquid effect before clearing the transition. */
+    setDisplacement(softDisplacement, 0)
     document.documentElement.removeAttribute('data-page-transition')
     document.documentElement.classList.remove('page-transition-active')
     transition.classList.remove('is-revealing')
@@ -58,13 +113,15 @@ if (themeButton) {
       clearArrivalState()
     } else {
       requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          transition.classList.add('is-revealing')
-        })
+        transition.classList.add('is-revealing')
+
+        /* Ease the liquid effect back to normal. */
+        animateDisplacement(softDisplacement, [11, 5, 0], revealDuration)
+          .then(clearArrivalState)
       })
 
-      transition.addEventListener('transitionend', clearArrivalState, { once: true })
-      setTimeout(clearArrivalState, 1180)
+      /* Clean up if the animation is interrupted. */
+      setTimeout(clearArrivalState, revealDuration + 120)
     }
   }
 
@@ -101,16 +158,17 @@ if (themeButton) {
       document.documentElement.classList.add('page-transition-active')
       transition.classList.add('is-covering')
 
-      setTimeout(() => {
-        window.location.href = destination.href
-      }, 1120)
+      /* Build the liquid effect quickly, then ease it toward the arrival strength. */
+      animateDisplacement(strongDisplacement, [0, 18, 11], coverDuration)
+        .then(() => {
+          window.location.href = destination.href
+        })
     })
   })
 })()
 
 
-
-/* Clear any frozen transition state when the browser restores a cached page. */
+/* Clear the transition if the browser restores a cached page. */
 window.addEventListener('pageshow', event => {
   if (!event.persisted) return
 

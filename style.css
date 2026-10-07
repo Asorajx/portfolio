@@ -414,7 +414,6 @@ img { max-width: 100%; }
   position: fixed;
   z-index: 1000;
   inset: 0;
-  overflow: hidden;
   visibility: hidden;
   pointer-events: none;
 }
@@ -425,60 +424,26 @@ img { max-width: 100%; }
   height: 0;
 }
 
-.page-transition__wash {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in srgb, var(--green-deep) 72%, var(--paper) 28%),
-      color-mix(in srgb, var(--green-deep) 86%, var(--paper-deep) 14%)
-    );
-  opacity: 0;
-  backdrop-filter: blur(1.5px);
-  -webkit-backdrop-filter: blur(1.5px);
-  transition: opacity 980ms ease;
-}
-
+/* The transition has no visible overlay; only the page itself is distorted. */
+.page-transition__wash,
 .page-transition__ripple {
-  position: absolute;
-  left: -2%;
-  width: 104%;
-  height: 96px;
-  overflow: visible;
-  transform: translateY(-150px);
-  will-change: transform;
+  display: none;
 }
 
-.page-transition__ripple path {
-  fill:
-    color-mix(
-      in srgb,
-      var(--green) 72%,
-      var(--surface) 28%
-    );
-  filter: url("#pageTransitionWaterSoft");
-}
-
-.page-transition__ripple--one {
-  top: 0;
-  opacity: .72;
-}
-
-.page-transition__ripple--one path {
+/* Apply the stronger liquid distortion while leaving the current page. */
+html.page-transition-active .site-header,
+html.page-transition-active main,
+html.page-transition-active .site-footer {
   filter: url("#pageTransitionWaterStrong");
+  will-change: filter;
 }
 
-.page-transition__ripple--two {
-  top: 0;
-  height: 82px;
-  opacity: .54;
-}
-
-.page-transition__ripple--three {
-  top: 0;
-  height: 70px;
-  opacity: .40;
+/* Keep a softer liquid distortion while the destination page settles in. */
+html[data-page-transition="ready"] .site-header,
+html[data-page-transition="ready"] main,
+html[data-page-transition="ready"] .site-footer {
+  filter: url("#pageTransitionWaterSoft");
+  will-change: filter;
 }
 
 .page-transition.is-covering,
@@ -488,92 +453,9 @@ html[data-page-transition="ready"] .page-transition {
   pointer-events: auto;
 }
 
-.page-transition.is-covering .page-transition__wash {
-  opacity: 1;
-}
-
-.page-transition.is-covering .page-transition__ripple--one {
-  animation: liquid-ripple-one-cover 1.08s cubic-bezier(.66, .03, .24, 1) forwards;
-}
-
-.page-transition.is-covering .page-transition__ripple--two {
-  animation: liquid-ripple-two-cover 1.14s cubic-bezier(.62, .04, .28, 1) 70ms forwards;
-}
-
-.page-transition.is-covering .page-transition__ripple--three {
-  animation: liquid-ripple-three-cover 1.18s cubic-bezier(.68, .02, .26, 1) 120ms forwards;
-}
-
+html.page-transition-active,
 html[data-page-transition="ready"] {
   overflow: hidden;
-}
-
-html[data-page-transition="ready"] .page-transition__wash {
-  opacity: 1;
-  transition: none;
-}
-
-html[data-page-transition="ready"] .page-transition__ripple--one {
-  transform: translateY(56vh);
-}
-
-html[data-page-transition="ready"] .page-transition__ripple--two {
-  transform: translateY(72vh);
-}
-
-html[data-page-transition="ready"] .page-transition__ripple--three {
-  transform: translateY(88vh);
-}
-
-.page-transition.is-revealing .page-transition__wash {
-  opacity: 0;
-  transition: opacity 860ms ease;
-}
-
-.page-transition.is-revealing .page-transition__ripple--one {
-  animation: liquid-ripple-one-reveal 880ms cubic-bezier(.64, .04, .30, 1) forwards;
-}
-
-.page-transition.is-revealing .page-transition__ripple--two {
-  animation: liquid-ripple-two-reveal 930ms cubic-bezier(.64, .04, .30, 1) 45ms forwards;
-}
-
-.page-transition.is-revealing .page-transition__ripple--three {
-  animation: liquid-ripple-three-reveal 980ms cubic-bezier(.64, .04, .30, 1) 90ms forwards;
-}
-
-html.page-transition-active {
-  overflow: hidden;
-}
-
-@keyframes liquid-ripple-one-cover {
-  from { transform: translateY(-150px); }
-  to { transform: translateY(56vh); }
-}
-
-@keyframes liquid-ripple-two-cover {
-  from { transform: translateY(-230px); }
-  to { transform: translateY(72vh); }
-}
-
-@keyframes liquid-ripple-three-cover {
-  from { transform: translateY(-310px); }
-  to { transform: translateY(88vh); }
-}
-
-@keyframes liquid-ripple-one-reveal {
-  from { transform: translateY(56vh); }
-  to { transform: translateY(116vh); }
-}
-
-@keyframes liquid-ripple-two-reveal {
-  from { transform: translateY(72vh); }
-  to { transform: translateY(128vh); }
-}
-
-@keyframes liquid-ripple-three-reveal {
-  from { transform: translateY(88vh); }
-  to { transform: translateY(140vh); }
 }
 
 
