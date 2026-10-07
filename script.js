@@ -29,6 +29,111 @@ if (themeButton) {
 
 
 /* =========================
+   Navigation Highlight
+   ========================= */
+
+;(function setupNavigationHighlight() {
+  const navigation = document.querySelector('.nav-links')
+  const links = navigation?.querySelectorAll('a')
+  const projectsSection = document.getElementById('projects')
+  const header = document.querySelector('.site-header')
+  let activeLink = navigation?.querySelector('a.active')
+  let trackMainPageSections = ['#contact', '#projects'].includes(window.location.hash)
+
+  if (!navigation || !links?.length) return
+
+  /* Move the underline below the chosen link. */
+  function moveHighlight(link) {
+    navigation.style.setProperty('--nav-highlight-left', `${link.offsetLeft}px`)
+    navigation.style.setProperty('--nav-highlight-width', `${link.offsetWidth}px`)
+    navigation.style.setProperty('--nav-highlight-opacity', '1')
+  }
+
+  /* Find a navigation link for the current page and hash. */
+  function findHashLink(hash) {
+    return [...links].find(link => {
+      const destination = new URL(link.href, window.location.href)
+      const current = new URL(window.location.href)
+
+      return (
+        destination.origin === current.origin &&
+        destination.pathname === current.pathname &&
+        destination.search === current.search &&
+        destination.hash === hash
+      )
+    })
+  }
+
+  /* Update which navigation item is currently selected. */
+  function setActiveLink(link) {
+    if (!link) return
+
+    links.forEach(item => {
+      item.classList.toggle('active', item === link)
+    })
+
+    activeLink = link
+    moveHighlight(link)
+  }
+
+  /* Keep Contact and Projects in sync as the main page scrolls. */
+  function syncMainPageSection() {
+    if (!trackMainPageSections || !projectsSection) return
+
+    const projectsLink = findHashLink('#projects')
+    const contactLink = findHashLink('#contact')
+
+    if (!projectsLink || !contactLink) return
+
+    const headerBottom = header?.getBoundingClientRect().bottom ?? 0
+    const projectsReached =
+      projectsSection.getBoundingClientRect().top <= headerBottom + 48
+
+    setActiveLink(projectsReached ? projectsLink : contactLink)
+  }
+
+  /* Return the underline to the current section or page. */
+  function restoreHighlight() {
+    if (trackMainPageSections) {
+      syncMainPageSection()
+      return
+    }
+
+    if (activeLink) {
+      moveHighlight(activeLink)
+      return
+    }
+
+    navigation.style.setProperty('--nav-highlight-opacity', '0')
+  }
+
+  links.forEach(link => {
+    link.addEventListener('mouseenter', () => moveHighlight(link))
+    link.addEventListener('focus', () => moveHighlight(link))
+  })
+
+  navigation.addEventListener('mouseleave', restoreHighlight)
+  navigation.addEventListener('focusout', event => {
+    if (!navigation.contains(event.relatedTarget)) {
+      restoreHighlight()
+    }
+  })
+
+  window.addEventListener('hashchange', () => {
+    trackMainPageSections = ['#contact', '#projects'].includes(window.location.hash)
+    restoreHighlight()
+  })
+
+  window.addEventListener('scroll', syncMainPageSection, { passive: true })
+  window.addEventListener('resize', restoreHighlight)
+  window.addEventListener('load', restoreHighlight)
+
+  requestAnimationFrame(restoreHighlight)
+})()
+
+
+
+/* =========================
    Page Transition
    ========================= */
 
