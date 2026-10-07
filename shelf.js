@@ -3,49 +3,52 @@
    ========================= */
 
 /* Each object stores the information needed to display one project. */
+
 /* Add another object to this array when adding a new project. */
 const projects = [
   {
+    id: 'secure-data-sharing',
     type: 'Full-Stack Development',
-    title: 'Secure Data Sharing Platform for Collaborative Research',
-    spineTitle: 'Secure Data Sharing',
-    summary: 'Final Year Capstone Project.',
-    date: 'July 2026 - Present',
-    description: 'A secure research collaboration platform designed for controlled data sharing and privacy protection. Collaborated in a 5-member team to design and implement the system.',
-    github: 'https://github.com/fyp-26-s3-07/secure-data-sharing-platform',
+    title: 'Mosaic',
+    spineTitle: 'Mosaic',
+    summary: 'Secure Data Sharing Platform for Collaborative Research · Final Year Capstone Project.',
+    preview: 'A secure platform for controlled research data sharing and privacy protection.',
+    page: 'projects.html#secure-data-sharing',
     bookSize: 'wide',
+    featured: true,
   },
   {
+    id: 'honeypot',
     type: 'Cybersecurity',
     title: 'Honeypot Simulation',
     spineTitle: 'Honeypot Simulation',
     summary: 'Simulated honeypot environment using Cowrie.',
-    date: 'August 2026',
-    description: 'A cybersecurity project using a honeypot server to capture, monitor, and analyse malicious SSH access attempts.',
-    github: 'https://github.com/Asorajx/honeypot-simulation',
+    preview: 'A Cowrie honeypot environment for capturing and analysing malicious SSH activity.',
+    page: 'projects.html#honeypot',
     bookSize: 'wide',
   },
   {
+    id: 'writepretty',
     type: 'Web Application',
     title: 'WritePretty',
     spineTitle: 'WritePretty',
     summary: 'Rule-based text cleanup and formatting tool.',
-    date: 'September 2026',
-    description: 'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
-    github: 'https://github.com/Asorajx/writepretty',
+    preview: 'A client-side writing cleanup tool with configurable formatting and local autosave.',
+    page: 'projects.html#writepretty',
     bookSize: 'regular',
   },
   {
+    id: 'loop',
     type: 'Web Application',
     title: 'LOOP',
     spineTitle: 'LOOP',
     summary: 'Interactive visualizer for learning Python OOP.',
-    date: 'October 2026',
-    description: 'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, object interactions, state changes, inheritance, and source code in real time.',
-    github: 'https://github.com/Asorajx/LOOP',
+    preview: 'An interactive visualizer for exploring Python OOP execution, state, and inheritance.',
+    page: 'projects.html#loop',
     bookSize: 'regular',
   },
 ]
+
 
 /* =========================
    Project Book Rendering
@@ -66,17 +69,29 @@ const makeElement = (tag, className, text = '') => {
 function createProjectCard(project, index) {
   const number = String(index + 1).padStart(2, '0')
   const size = project.bookSize || 'regular'
-  const card = makeElement('article', `project-card book-${size} book-tone-${(index % 4) + 1}`)
+  const featuredClass = project.featured ? ' is-featured' : ''
+  const card = makeElement(
+    'a',
+    `project-card book-${size} book-tone-${(index % 4) + 1}${featuredClass}`,
+  )
 
-  card.tabIndex = 0
-  card.setAttribute('role', 'button')
-  card.setAttribute('aria-label', `Open ${project.title}`)
+  card.href = project.page
+  card.setAttribute('aria-label', `Open ${project.title} project page`)
   Object.assign(card.dataset, { number, ...project })
 
   const content = makeElement('div', 'book-spine-content')
+  const title = makeElement('h3', 'project-book-title')
+  const titleText = makeElement('span', '', project.spineTitle || project.title)
+
+  title.appendChild(titleText)
+
+  if (project.featured) {
+    title.appendChild(makeElement('span', 'project-featured-star', '✦'))
+  }
+
   content.append(
     makeElement('p', 'project-type', project.type),
-    makeElement('h3', '', project.spineTitle || project.title),
+    title,
   )
   card.append(
     makeElement('span', 'project-number', number),

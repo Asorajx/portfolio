@@ -132,7 +132,6 @@ if (themeButton) {
 })()
 
 
-
 /* =========================
    Page Transition
    ========================= */
@@ -154,7 +153,12 @@ if (themeButton) {
   const coverDuration = 380
   const revealDuration = 300
 
-  if (!transition) return
+  if (!transition) {
+    window.navigateWithPageTransition = destination => {
+      window.location.href = destination
+    }
+    return
+  }
 
   /* Update the strength of the liquid distortion. */
   function setDisplacement(displacement, value) {
@@ -202,6 +206,7 @@ if (themeButton) {
   }
 
   function clearArrivalState() {
+
     /* Reset the liquid effect before clearing the transition. */
     setDisplacement(softDisplacement, 0)
     document.documentElement.removeAttribute('data-page-transition')
@@ -230,6 +235,31 @@ if (themeButton) {
     }
   }
 
+  /* Reuse the same liquid transition for scripted project navigation. */
+  function navigateWithPageTransition(destinationHref) {
+    const destination = new URL(destinationHref, window.location.href)
+
+    if (reducedMotion) {
+      window.location.href = destination.href
+      return
+    }
+
+    try {
+      sessionStorage.setItem('portfolio-page-transition', 'ready')
+    } catch {}
+
+    document.documentElement.classList.add('page-transition-active')
+    transition.classList.add('is-covering')
+
+    /* Build the liquid effect quickly, then ease it toward the arrival strength. */
+    animateDisplacement(strongDisplacement, [0, 18, 11], coverDuration)
+      .then(() => {
+        window.location.href = destination.href
+      })
+  }
+
+  window.navigateWithPageTransition = navigateWithPageTransition
+
   transitionLinks.forEach(link => {
     link.addEventListener('click', event => {
       const destination = new URL(link.href, window.location.href)
@@ -252,26 +282,11 @@ if (themeButton) {
         return
       }
 
-      if (reducedMotion) return
-
       event.preventDefault()
-
-      try {
-        sessionStorage.setItem('portfolio-page-transition', 'ready')
-      } catch {}
-
-      document.documentElement.classList.add('page-transition-active')
-      transition.classList.add('is-covering')
-
-      /* Build the liquid effect quickly, then ease it toward the arrival strength. */
-      animateDisplacement(strongDisplacement, [0, 18, 11], coverDuration)
-        .then(() => {
-          window.location.href = destination.href
-        })
+      navigateWithPageTransition(destination.href)
     })
   })
 })()
-
 
 /* Clear the transition if the browser restores a cached page. */
 window.addEventListener('pageshow', event => {
@@ -375,7 +390,7 @@ window.addEventListener('pageshow', event => {
 
 
 /* =========================
-   Project Popup
+   Project Preview
    ========================= */
 
 const projectContainer = document.getElementById('projectSlider')
@@ -388,19 +403,20 @@ const popupBindings = {
   popupFrontTitle: 'title',
   popupSummary: 'summary',
   popupTitle: 'title',
-  popupDate: 'date',
-  popupDescription: 'description',
+  popupDescription: 'preview',
 }
 const reducedProjectMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const bookGrowDelay = reducedProjectMotion ? 0 : 60
 const bookGrowDuration = reducedProjectMotion ? 0 : 220
 const bookOpenDuration = reducedProjectMotion ? 0 : 400
 const bookCloseDuration = reducedProjectMotion ? 0 : 360
+const projectNavigateHold = reducedProjectMotion ? 0 : 320
 let popupOpen = false
 let growTimer
 let flipTimer
 let closeFocusTimer
 let closeTimer
+let projectNavigateTimer
 let lastFocusedCard
 
 /* Render project books only when the project manager and container are available. */
@@ -417,9 +433,6 @@ function openProject(card) {
     if (element) element.textContent = card.dataset[key]
   })
 
-  const github = document.getElementById('popupGithub')
-  if (github) github.href = card.dataset.github
-
   const bookStyles = getComputedStyle(card)
   const bookCover = bookStyles.getPropertyValue('--book-cover').trim()
   const bookInk = bookStyles.getPropertyValue('--book-ink').trim()
@@ -435,6 +448,7 @@ function openProject(card) {
   clearTimeout(flipTimer)
   clearTimeout(closeFocusTimer)
   clearTimeout(closeTimer)
+  clearTimeout(projectNavigateTimer)
 
   overlay.classList.remove('expanded', 'flipped')
   overlay.classList.add('open')
@@ -452,6 +466,20 @@ function openProject(card) {
         () => popupClose?.focus(),
         bookOpenDuration,
       )
+
+      projectNavigateTimer = setTimeout(() => {
+        if (!popupOpen) return
+
+        const destination = card.href || card.dataset.page
+        if (!destination) return
+
+        if (window.navigateWithPageTransition) {
+          window.navigateWithPageTransition(destination)
+          return
+        }
+
+        window.location.href = destination
+      }, bookOpenDuration + projectNavigateHold)
     }, bookGrowDuration)
   }, bookGrowDelay)
 }
@@ -465,6 +493,7 @@ function closeProject() {
   clearTimeout(flipTimer)
   clearTimeout(closeFocusTimer)
   clearTimeout(closeTimer)
+  clearTimeout(projectNavigateTimer)
 
   overlay.classList.remove('flipped')
 
@@ -480,16 +509,28 @@ function closeProject() {
   }, bookCloseDuration)
 }
 
-
 /* Mouse/touch interaction for project books. */
 projectContainer?.addEventListener('click', event => {
   const card = event.target.closest('.project-card')
-  if (card) openProject(card)
+  if (!card) return
+
+  if (
+    event.button !== 0 ||
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.altKey
+  ) {
+    return
+  }
+
+  event.preventDefault()
+  openProject(card)
 })
 
-/* Keyboard interaction mirrors a normal button (Enter or Space). */
+/* Space keeps the shelf books usable like the previous button interaction. */
 projectContainer?.addEventListener('keydown', event => {
-  if (!['Enter', ' '].includes(event.key)) return
+  if (event.key !== ' ') return
   const card = event.target.closest('.project-card')
   if (!card) return
   event.preventDefault()

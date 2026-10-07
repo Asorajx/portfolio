@@ -39,9 +39,6 @@
   --spirit-a: #754354;
   --spirit-b: #7fae70;
   --spirit-c: #245b55;
-  --spirit-low: .20;
-  --spirit-high: .48;
-  --spirit-end: .30;
 }
 
 /* Dark mode overrides the shared theme colors above. */
@@ -79,9 +76,6 @@
   --spirit-a: #95556b;
   --spirit-b: #9acb85;
   --spirit-c: #4f8c82;
-  --spirit-low: .27;
-  --spirit-high: .58;
-  --spirit-end: .38;
 }
 
 
@@ -208,7 +202,11 @@ img { max-width: 100%; }
   color: var(--ink);
 }
 
-/* Animated Day/Night */
+
+/* =========================
+   Theme Toggle
+   ========================= */
+
 .theme-switch {
   --toggle-size: 12px;
   --container-width: 5.625em;
@@ -447,12 +445,6 @@ img { max-width: 100%; }
   position: absolute;
   width: 0;
   height: 0;
-}
-
-/* The transition has no visible overlay; only the page itself is distorted. */
-.page-transition__wash,
-.page-transition__ripple {
-  display: none;
 }
 
 /* Apply the stronger liquid distortion while leaving the current page. */

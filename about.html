@@ -24,12 +24,14 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="about.css">
 </head>
+
 <body>
 
 
   <!-- =========================
        Page Transition
        ========================= -->
+
   <div class="page-transition" aria-hidden="true">
     <svg class="page-transition__filter-defs" aria-hidden="true">
       <filter id="pageTransitionWaterSoft" x="-12%" y="-55%" width="124%" height="210%">
@@ -80,73 +82,13 @@
         ></feDisplacementMap>
       </filter>
     </svg>
-
-    <div class="page-transition__wash"></div>
-
-    <svg
-      class="page-transition__ripple page-transition__ripple--one"
-      viewBox="0 0 1200 120"
-      preserveAspectRatio="none"
-      focusable="false"
-    >
-      <path
-        d="M0 42
-           C105 18 174 70 282 42
-           C394 13 475 72 590 43
-           C710 13 790 68 902 39
-           C1018 9 1092 61 1200 34
-           L1200 67
-           C1092 92 1018 48 902 75
-           C790 101 710 50 590 79
-           C475 106 394 52 282 79
-           C174 105 105 58 0 79
-           Z"
-      ></path>
-    </svg>
-
-    <svg
-      class="page-transition__ripple page-transition__ripple--two"
-      viewBox="0 0 1200 120"
-      preserveAspectRatio="none"
-      focusable="false"
-    >
-      <path
-        d="M0 53
-           C92 78 174 24 272 55
-           C373 87 465 28 570 58
-           C681 90 761 31 873 61
-           C984 91 1091 33 1200 57
-           L1200 82
-           C1088 60 984 111 873 83
-           C761 55 681 112 570 82
-           C465 54 373 110 272 79
-           C174 50 92 100 0 76
-           Z"
-      ></path>
-    </svg>
-
-    <svg
-      class="page-transition__ripple page-transition__ripple--three"
-      viewBox="0 0 1200 120"
-      preserveAspectRatio="none"
-      focusable="false"
-    >
-      <path
-        d="M0 36
-           C128 11 192 64 318 34
-           C432 7 510 63 626 36
-           C742 9 842 71 950 38
-           C1054 7 1129 54 1200 43
-           L1200 64
-           C1126 77 1054 34 950 65
-           C842 96 742 40 626 67
-           C510 94 432 41 318 66
-           C192 94 128 45 0 69
-           Z"
-      ></path>
-    </svg>
   </div>
-  <!-- Site Header and Primary Navigation -->
+
+
+  <!-- =========================
+       Header and Navigation
+       ========================= -->
+
   <header class="site-header">
     <div class="container nav-wrapper">
       <a class="logo" href="index.html" aria-label="Jun Xiang home">
@@ -199,7 +141,10 @@
   <main>
 
 
-  <!-- About Content -->
+  <!-- =========================
+       About Content
+       ========================= -->
+
     <section id="about" class="about-page section">
       <div class="container about-page-grid">
         <div class="about-intro">
@@ -242,12 +187,21 @@
     </section>
   </main>
 
-  <!-- Site footer -->
+
+  <!-- =========================
+       Footer
+       ========================= -->
+
   <footer class="site-footer">
     <div class="container footer-inner">
       <p>© <span id="currentYear">2026</span> Jun Xiang. All rights reserved.</p>
     </div>
   </footer>
+
+
+  <!-- =========================
+       Scripts
+       ========================= -->
 
   <!-- Music data/renderer loads before the shared interaction script. -->
   <script src="music.js"></script>

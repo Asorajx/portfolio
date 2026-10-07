@@ -44,6 +44,7 @@
 /* =========================
    Bookshelf Cabinet
    ========================= */
+
 .bookshelf-stage { position: relative; isolation: isolate; }
 
 
@@ -420,6 +421,7 @@
     linear-gradient(90deg, rgba(255,255,255,.065), transparent 16%, transparent 80%, rgba(0,0,0,.09)),
     var(--book-cover);
   color: var(--book-ink);
+  text-decoration: none;
   outline: none;
   cursor: pointer;
   overflow: hidden;
@@ -438,6 +440,43 @@
 .book-tone-2 { --book-cover: #73545d; }
 .book-tone-3 { --book-cover: #82755f; }
 .book-tone-4 { --book-cover: #50685e; }
+
+/* Featured books keep their normal cover and gain a restrained warm glow. */
+.project-card.is-featured {
+  border-color: color-mix(in srgb, var(--gold) 44%, var(--book-ink) 12%);
+  box-shadow:
+    0 0 12px color-mix(in srgb, var(--gold) 30%, transparent),
+    0 0 26px color-mix(in srgb, var(--gold) 12%, transparent),
+    -5px 0 0 color-mix(in srgb, var(--book-cover) 72%, #231b16),
+    -7px 5px 9px rgba(24, 17, 12, .15),
+    4px 8px 12px rgba(24, 17, 12, .13);
+}
+
+.project-card.is-featured::after {
+  border-color: color-mix(in srgb, var(--gold) 34%, var(--book-ink) 10%);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gold) 7%, transparent);
+}
+
+.project-card.is-featured:hover,
+.project-card.is-featured:focus-visible {
+  box-shadow:
+    0 0 14px color-mix(in srgb, var(--gold) 36%, transparent),
+    0 0 30px color-mix(in srgb, var(--gold) 15%, transparent),
+    -5px 0 0 color-mix(in srgb, var(--book-cover) 72%, #231b16),
+    -8px 8px 12px rgba(24, 17, 12, .17),
+    7px 16px 19px rgba(24, 17, 12, .2);
+}
+
+[data-theme="dark"] .project-card.is-featured {
+  border-color: color-mix(in srgb, var(--gold) 50%, var(--book-ink) 12%);
+  box-shadow:
+    0 0 13px color-mix(in srgb, var(--gold) 38%, transparent),
+    0 0 30px color-mix(in srgb, var(--gold) 15%, transparent),
+    -5px 0 0 color-mix(in srgb, var(--book-cover) 72%, #231b16),
+    -7px 5px 9px rgba(0, 0, 0, .22),
+    4px 8px 12px rgba(0, 0, 0, .18);
+}
+
 [data-theme="dark"] .book-tone-1 { --book-cover: #505c48; }
 [data-theme="dark"] .book-tone-2 { --book-cover: #644952; }
 [data-theme="dark"] .book-tone-3 { --book-cover: #6d634f; }
@@ -519,6 +558,28 @@
   line-height: 1;
   letter-spacing: -.015em;
 }
+
+.project-book-title {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.project-card.is-featured .project-book-title {
+  font-size: 28px;
+}
+
+.project-featured-star {
+  color: var(--gold);
+  font-size: .48em;
+  line-height: 1;
+  transform: translateY(-.08em);
+  text-shadow:
+    0 0 5px color-mix(in srgb, var(--gold) 68%, transparent),
+    0 0 12px color-mix(in srgb, var(--gold) 30%, transparent);
+}
+
 .book-slim h3 { font-size: 21px; }
 .project-view {
   align-self: center;
@@ -541,7 +602,7 @@
 
 
 /* =========================
-   Project Detail Popup
+   Project Preview Book
    ========================= */
 
 .project-overlay {
@@ -588,8 +649,8 @@
 }
 
 .project-overlay.expanded .project-popup {
-  width: min(520px, calc(100vw - 56px));
-  height: clamp(390px, 60vh, 500px);
+  width: min(470px, calc(100vw - 56px));
+  height: clamp(340px, 52vh, 420px);
 }
 
 .project-overlay.flipped .project-popup {
@@ -830,39 +891,30 @@
 .popup-back h3 {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(34px, 5vw, 46px);
+  font-size: clamp(36px, 5.4vw, 50px);
   font-weight: 600;
-  line-height: 1;
+  line-height: .95;
 }
 
-.popup-back .eyebrow {
+.popup-back h3 {
   margin-top: 34px;
 }
 
-.popup-date {
-  margin: 10px 0 0;
-  color: var(--green);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-
 .popup-description {
-  margin-top: 24px;
+  max-width: 34ch;
+  margin-top: 20px;
   color: var(--muted);
-  line-height: 1.75;
+  font-size: 17px;
+  line-height: 1.65;
 }
 
-.popup-github {
-  margin-top: auto;
-  color: var(--plum);
-  font-size: 14px;
+.popup-opening {
+  margin: auto 0 0;
+  color: var(--green);
+  font-size: 10px;
   font-weight: 700;
-}
-
-.popup-github:hover {
-  text-decoration: underline;
+  letter-spacing: .09em;
+  text-transform: uppercase;
 }
 
 
@@ -902,8 +954,8 @@
 .book-slim { flex-basis: 100px; height: 182px; }
 .project-card { padding: 15px 13px 14px; }
 .project-overlay.expanded .project-popup {
-  width: min(100%, 480px);
-  height: min(520px, 74vh);
+  width: min(100%, 430px);
+  height: min(420px, 66vh);
 }
 .project-overlay.flipped .project-popup { transform: translateY(0) scale(1); }
 .project-overlay.flipped .popup-front { transform: rotateY(-82deg); }
