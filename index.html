@@ -10,9 +10,22 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/portfolio-favicon-32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/portfolio-favicon-16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/portfolio-apple-icon.png">
+  <!-- Website Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/portfolio-favicon-32.png"> <!-- For browsers that use 32x32 -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/portfolio-favicon-16.png"> <!-- For older browsers -->
+  <link rel="icon" type="image/svg+xml" sizes="any" href="assets/icons/portfolio-favicon.svg">  <!-- For supported browsers -->
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/icons/portfolio-apple-icon.png">    <!-- For apple icons -->
+
+  <!-- Social Sharing Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Jun Xiang | Portfolio  ">
+  <meta property="og:description" content="Things I'm building and learning along the way.">
+  <meta property="og:image" content="https://asorajx.github.io/portfolio/assets/icons/share-preview.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://asorajx.github.io/portfolio/assets/icons/share-preview.png">
+
   <script>
     try {
       document.documentElement.dataset.theme =
@@ -237,16 +250,15 @@
             </svg>
 
             <div class="magic-socials">
-              <button
+              <a
                 class="magic-social-link magic-social-email"
-                type="button"
-                data-open-contact
                 data-magic-node="email"
-                aria-label="Open contact form"
+                href="mailto:xaranjin@gmail.com"
+                aria-label="Send email"
                 title="Email"
               >
                 <span class="magic-social-icon magic-social-icon-email" aria-hidden="true"></span>
-              </button>
+              </a>
 
               <a
                 class="magic-social-link magic-social-github"

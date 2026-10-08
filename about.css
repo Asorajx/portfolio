@@ -37,6 +37,14 @@
   line-height: 1.65;
 }
 
+.about-summary p {
+  margin: 0;
+}
+
+.about-summary p + p {
+  margin-top: 18px;
+}
+
 .about-back-link {
   display: inline-flex;
   margin-top: 42px;
