@@ -3,11 +3,15 @@
    ========================= */
 
 .project-detail {
+  position: relative;
+  isolation: isolate;
   min-height: calc(100vh - 130px);
   padding: 24px 0 104px;
 }
 
 .project-detail-container {
+  position: relative;
+  z-index: 2;
   max-width: 1040px;
 }
 
