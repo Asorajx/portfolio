@@ -123,12 +123,8 @@ const projectDetails = [
       /* Demo Preview */
       if (project.hasDemo) {
         if (project.demo) {
-          fields.demoFrame.innerHTML = `
-            <video controls muted playsinline preload="metadata">
-              <source src="${project.demo}" type="video/mp4">
-              Your browser does not support the video tag.
-            </video>
-          `
+          /* Recreate controls when a different project is selected. */
+          fields.demoFrame.replaceChildren(window.DemoVideo.create(project.demo, `${project.title} demonstration`))
         } else {
           fields.demoFrame.innerHTML = `
             <div class="project-demo-placeholder">
