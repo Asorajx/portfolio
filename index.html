@@ -442,7 +442,12 @@
         <h2 id="contactDialogTitle">Contact me</h2>
       </div>
 
-      <form id="contactForm" class="contact-form">
+      <form
+        id="contactForm"
+        class="contact-form"
+        action="https://formspree.io/f/mljgjpdq"
+        method="POST"
+      >
         <label class="contact-field">
           <span>Name</span>
           <input id="contactName" name="name" type="text" autocomplete="name" required>
@@ -458,8 +463,14 @@
           <textarea name="message" rows="5" required></textarea>
         </label>
 
-        <p id="contactFormNote" class="contact-form-note">
-          Sending opens your email app with this message filled in.
+        <p
+          id="contactFormNote"
+          class="contact-form-note"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          Your message will be sent directly through this form.
         </p>
 
         <button class="primary-button contact-submit" type="submit">Send message</button>

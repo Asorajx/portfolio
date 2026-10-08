@@ -614,26 +614,51 @@ contactDialog?.addEventListener('keydown', event => {
   }
 })
 
-/* This static portfolio uses the visitor's email app instead of a form service. */
-contactForm?.addEventListener('submit', event => {
+
+/* Submit the contact form without leaving the portfolio. */
+contactForm?.addEventListener('submit', async event => {
   event.preventDefault()
 
+  const submitButton = contactForm.querySelector('.contact-submit')
+  const formNote = document.getElementById('contactFormNote')
+
+  if (submitButton.disabled) return
+
+  /* Prepare the form and prevent duplicate submissions. */
   const formData = new FormData(contactForm)
-  const name = String(formData.get('name') || '').trim()
-  const email = String(formData.get('email') || '').trim()
-  const message = String(formData.get('message') || '').trim()
+  const originalButtonText = 'Send message'
 
-  const subject = encodeURIComponent(`Portfolio message from ${name}`)
-  const body = encodeURIComponent(
-    `Name: ${name}\nEmail: ${email}\n\n${message}`,
-  )
+  submitButton.disabled = true
+  submitButton.textContent = 'Sending...'
+  formNote.textContent = 'Sending your message...'
 
-  window.location.href = `mailto:xaranjin@gmail.com?subject=${subject}&body=${body}`
+  try {
+    /* Send the message to Formspree in the background. */
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error('Form submission failed')
+    }
+
+    /* Clear the fields only after Formspree confirms success. */
+    contactForm.reset()
+    formNote.textContent = 'Message sent successfully! Thank you for reaching out.'
+    submitButton.textContent = 'Message sent!'
+  } catch (error) {
+    /* Preserve the form inputs so visitors can try again. */
+    formNote.textContent = 'Unable to send your message. Please try again.'
+    submitButton.textContent = originalButtonText
+  } finally {
+    submitButton.disabled = false
+  }
 })
 
-document.addEventListener('keydown', event => {
-  if (event.key === 'Escape' && contactFormOpen) closeContactForm()
-})
 
 
 /* =========================
