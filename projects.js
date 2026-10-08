@@ -13,6 +13,8 @@ const projectDetails = [
     date: 'July 2026 - Present',
     focus: 'Secure collaboration',
     description: 'A secure research collaboration platform designed for controlled data sharing and privacy protection. Collaborated in a 5-member team to design and implement the system.',
+    extra: 'Nothing for now...',
+    documentation: '',
     github: 'https://github.com/fyp-26-s3-07/secure-data-sharing-platform',
     hasDemo: true,
     demo: '',
@@ -28,6 +30,8 @@ const projectDetails = [
     date: 'August 2026',
     focus: 'SSH attack analysis',
     description: 'A cybersecurity project using a honeypot server to capture, monitor, and analyse malicious SSH access attempts.',
+    extra: 'Nothing for now...',
+    documentation: 'https://github.com/Asorajx/honeypot-simulation/blob/main/P01-honeypot-simulation.pdf',
     github: 'https://github.com/Asorajx/honeypot-simulation',
     hasDemo: false,
     demo: '',
@@ -43,6 +47,8 @@ const projectDetails = [
     date: 'September 2026',
     focus: 'Text cleanup',
     description: 'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
+    extra: 'Nothing for now...',
+    documentation: 'https://github.com/Asorajx/writepretty/blob/main/P02-write-pretty.pdf',
     github: 'https://github.com/Asorajx/writepretty',
     hasDemo: true,
     demo: 'assets/demos/WritePretty-Demo.mp4',
@@ -58,6 +64,8 @@ const projectDetails = [
     date: 'October 2026',
     focus: 'Python OOP learning',
     description: 'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, object interactions, state changes, inheritance, and source code in real time.',
+    extra: 'Nothing for now...',
+    documentation: '',
     github: 'https://github.com/Asorajx/LOOP',
     hasDemo: true,
     demo: 'assets/demos/LOOP-Demo.mp4',
@@ -85,6 +93,8 @@ const projectDetails = [
     recordType: document.getElementById('projectRecordType'),
     focus: document.getElementById('projectFocus'),
     description: document.getElementById('projectDescription'),
+    extra: document.getElementById('projectExtra'),
+    documentation: document.getElementById('projectDocumentation'),
     demoSection: document.getElementById('projectDemoSection'),
     demoFrame: document.querySelector('.project-demo-frame'),
     github: document.getElementById('projectGithub'),
@@ -117,6 +127,12 @@ const projectDetails = [
       fields.recordType.textContent = project.type
       fields.focus.textContent = project.focus
       fields.description.textContent = project.description
+      fields.extra.textContent = project.extra || ''
+      fields.extra.hidden = !project.extra
+
+      /* Show the PDF link only when the project has a documentation URL. */
+      fields.documentation.hidden = !project.documentation
+      if (project.documentation) fields.documentation.href = project.documentation
       fields.github.href = project.github
       fields.demoSection.hidden = !project.hasDemo
 
@@ -207,8 +223,18 @@ const projectDetails = [
     })
   })
 
+  /* Only project IDs should change the selected project. */
   window.addEventListener('hashchange', () => {
-    showProject(window.location.hash.slice(1), false)
+    const projectId = window.location.hash.slice(1)
+    if (projectDetails.some(project => project.id === projectId)) {
+      showProject(projectId, false)
+    }
+  })
+
+  /* Scroll without changing the project URL or triggering the tab switcher. */
+  document.getElementById('projectBackToTop')?.addEventListener('click', event => {
+    event.preventDefault()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   })
 
   showProject(window.location.hash.slice(1), !window.location.hash)

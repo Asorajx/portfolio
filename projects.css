@@ -693,24 +693,54 @@
   margin-bottom: 12px;
 }
 
-.project-explanation-copy {
+.project-overview {
   max-width: 660px;
 }
 
-.project-explanation-copy p {
+.project-overview p {
   margin: 0;
   color: var(--muted);
   font-size: 16px;
   line-height: 1.85;
 }
 
-.project-explanation-copy p + p {
+.project-overview p + p {
   margin-top: 22px;
 }
 
+/* Keep the documentation link near the heading without changing the content columns. */
+.project-documentation-link {
+  margin-top: 24px;
+  gap: 6px;
 
-.project-back-link--bottom {
+  color: var(--gold);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  text-underline-offset: 4px;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.project-documentation-link[hidden] {
+  display: none;
+}
+
+.project-documentation-link:hover,
+.project-documentation-link:focus-visible {
+  color: var(--ink);
+  text-decoration-color: currentColor;
+}
+
+/* For back to projects and back to the top. */
+.project-bottom-navigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
   margin-top: 76px;
+}
+
+.project-bottom-navigation .project-back-link {
+  flex-shrink: 0;
 }
 
 
