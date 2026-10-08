@@ -87,7 +87,7 @@
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, 146px);
-  grid-template-rows: repeat(3, 32px);
+  grid-template-rows: repeat(3, 35px);
   align-items: end;
   column-gap: 24px;
   row-gap: 0;
@@ -110,8 +110,8 @@
   --switcher-cover: #6d7563;
   --switcher-ink: #f0eadb;
   position: relative;
-  width: 124px;
-  height: 36px;
+  width: 138px;
+  height: 38px;
   display: grid;
   grid-template-columns: 24px minmax(0, 1fr);
   grid-template-rows: 1fr;
@@ -213,6 +213,7 @@
     translateX(calc(var(--book-x, 0) - 3px))
     translateY(-3px)
     scale(1.02);
+  border-color: color-mix(in srgb, var(--switcher-ink) 58%, transparent);
   box-shadow:
     0 10px 16px -11px rgba(0, 0, 0, .8),
     inset 3px 0 0 rgba(0, 0, 0, .11),
@@ -229,7 +230,7 @@
 }
 
 .project-switcher-card.is-active::after {
-  opacity: .58;
+  opacity: .9;
   transform: scaleX(1);
 }
 
@@ -266,9 +267,9 @@
 .project-switcher-number {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 700;
-  opacity: .6;
+  opacity: .8;
 }
 
 
@@ -276,7 +277,7 @@
   min-width: 0;
   overflow: hidden;
   font-family: var(--font-serif);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 600;
   line-height: 1;
   letter-spacing: -.01em;
@@ -792,7 +793,7 @@
   .project-switcher {
     width: 100%;
     grid-template-columns: repeat(2, 132px);
-    grid-template-rows: repeat(3, 31px);
+    grid-template-rows: repeat(3, 35px);
     column-gap: 12px;
     row-gap: 0;
     padding: 5px 7px 0 10px;
@@ -802,8 +803,13 @@
   }
 
   .project-switcher-card {
-    width: 116px;
-    height: 34px;
+    width: 122px;
+    height: 38px;
+  }
+
+  /* Keep the stacked-books layout usable without horizontal page overflow. */
+  .project-switcher-card strong {
+    font-size: 13px;
   }
 
   .project-detail {
@@ -849,10 +855,27 @@
   .project-demo-frame > img,
   .project-demo-frame > video,
   .project-demo-frame > iframe,
-  .project-demo-placeholder {
+  .project-demo-placeholder,
+  .project-demo-frame .demo-video {
     min-height: 300px;
   }
 
+}
+
+@media (max-width: 360px) {
+  .project-switcher {
+    grid-template-columns: repeat(2, 120px);
+    column-gap: 8px;
+  }
+
+  .project-switcher-card {
+    width: 112px;
+    padding-right: 5px;
+  }
+
+  .project-switcher-card strong {
+    font-size: 12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -13,7 +13,7 @@ const projectDetails = [
     date: 'July 2026 - Present',
     focus: 'Secure collaboration',
     description: 'A secure research collaboration platform designed for controlled data sharing and privacy protection. Collaborated in a 5-member team to design and implement the system.',
-    extra: 'Nothing for now...',
+    extra: '',
     documentation: '',
     github: 'https://github.com/fyp-26-s3-07/secure-data-sharing-platform',
     hasDemo: true,
@@ -30,7 +30,7 @@ const projectDetails = [
     date: 'August 2026',
     focus: 'SSH attack analysis',
     description: 'A cybersecurity project using a honeypot server to capture, monitor, and analyse malicious SSH access attempts.',
-    extra: 'Nothing for now...',
+    extra: '',
     documentation: 'https://github.com/Asorajx/honeypot-simulation/blob/main/P01-honeypot-simulation.pdf',
     github: 'https://github.com/Asorajx/honeypot-simulation',
     hasDemo: false,
@@ -47,7 +47,7 @@ const projectDetails = [
     date: 'September 2026',
     focus: 'Text cleanup',
     description: 'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
-    extra: 'Nothing for now...',
+    extra: '',
     documentation: 'https://github.com/Asorajx/writepretty/blob/main/P02-write-pretty.pdf',
     github: 'https://github.com/Asorajx/writepretty',
     hasDemo: true,
@@ -64,7 +64,7 @@ const projectDetails = [
     date: 'October 2026',
     focus: 'Python OOP learning',
     description: 'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, object interactions, state changes, inheritance, and source code in real time.',
-    extra: 'Nothing for now...',
+    extra: '',
     documentation: '',
     github: 'https://github.com/Asorajx/LOOP',
     hasDemo: true,
@@ -102,6 +102,16 @@ const projectDetails = [
   }
 
   let switchTimer
+
+  /* Only the selected tab belongs in the normal keyboard tab order. */
+  function updateTabSelection(projectId) {
+    tabs.forEach(tab => {
+      const selected = tab.dataset.projectTab === projectId
+      tab.classList.toggle('is-active', selected)
+      tab.setAttribute('aria-selected', String(selected))
+      tab.tabIndex = selected ? 0 : -1
+    })
+  }
 
   /* Find the requested project, or fall back to the first one. */
   function getProject(projectId) {
@@ -182,11 +192,7 @@ const projectDetails = [
 
       fields.liveDemo = document.getElementById('projectDemo')
 
-      tabs.forEach(tab => {
-        const selected = tab.dataset.projectTab === project.id
-        tab.classList.toggle('is-active', selected)
-        tab.setAttribute('aria-selected', String(selected))
-      })
+      updateTabSelection(project.id)
 
       document.title = `${project.shortTitle} | Jun Xiang`
 
@@ -208,17 +214,23 @@ const projectDetails = [
       showProject(tab.dataset.projectTab)
     })
 
-    /* Arrow keys move between project tabs. */
+    /* Arrow keys cycle through books; Home and End reach either end. */
     tab.addEventListener('keydown', event => {
-      if (!['ArrowLeft', 'ArrowRight'].includes(event.key)) return
+      const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End']
+      if (!keys.includes(event.key)) return
 
       event.preventDefault()
       const currentIndex = tabs.indexOf(tab)
-      const direction = event.key === 'ArrowRight' ? 1 : -1
-      const nextIndex = (currentIndex + direction + tabs.length) % tabs.length
-      const nextTab = tabs[nextIndex]
+      let nextIndex = currentIndex
 
+      if (event.key === 'Home') nextIndex = 0
+      if (event.key === 'End') nextIndex = tabs.length - 1
+      if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length
+      if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length
+
+      const nextTab = tabs[nextIndex]
       nextTab.focus()
+      updateTabSelection(nextTab.dataset.projectTab)
       showProject(nextTab.dataset.projectTab)
     })
   })
@@ -237,5 +249,6 @@ const projectDetails = [
     window.scrollTo({ top: 0, behavior: 'smooth' })
   })
 
+  updateTabSelection(getProject(window.location.hash.slice(1)).id)
   showProject(window.location.hash.slice(1), !window.location.hash)
 })()

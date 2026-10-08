@@ -189,6 +189,7 @@
                 class="project-switcher-card project-switcher-card--2"
                 type="button"
                 role="tab"
+                tabindex="-1"
                 aria-selected="false"
                 aria-controls="projectContent"
                 data-project-tab="honeypot"
@@ -202,6 +203,7 @@
                 class="project-switcher-card project-switcher-card--3"
                 type="button"
                 role="tab"
+                tabindex="-1"
                 aria-selected="false"
                 aria-controls="projectContent"
                 data-project-tab="writepretty"
@@ -215,6 +217,7 @@
                 class="project-switcher-card project-switcher-card--4"
                 type="button"
                 role="tab"
+                tabindex="-1"
                 aria-selected="false"
                 aria-controls="projectContent"
                 data-project-tab="loop"
@@ -233,7 +236,7 @@
 
         <!-- Mosaic provides the default project content. -->
         <!-- projects.js replaces these values when another project is selected. -->
-        <div id="projectContent" class="project-content" role="tabpanel">
+        <div id="projectContent" class="project-content" role="tabpanel" aria-label="Project details">
           <header class="project-detail-hero">
             <div class="project-detail-intro">
               <div class="project-title-meta">
@@ -333,7 +336,7 @@
 
           <div class="project-overview">
             <p id="projectDescription"></p>
-            <p id="projectExtra"></p>
+            <p id="projectExtra" hidden></p>
           </div>
         </section>
         </div>
