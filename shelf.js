@@ -1,56 +1,4 @@
 /* =========================
-   Project Data
-   ========================= */
-
-/* Each object stores the information needed to display one project. */
-
-/* Add another object to this array when adding a new project. */
-const projects = [
-  {
-    id: 'secure-data-sharing',
-    type: 'Full-Stack Development',
-    title: 'Mosaic',
-    spineTitle: 'Mosaic',
-    summary: 'Secure Data Sharing Platform for Collaborative Research · Final Year Capstone Project.',
-    preview: 'A secure platform for controlled research data sharing and privacy protection.',
-    page: 'projects.html#secure-data-sharing',
-    bookSize: 'wide',
-    featured: true,
-  },
-  {
-    id: 'honeypot',
-    type: 'Cybersecurity',
-    title: 'Honeypot Simulation',
-    spineTitle: 'Honeypot Simulation',
-    summary: 'Simulated honeypot environment using Cowrie.',
-    preview: 'A Cowrie honeypot environment for capturing and analysing malicious SSH activity.',
-    page: 'projects.html#honeypot',
-    bookSize: 'wide',
-  },
-  {
-    id: 'writepretty',
-    type: 'Web Application',
-    title: 'WritePretty',
-    spineTitle: 'WritePretty',
-    summary: 'Rule-based text cleanup and formatting tool.',
-    preview: 'A client-side writing cleanup tool with configurable formatting and local autosave.',
-    page: 'projects.html#writepretty',
-    bookSize: 'regular',
-  },
-  {
-    id: 'loop',
-    type: 'Web Application',
-    title: 'LOOP',
-    spineTitle: 'LOOP',
-    summary: 'Interactive visualizer for learning Python OOP.',
-    preview: 'An interactive visualizer for exploring Python OOP execution, state, and inheritance.',
-    page: 'projects.html#loop',
-    bookSize: 'regular',
-  },
-]
-
-
-/* =========================
    Project Book Rendering
    ========================= */
 
@@ -75,7 +23,7 @@ function createProjectCard(project, index) {
     `project-card book-${size} book-tone-${(index % 4) + 1}${featuredClass}`,
   )
 
-  card.href = project.page
+  card.href = `projects.html#${project.id}`
   card.setAttribute('aria-label', `Open ${project.title} project page`)
   Object.assign(card.dataset, { number, ...project })
 
@@ -119,7 +67,7 @@ function renderProjects(container) {
   let shelf = createShelfRow()
   container.appendChild(shelf.row)
 
-  projects.forEach((project, index) => {
+  window.portfolioProjects.forEach((project, index) => {
     const units = bookUnits[project.bookSize] || bookUnits.regular
     if (used && used + units > capacity) {
       shelf = createShelfRow()
@@ -131,5 +79,62 @@ function renderProjects(container) {
   })
 }
 
-/* Expose only the render function to script.js. */
-window.ProjectManager = { render: renderProjects }
+/* Share project rendering and featured entries with the page scripts. */
+window.ProjectManager = {
+  render: renderProjects,
+  getFeatured: () => window.portfolioProjects.filter(project => project.featured),
+}
+
+/* =========================
+   Hanging Sign
+   ========================= */
+
+;(function setupHangingSign() {
+  const sign = document.querySelector('.bookshelf-sign')
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+  if (!sign) return
+
+  let offset = 0
+  let velocity = 0
+  let previousX = null
+  let frame = 0
+
+  function settle() {
+    velocity = (velocity - offset * .025) * .94
+    offset += velocity
+    const chainHeight = parseFloat(getComputedStyle(sign, '::before').height) || 45
+    sign.style.setProperty('--sign-offset', `${offset}px`)
+    sign.style.setProperty('--chain-angle', `${Math.atan(offset / chainHeight)}rad`)
+    sign.style.setProperty('--sign-tilt', `${Math.max(-9, Math.min(9, velocity * 5))}deg`)
+
+    if (Math.abs(offset) < .03 && Math.abs(velocity) < .03) {
+      offset = 0
+      velocity = 0
+      sign.style.removeProperty('--sign-offset')
+      sign.style.removeProperty('--chain-angle')
+      sign.style.removeProperty('--sign-tilt')
+      frame = 0
+      return
+    }
+    frame = requestAnimationFrame(settle)
+  }
+
+  sign.addEventListener('pointermove', event => {
+    if (motion.matches || event.pointerType === 'touch') return
+    if (previousX !== null) velocity = Math.max(-2, Math.min(2, velocity + (event.clientX - previousX) * .08))
+    previousX = event.clientX
+    if (!frame) frame = requestAnimationFrame(settle)
+  })
+  sign.addEventListener('pointerleave', () => { previousX = null })
+  motion.addEventListener('change', event => {
+    if (!event.matches) return
+    cancelAnimationFrame(frame)
+    frame = 0
+    offset = 0
+    velocity = 0
+    previousX = null
+    sign.style.removeProperty('--sign-offset')
+    sign.style.removeProperty('--chain-angle')
+    sign.style.removeProperty('--sign-tilt')
+  })
+})()

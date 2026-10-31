@@ -2,76 +2,8 @@
    Project Detail Data
    ========================= */
 
-const projectDetails = [
-  {
-    id: 'secure-data-sharing',
-    featured: true,
-    shortTitle: 'Mosaic',
-    type: 'Full-Stack Development',
-    title: 'Mosaic',
-    summary: 'Secure Data Sharing Platform for Collaborative Research · Final Year Capstone Project.',
-    date: 'July 2026 - Present',
-    focus: 'Secure collaboration',
-    description: 'A secure research collaboration platform designed for controlled data sharing and privacy protection. Collaborated in a 5-member team to design and implement the system.',
-    extra: '',
-    documentation: '',
-    github: 'https://github.com/fyp-26-s3-07/secure-data-sharing-platform',
-    hasDemo: true,
-    demo: '',
-    liveDemo: '',
-  },
-  {
-    id: 'honeypot',
-    featured: false,
-    shortTitle: 'Honeypot',
-    type: 'Cybersecurity',
-    title: 'Honeypot Simulation',
-    summary: 'Simulated honeypot environment using Cowrie.',
-    date: 'August 2026',
-    focus: 'SSH attack analysis',
-    description: 'A cybersecurity project using a honeypot server to capture, monitor, and analyse malicious SSH access attempts.',
-    extra: '',
-    documentation: 'https://github.com/Asorajx/honeypot-simulation/blob/main/P01-honeypot-simulation.pdf',
-    github: 'https://github.com/Asorajx/honeypot-simulation',
-    hasDemo: false,
-    demo: '',
-    liveDemo: '',
-  },
-  {
-    id: 'writepretty',
-    featured: false,
-    shortTitle: 'WritePretty',
-    type: 'Web Application',
-    title: 'WritePretty',
-    summary: 'Rule-based text cleanup and formatting tool.',
-    date: 'September 2026',
-    focus: 'Text cleanup',
-    description: 'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
-    extra: '',
-    documentation: 'https://github.com/Asorajx/writepretty/blob/main/P02-write-pretty.pdf',
-    github: 'https://github.com/Asorajx/writepretty',
-    hasDemo: true,
-    demo: 'assets/demos/WritePretty-Demo.mp4',
-    liveDemo: 'https://asorajx.github.io/writepretty/',
-  },
-  {
-    id: 'loop',
-    featured: false,
-    shortTitle: 'LOOP',
-    type: 'Web Application',
-    title: 'LOOP',
-    summary: 'Interactive visualizer for learning Python OOP.',
-    date: 'October 2026',
-    focus: 'Python OOP learning',
-    description: 'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, object interactions, state changes, inheritance, and source code in real time.',
-    extra: '',
-    documentation: '',
-    github: 'https://github.com/Asorajx/LOOP',
-    hasDemo: true,
-    demo: 'assets/demos/LOOP-Demo.mp4',
-    liveDemo: 'https://loop-duzg.onrender.com/',
-  },
-]
+const projectDetails = window.portfolioProjects
+
 
 
 /* =========================
@@ -79,10 +11,44 @@ const projectDetails = [
    ========================= */
 
 ;(function setupProjectCollection() {
-  const tabs = [...document.querySelectorAll('[data-project-tab]')]
+  const switcher = document.querySelector('.project-switcher')
   const content = document.getElementById('projectContent')
 
-  if (!tabs.length || !content) return
+  if (!switcher || !content || !projectDetails.length) return
+
+  /* Build the collection from the same data used by the bookshelf. */
+  const offsets = [6, -4, 3, -2]
+  const tabs = projectDetails.map((project, index) => {
+    const tab = document.createElement('button')
+    tab.type = 'button'
+    tab.className = `project-switcher-card project-switcher-card--${index % 4 + 1}`
+    tab.classList.toggle('is-featured', !!project.featured)
+    tab.setAttribute('role', 'tab')
+    tab.setAttribute('aria-selected', 'false')
+    tab.setAttribute('aria-controls', 'projectContent')
+    tab.tabIndex = -1
+    tab.dataset.projectTab = project.id
+    tab.style.setProperty('--book-x', `${offsets[index % offsets.length]}px`)
+    tab.style.gridColumn = index === 0 ? '1' : String(2 + Math.floor((index - 1) / 3))
+    tab.style.gridRow = index === 0 ? '3' : String(3 - (index - 1) % 3)
+
+    const number = document.createElement('span')
+    number.className = 'project-switcher-number'
+    number.textContent = String(index + 1).padStart(2, '0')
+    const title = document.createElement('strong')
+    title.className = 'project-switcher-title'
+    title.textContent = project.shortTitle || project.title
+    if (project.featured) {
+      const star = document.createElement('span')
+      star.className = 'project-switcher-featured'
+      star.setAttribute('aria-hidden', 'true')
+      star.textContent = '✦'
+      title.append(' ', star)
+    }
+    tab.append(number, title)
+    return tab
+  })
+  switcher.replaceChildren(...tabs)
 
   const fields = {
     type: document.getElementById('projectType'),

@@ -139,7 +139,7 @@ if (themeButton) {
 ;(function setupPageTransition() {
   const transition = document.querySelector('.page-transition')
   const transitionLinks = document.querySelectorAll(
-    'a[href="about.html"], a[href^="index.html"]',
+    'a[href="about.html"], a[href^="index.html"], a.featured-display-link',
   )
   const softDisplacement = document.querySelector(
     '#pageTransitionWaterSoft feDisplacementMap',
@@ -352,7 +352,8 @@ window.addEventListener('pageshow', event => {
   const colours = ['var(--spirit-a)', 'var(--spirit-b)', 'var(--spirit-c)']
   const layouts = {
     home: [[9, 22],[49, 20],[46, 69],[91, 62]],
-    projects: [[8, 24],[25, 19],[53, 23],[84, 21],[94, 38],[7, 48],[92, 58],[13, 73],[38, 84],[67, 79],[89, 86]],
+    projects: [[9, 24],[28, 68],[75, 25],[91, 70]],
+    bookshelf: [[8, 24],[25, 19],[53, 23],[84, 21],[94, 38],[7, 48],[92, 58],[13, 73],[38, 84],[67, 79],[89, 86]],
     about: [[12, 22],[88, 18],[18, 76],[82, 72]],
     projectDetail: [[7, 12],[93, 17],[9, 39],[91, 47],[5, 67],[95, 76],[22, 91],[79, 92]],
   }

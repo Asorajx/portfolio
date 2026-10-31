@@ -571,6 +571,12 @@ html[data-page-transition="ready"] {
   inset: -4px;
 }
 
+/* Keep the bookshelf's lights sparse on smaller screens. */
+@media (max-width: 680px) {
+  #bookshelf .spirit-light:not(:nth-child(3n + 1)) { display: none; }
+  #projects .spirit-light:nth-child(even) { display: none; }
+}
+
 .spirit-light.still {
   opacity: .68;
   animation: none;
