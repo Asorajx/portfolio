@@ -22,6 +22,18 @@ const musicTracks = [
     cover: 'assets/music/cover-3.png',
     playing: false,
   },
+  {
+    title: 'Super in Love',
+    artist: 'ILLIT',
+    cover: 'assets/music/cover-4.png',
+    playing: false,
+  },
+  {
+    title: 'Why do I cry?',
+    artist: 'fromis_9',
+    cover: 'assets/music/cover-5.png',
+    playing: false,
+  },
 ]
 
 
@@ -49,10 +61,12 @@ function createTrackRow(track) {
   const row = document.createElement('div')
   row.className = `track-row${track.playing ? ' is-playing' : ''}`
 
-  const cover = document.createElement('img')
+  const cover = document.createElement(track.cover ? 'img' : 'span')
   cover.className = 'track-cover'
-  cover.src = track.cover
-  cover.alt = ''
+  if (track.cover) {
+    cover.src = track.cover
+    cover.alt = ''
+  }
   cover.setAttribute('aria-hidden', 'true')
 
   const info = document.createElement('div')

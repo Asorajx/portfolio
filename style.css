@@ -661,13 +661,18 @@ html[data-page-transition="ready"] {
   .nav-links {
     order: 3;
     width: 100%;
-    justify-content: space-between;
-    gap: 12px;
-    padding-top: 7px;
+    gap: 0;
     border-top: 1px solid var(--line);
   }
 
-  .nav-links a { font-size: 13px; }
+  .nav-links a {
+    flex: 1;
+    min-height: 44px;
+    display: grid;
+    place-items: center;
+    font-size: 13px;
+  }
+  .nav-links::after { bottom: 0; }
   .theme-toggle { margin-left: auto; }
   .apothecary-note { min-height: 0; padding: 20px; transform: none; }
   .section { padding: 72px 0; }

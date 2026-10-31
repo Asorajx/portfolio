@@ -10,7 +10,8 @@
 .about-page-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr);
-  gap: clamp(64px, 8vw, 116px);
+  column-gap: clamp(64px, 8vw, 116px);
+  row-gap: 40px;
   align-items: start;
 }
 
@@ -19,19 +20,22 @@
   padding-top: 8px;
 }
 
-/* Give the heading more presence while leaving room for the note beside it. */
+/* Give the introduction a full-width line above the content. */
 .about-page h1 {
+  grid-column: 1 / -1;
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(88px, 11vw, 148px);
+  font-size: clamp(48px, 5.5vw, 76px);
   font-weight: 600;
-  line-height: .78;
-  letter-spacing: -.06em;
+  line-height: 1.02;
+  letter-spacing: -.035em;
 }
+
+.about-page h1 span { color: var(--plum); }
 
 .about-summary {
   max-width: 620px;
-  margin: 48px 0 0;
+  margin: 0;
   color: var(--muted);
   font-size: clamp(18px, 1.4vw, 20px);
   line-height: 1.65;
@@ -238,12 +242,16 @@
 @media (max-width: 840px) {
   .about-page-grid {
     grid-template-columns: 1fr;
-    gap: 52px;
+    gap: 32px;
   }
 
   .about-intro {
-    max-width: 720px;
+    display: contents;
   }
+
+  .about-summary { grid-row: 2; }
+  .listening-note { grid-row: 3; }
+  .about-back-link { grid-row: 4; justify-self: start; }
 
   .listening-note {
     margin-top: 0;
@@ -257,7 +265,7 @@
   }
 
   .about-page h1 {
-    font-size: clamp(72px, 21vw, 96px);
+    font-size: clamp(42px, 10vw, 58px);
   }
 
   .about-summary {

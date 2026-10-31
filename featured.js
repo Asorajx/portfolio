@@ -28,13 +28,20 @@
     crystal.setAttribute('aria-expanded', 'false')
     crystal.setAttribute('aria-controls', 'featuredDetails')
     crystal.setAttribute('aria-label', `Show ${project.title} project details`)
-    crystal.innerHTML = '<span class="featured-orb"><canvas class="featured-orb-canvas" aria-hidden="true"></canvas><span class="featured-orb-title"><span></span><small>View project</small></span></span>'
+    crystal.innerHTML =
+      '<span class="featured-orb"><span class="featured-orb-webgl" aria-hidden="true"></span><canvas class="featured-orb-canvas" aria-hidden="true"></canvas><span class="featured-orb-title"><span></span><small>View project</small></span></span>'
     crystal.querySelector('.featured-orb-title span').textContent = project.title
     container.appendChild(crystal)
     list.appendChild(container)
 
     crystal.addEventListener('click', () => {
       activeCrystal = crystal
+      const area = display.getBoundingClientRect()
+      const ball = crystal.getBoundingClientRect()
+      display.style.setProperty('--expansion-x', `${ball.left + ball.width / 2 - area.left}px`)
+      display.style.setProperty('--expansion-y', `${ball.top + ball.height / 2 - area.top}px`)
+      display.style.setProperty('--expansion-size', `${ball.width}px`)
+      crystal.classList.add('is-selected')
       details.querySelector('.eyebrow').textContent = project.type
       details.querySelector('h3').textContent = project.title
       details.querySelector('.featured-description').textContent = project.preview
@@ -51,10 +58,12 @@
     })
 
     setupCrystalEffect(crystal, index === 0)
+    setupCrystalRenderer(crystal)
   })
 
   closeButton?.addEventListener('click', () => {
     display.classList.remove('is-open')
+    activeCrystal?.classList.remove('is-selected')
     activeCrystal?.setAttribute('aria-expanded', 'false')
     list.inert = false
     details.inert = true
@@ -63,6 +72,40 @@
   })
 })()
 
+/* Use the supplied WebGL renderer when available and keep the canvas fallback. */
+function setupCrystalRenderer(crystal) {
+  const container = crystal.querySelector('.featured-orb-webgl')
+  const fallback = crystal.querySelector('.featured-orb-canvas')
+  if (!container || !fallback || !window.CrystalizedBall) return
+
+  function mount() {
+    const lightTheme = document.documentElement.dataset.theme === 'light'
+    window.CrystalizedBall.mount(container, {
+      preset: 'aurora',
+      color: lightTheme ? '#c8bd83' : '#8cb994',
+      theme: 'dark',
+      size: 0.94,
+      particleCount: 5000,
+      crackle: 0.65,
+      glow: 0.75,
+      fill: 0.32,
+      motion: 'drift',
+      hoverStrength: 0.7,
+      intro: false,
+    })
+    const error = container.querySelector('.crystalized-ball-error')
+    fallback.hidden = !error && !!container.querySelector('canvas')
+    error?.remove()
+  }
+
+  mount()
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+  motion.addEventListener('change', mount)
+  new MutationObserver(mount).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme'],
+  })
+}
 
 /* =========================
    Crystal Animation
@@ -71,7 +114,9 @@
 /* Draw a flickering rim and drifting dust inside the featured crystal. */
 function setupCrystalEffect(crystal, drawBackground) {
   const canvas = crystal.querySelector('.featured-orb-canvas')
-  const backgroundCanvas = drawBackground ? document.querySelector('.featured-background-canvas') : null
+  const backgroundCanvas = drawBackground
+    ? document.querySelector('.featured-background-canvas')
+    : null
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
   if (!canvas || !crystal) return
 
@@ -87,8 +132,8 @@ function setupCrystalEffect(crystal, drawBackground) {
     radius: Math.sqrt(Math.random()) * 95,
     phaseX: Math.random() * Math.PI * 2,
     phaseY: Math.random() * Math.PI * 2,
-    speedX: .00045 + Math.random() * .0008,
-    speedY: .00045 + Math.random() * .0008,
+    speedX: 0.00045 + Math.random() * 0.0008,
+    speedY: 0.00045 + Math.random() * 0.0008,
     driftX: 10 + Math.random() * 18,
     driftY: 10 + Math.random() * 18,
     backgroundX: Math.random(),
@@ -107,34 +152,32 @@ function setupCrystalEffect(crystal, drawBackground) {
   function draw(time = 0) {
     const lightTheme = document.documentElement.dataset.theme === 'light'
 
-    currentX += (pointerX - currentX) * .045
-    currentY += (pointerY - currentY) * .045
-    spread += (targetSpread - spread) * .025
+    currentX += (pointerX - currentX) * 0.045
+    currentY += (pointerY - currentY) * 0.045
+    spread += (targetSpread - spread) * 0.025
     const angleDifference = Math.atan2(
       Math.sin(targetGlowAngle - glowAngle),
       Math.cos(targetGlowAngle - glowAngle),
     )
-    glowAngle += angleDifference * .08
+    glowAngle += angleDifference * 0.08
     crystal.style.setProperty('--glow-angle', `${glowAngle}rad`)
     context.clearRect(0, 0, size, size)
     context.save()
     context.translate(150, 150)
-    context.strokeStyle = 'rgba(213, 233, 193, .8)'
+    context.strokeStyle = lightTheme ? 'rgba(240, 221, 184, .85)' : 'rgba(213, 233, 193, .8)'
     context.lineWidth = 1.1
-    context.shadowColor = 'rgba(151, 200, 151, .9)'
+    context.shadowColor = lightTheme ? 'rgba(201, 169, 121, .8)' : 'rgba(151, 200, 151, .9)'
     context.shadowBlur = 9
     for (let strand = 0; strand < 2; strand++) {
-      context.globalAlpha = strand ? .45 : .9
+      context.globalAlpha = strand ? 0.45 : 0.9
       context.beginPath()
       for (let i = 0; i <= 160; i++) {
-        const angle = i * Math.PI * 2 / 160
-        const flame = Math.pow(
-          Math.max(0, Math.sin(angle * 13 + time * .003 + strand * 1.8)),
-          5,
-        )
-        const radius = 141 +
-          flame * (2.5 + 1.5 * Math.sin(time * .004 + angle * 7)) +
-          Math.sin(angle * 23 - time * .004 + strand) * 1.1
+        const angle = (i * Math.PI * 2) / 160
+        const flame = Math.pow(Math.max(0, Math.sin(angle * 13 + time * 0.003 + strand * 1.8)), 5)
+        const radius =
+          141 +
+          flame * (2.5 + 1.5 * Math.sin(time * 0.004 + angle * 7)) +
+          Math.sin(angle * 23 - time * 0.004 + strand) * 1.1
         const x = Math.cos(angle) * radius
         const y = Math.sin(angle) * radius
         if (i === 0) context.moveTo(x, y)
@@ -145,14 +188,16 @@ function setupCrystalEffect(crystal, drawBackground) {
     }
     particles.forEach((particle, index) => {
       const influence = 1 - particle.radius / 150
-      const x = Math.cos(particle.angle) * particle.radius * spread +
+      const x =
+        Math.cos(particle.angle) * particle.radius * spread +
         Math.sin(time * particle.speedX + particle.phaseX) * particle.driftX +
-        currentX * influence * .38
-      const y = Math.sin(particle.angle) * particle.radius * spread +
+        currentX * influence * 0.38
+      const y =
+        Math.sin(particle.angle) * particle.radius * spread +
         Math.sin(time * particle.speedY + particle.phaseY) * particle.driftY +
-        currentY * influence * .38
-      context.globalAlpha = .35 + .3 * (1 + Math.sin(time * .0015 + index)) / 2
-      context.fillStyle = lightTheme ? '#f0e8c9' : '#e6edcc'
+        currentY * influence * 0.38
+      context.globalAlpha = 0.35 + (0.3 * (1 + Math.sin(time * 0.0015 + index))) / 2
+      context.fillStyle = lightTheme ? '#f2e6ce' : '#e6edcc'
       context.beginPath()
       context.arc(x, y, index % 6 === 0 ? 1.8 : 1, 0, Math.PI * 2)
       context.fill()
@@ -170,10 +215,14 @@ function setupCrystalEffect(crystal, drawBackground) {
       backgroundContext.setTransform(ratio, 0, 0, ratio, 0, 0)
       backgroundContext.clearRect(0, 0, bounds.width, bounds.height)
       particles.forEach((particle, index) => {
-        const x = particle.backgroundX * bounds.width + Math.sin(time * particle.speedX + particle.phaseX) * particle.driftX
-        const y = particle.backgroundY * bounds.height + Math.sin(time * particle.speedY + particle.phaseY) * particle.driftY
-        backgroundContext.globalAlpha = .35 + .3 * (1 + Math.sin(time * .0015 + index)) / 2
-        backgroundContext.fillStyle = '#e6edcc'
+        const x =
+          particle.backgroundX * bounds.width +
+          Math.sin(time * particle.speedX + particle.phaseX) * particle.driftX
+        const y =
+          particle.backgroundY * bounds.height +
+          Math.sin(time * particle.speedY + particle.phaseY) * particle.driftY
+        backgroundContext.globalAlpha = 0.35 + (0.3 * (1 + Math.sin(time * 0.0015 + index))) / 2
+        backgroundContext.fillStyle = lightTheme ? '#e9d8b9' : '#e6edcc'
         backgroundContext.beginPath()
         backgroundContext.arc(x, y, index % 6 === 0 ? 1.8 : 1, 0, Math.PI * 2)
         backgroundContext.fill()
@@ -187,10 +236,10 @@ function setupCrystalEffect(crystal, drawBackground) {
     if (!animation) draw()
   }
   crystal.addEventListener('pointermove', event => {
-    targetSpread = .88
+    targetSpread = 0.88
     const bounds = canvas.getBoundingClientRect()
-    pointerX = ((event.clientX - bounds.left) / bounds.width - .5) * size
-    pointerY = ((event.clientY - bounds.top) / bounds.height - .5) * size
+    pointerX = ((event.clientX - bounds.left) / bounds.width - 0.5) * size
+    pointerY = ((event.clientY - bounds.top) / bounds.height - 0.5) * size
     targetGlowAngle = Math.atan2(pointerX, -pointerY)
   })
   crystal.addEventListener('pointerleave', () => {
