@@ -49,8 +49,8 @@
 }
 
 .magic-circle {
-  --magic-low: .17;
-  --magic-high: .34;
+  --magic-low: .38;
+  --magic-high: .55;
   position: absolute;
   inset: 0;
   width: 100%;
@@ -73,8 +73,8 @@
 
 .magic-social-link {
   position: absolute;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   display: grid;
   place-items: center;
   padding: 0;
@@ -164,18 +164,18 @@
 
 /* Match the interactive icons to the three SVG seal centers. */
 .magic-social-email {
-  top: 15.28%;
+  top: 9.72%;
   left: 50%;
 }
 
 .magic-social-github {
-  top: 68.61%;
-  left: 20.56%;
+  top: 71.67%;
+  left: 15.83%;
 }
 
 .magic-social-linkedin {
-  top: 68.61%;
-  left: 79.44%;
+  top: 71.67%;
+  left: 84.17%;
 }
 
 .magic-glyph {
@@ -188,22 +188,13 @@
 .magic-ring-outer { stroke-width: 2.4; }
 .magic-ring-inner { stroke-width: 1; opacity: .72; }
 
-.magic-ring-marks {
-  stroke-width: 1.1;
-  opacity: .56;
+.magic-reflected-lines {
+  stroke-width: .9;
+  opacity: .38;
 }
 
-.magic-ring-marks-diagonal { opacity: .38; }
-
-.magic-triangle {
-  stroke-width: 2;
-  opacity: .92;
-}
-
-.magic-node-spokes {
-  stroke-width: 1;
-  opacity: .48;
-}
+/* A crescent sweeps between the contact seals. */
+.magic-crescent { stroke-width: .9; opacity: .48; transition: opacity 400ms ease; }
 
 .magic-core-orbit {
   stroke-width: .9;
@@ -214,14 +205,19 @@
 .magic-core { stroke-width: 1.6; }
 
 .magic-core-mark {
-  stroke-width: .9;
-  opacity: .46;
+  stroke-width: 1.35;
+  opacity: .8;
 }
 
-.magic-core-dot {
-  fill: currentColor;
-  stroke: none;
-  opacity: .52;
+/* The Pisces glyph sits within the existing central seal. */
+.magic-pisces { stroke-width: 1.5; opacity: .8; transition: opacity 400ms ease, stroke-width 400ms ease; }
+
+.magic-circle-stage.is-resonating .magic-crescent { opacity: .75; }
+.magic-circle-stage.is-resonating .magic-pisces { opacity: 1; stroke-width: 2; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .magic-core-orbit { animation: magic-orbit-drift 12s linear infinite; }
+  @keyframes magic-orbit-drift { to { stroke-dashoffset: -40; } }
 }
 
 .magic-node-halo {
@@ -235,33 +231,6 @@
   stroke-width: 1.45;
   opacity: .72;
   transition: fill 160ms ease, opacity 160ms ease, stroke-width 160ms ease;
-}
-
-.magic-node-ticks {
-  stroke-width: 1;
-  opacity: .42;
-}
-
-/* Curved bands fill the outer wedges without turning the sigil into a grid. */
-.magic-orbit-segments {
-  stroke-width: .85;
-  opacity: .34;
-}
-
-.magic-bridge-marks {
-  stroke-width: 1;
-  opacity: .46;
-}
-
-.magic-rune-marks {
-  stroke-width: 1;
-  opacity: .44;
-}
-
-.magic-rune-dot {
-  fill: currentColor;
-  stroke: none;
-  opacity: .48;
 }
 
 .magic-circle-stage.is-resonating .magic-glyph {

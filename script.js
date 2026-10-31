@@ -715,3 +715,39 @@ if (currentYear) {
     }
   })
 })()
+
+
+/* =========================
+   Section Entrances
+   ========================= */
+
+/* Animate each section once as it enters the viewport. */
+;(function setupApothecaryEntrances() {
+  const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
+  if (preference.matches || !('IntersectionObserver' in window)) return
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return
+      entry.target.classList.add('apothecary-arrive')
+      observer.unobserve(entry.target)
+    })
+  }, { threshold: 0.12 })
+
+  const sections = document.querySelectorAll(
+    '.hero-copy, .hero-note-wrap, .projects-header, .about-intro, .listening-note, .project-detail-intro, .project-detail-section',
+  )
+
+  sections.forEach(element => {
+    observer.observe(element)
+    element.addEventListener('animationend', event => {
+      if (event.animationName === 'apothecary-arrive') element.classList.remove('apothecary-arrive')
+    })
+  })
+
+  preference.addEventListener('change', event => {
+    if (!event.matches) return
+    observer.disconnect()
+    document.querySelectorAll('.apothecary-arrive').forEach(element => element.classList.remove('apothecary-arrive'))
+  })
+})()

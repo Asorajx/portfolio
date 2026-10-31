@@ -679,3 +679,31 @@ html[data-page-transition="ready"] {
     animation-iteration-count: 1 !important;
   }
 }
+
+/* =========================
+   Shared Interaction Details
+   ========================= */
+.apothecary-note {
+  transition: border-color 240ms ease, box-shadow 240ms ease;
+}
+.apothecary-note:hover,
+.apothecary-note:focus-within {
+  border-color: var(--gold);
+  box-shadow: var(--shadow), 0 0 28px color-mix(in srgb, var(--gold) 9%, transparent);
+}
+.text-link span { display: inline-block; transition: transform 220ms ease; }
+.text-link:hover span { transform: translate(2px, -2px); }
+.primary-button:focus-visible,
+.text-link:focus-visible,
+.project-detail-button:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 5px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .apothecary-arrive { animation: apothecary-arrive 650ms cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes apothecary-arrive {
+    from { opacity: .35; translate: 0 14px; }
+    to { opacity: 1; translate: 0 0; }
+  }
+  .primary-button:active, .hero-actions .text-link:active { transform: translateY(1px) scale(.98); }
+}

@@ -962,3 +962,18 @@
 .popup-face { padding: 26px 22px; }
 .popup-close { top: 14px; right: 14px; }
 }
+
+/* Add a subtle movement to the bottles when hovering over the cabinet. */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .potion-bottle { transform-origin: 50% 100%; transition: filter 350ms ease; }
+  .bookshelf-stage:hover .potion-bottle { animation: potion-settle 850ms ease-in-out; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--gold) 35%, transparent)); }
+  .bookshelf-stage:hover .potion-upper-right .potion-bottle { animation-delay: 100ms; }
+  .bookshelf-stage:hover .potion-mid-right .potion-bottle { animation-delay: 180ms; }
+  .bookshelf-stage:hover .potion-shine { animation: glass-glint 1200ms ease-in-out; }
+  @keyframes potion-settle {
+    0%, 100% { rotate: 0deg; }
+    25% { rotate: -3deg; }
+    60% { rotate: 2deg; }
+  }
+  @keyframes glass-glint { 0%, 100% { opacity: .5; } 45% { opacity: 1; } }
+}
