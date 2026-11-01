@@ -87,6 +87,7 @@
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, 146px);
+  grid-auto-columns: 146px;
   grid-template-rows: repeat(3, 35px);
   align-items: end;
   column-gap: 24px;
@@ -97,14 +98,6 @@
   isolation: isolate;
   transform: translateY(2px);
 }
-
-/* Keep Mosaic separate while the remaining projects form one book stack. */
-.project-switcher-card:nth-child(1) { grid-column: 1; grid-row: 3; }
-.project-switcher-card:nth-child(2) { grid-column: 2; grid-row: 3; }
-.project-switcher-card:nth-child(3) { grid-column: 2; grid-row: 2; }
-.project-switcher-card:nth-child(4) { grid-column: 2; grid-row: 1; }
-.project-switcher-card:nth-child(5) { grid-column: 3; grid-row: 3; }
-.project-switcher-card:nth-child(6) { grid-column: 3; grid-row: 2; }
 
 .project-switcher-card {
   --switcher-cover: #6d7563;
@@ -793,6 +786,7 @@
   .project-switcher {
     width: 100%;
     grid-template-columns: repeat(2, 132px);
+    grid-auto-columns: 132px;
     grid-template-rows: repeat(3, 35px);
     column-gap: 12px;
     row-gap: 0;
@@ -865,6 +859,7 @@
 @media (max-width: 360px) {
   .project-switcher {
     grid-template-columns: repeat(2, 120px);
+    grid-auto-columns: 120px;
     column-gap: 8px;
   }
 

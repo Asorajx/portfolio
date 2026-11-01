@@ -17,7 +17,10 @@ const projectDetails = window.portfolioProjects
   if (!switcher || !content || !projectDetails.length) return
 
   /* Build the collection from the same data used by the bookshelf. */
-  const offsets = [6, -4, 3, -2]
+  const offsets = [-4, 6, -1]
+  const featuredColumns = Math.ceil(projectDetails.filter(project => project.featured).length / 3)
+  let featuredIndex = 0
+  let otherIndex = 0
   const tabs = projectDetails.map((project, index) => {
     const tab = document.createElement('button')
     tab.type = 'button'
@@ -28,9 +31,11 @@ const projectDetails = window.portfolioProjects
     tab.setAttribute('aria-controls', 'projectContent')
     tab.tabIndex = -1
     tab.dataset.projectTab = project.id
-    tab.style.setProperty('--book-x', `${offsets[index % offsets.length]}px`)
-    tab.style.gridColumn = index === 0 ? '1' : String(2 + Math.floor((index - 1) / 3))
-    tab.style.gridRow = index === 0 ? '3' : String(3 - (index - 1) % 3)
+    const stackIndex = project.featured ? featuredIndex++ : otherIndex++
+    tab.style.setProperty('--book-x', `${offsets[stackIndex % offsets.length]}px`)
+    const firstColumn = project.featured ? 1 : featuredColumns + 1
+    tab.style.gridColumn = String(firstColumn + Math.floor(stackIndex / 3))
+    tab.style.gridRow = String(3 - stackIndex % 3)
 
     const number = document.createElement('span')
     number.className = 'project-switcher-number'
@@ -110,13 +115,13 @@ const projectDetails = window.portfolioProjects
       fields.documentation.hidden = !project.documentation
       if (project.documentation) fields.documentation.href = project.documentation
       fields.github.href = project.github
-      fields.demoSection.hidden = !project.hasDemo
+      fields.demoSection.hidden = !project.hasVideoDemo
 
       /* Demo Preview */
-      if (project.hasDemo) {
-        if (project.demo) {
+      if (project.hasVideoDemo) {
+        if (project.videoDemo) {
           /* Recreate controls when a different project is selected. */
-          fields.demoFrame.replaceChildren(window.DemoVideo.create(project.demo, `${project.title} demonstration`))
+          fields.demoFrame.replaceChildren(window.DemoVideo.create(project.videoDemo, `${project.title} demonstration`))
         } else {
           fields.demoFrame.innerHTML = `
             <div class="project-demo-placeholder">
@@ -140,7 +145,7 @@ const projectDetails = window.portfolioProjects
             Live demo <span aria-hidden="true">↗</span>
           </a>
         `
-      } else if (project.hasDemo) {
+      } else if (project.hasVideoDemo) {
         fields.liveDemo.outerHTML = `
           <span
             id="projectDemo"

@@ -29,7 +29,7 @@ function createProjectCard(project, index) {
 
   const content = makeElement('div', 'book-spine-content')
   const title = makeElement('h3', 'project-book-title')
-  const titleText = makeElement('span', '', project.spineTitle || project.title)
+  const titleText = makeElement('span', '', project.bookTitle || project.title)
 
   title.appendChild(titleText)
 
