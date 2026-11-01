@@ -1,5 +1,5 @@
 /* =========================
-   Featured Crystal
+   Featured Crystal Ball
    ========================= */
 
 /* Build a crystal for every project marked as featured. */
@@ -19,6 +19,31 @@
   }
 
   let activeCrystal = null
+  let activeIndex = 0
+  let dragged = false
+  let pointerStart = null
+  const crystals = []
+  let announcement = null
+
+  function setActive(index) {
+    activeIndex = (index + crystals.length) % crystals.length
+    crystals.forEach((item, itemIndex) => {
+      let position = itemIndex - activeIndex
+      if (position > crystals.length / 2) position -= crystals.length
+      if (position < -crystals.length / 2) position += crystals.length
+      const isOpposite = crystals.length % 2 === 0 && Math.abs(position) === crystals.length / 2
+      item.container.dataset.position = isOpposite && crystals.length === 4
+        ? 'back'
+        : Math.abs(position) > 2 ? 'hidden' : String(position)
+      item.container.inert = Math.abs(position) > 2
+      item.crystal.tabIndex = Math.abs(position) > 2 ? -1 : 0
+      item.crystal.setAttribute('aria-label', itemIndex === activeIndex
+        ? `Show ${item.project.title} project details`
+        : `Select ${item.project.title}`)
+    })
+    if (announcement) announcement.textContent = `${featuredProjects[activeIndex].title}, ${activeIndex + 1} of ${crystals.length}`
+  }
+
   featuredProjects.forEach((project, index) => {
     const container = document.createElement('div')
     container.className = 'featured-display-art'
@@ -33,8 +58,15 @@
     crystal.querySelector('.featured-orb-title span').textContent = project.title
     container.appendChild(crystal)
     list.appendChild(container)
+    crystals.push({ container, crystal, project })
 
     crystal.addEventListener('click', () => {
+      if (dragged) return
+      if (index !== activeIndex) {
+        setActive(index)
+        crystal.focus()
+        return
+      }
       activeCrystal = crystal
       const area = display.getBoundingClientRect()
       const ball = crystal.getBoundingClientRect()
@@ -61,14 +93,78 @@
     setupCrystalRenderer(crystal)
   })
 
-  closeButton?.addEventListener('click', () => {
+  if (crystals.length > 1) {
+    list.classList.add('is-carousel')
+    list.setAttribute('role', 'region')
+    list.setAttribute('aria-roledescription', 'carousel')
+    list.setAttribute('aria-label', 'Featured projects')
+
+    const instructions = document.createElement('span')
+    instructions.id = 'featuredCarouselInstructions'
+    instructions.className = 'featured-carousel-status'
+    instructions.textContent = 'Use the left and right arrow keys to browse featured projects.'
+    list.setAttribute('aria-describedby', instructions.id)
+    announcement = document.createElement('span')
+    announcement.className = 'featured-carousel-status'
+    announcement.setAttribute('aria-live', 'polite')
+    list.append(instructions, announcement)
+
+    let lastWheelTime = 0
+    list.addEventListener('wheel', event => {
+      if (!event.target.closest('.featured-crystal') || event.ctrlKey) return
+      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY
+      if (!delta) return
+      event.preventDefault()
+      const now = performance.now()
+      if (now - lastWheelTime < 550) return
+      lastWheelTime = now
+      setActive(activeIndex + (delta > 0 ? 1 : -1))
+    }, { passive: false })
+    list.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return
+      event.preventDefault()
+      setActive(activeIndex + (event.key === 'ArrowLeft' ? -1 : 1))
+      crystals[activeIndex].crystal.focus()
+    })
+    list.addEventListener('pointerdown', event => {
+      if (event.button !== 0) return
+      pointerStart = { x: event.clientX, y: event.clientY }
+      dragged = false
+      event.target.closest('.featured-crystal')?.setPointerCapture(event.pointerId)
+    })
+    list.addEventListener('pointerup', event => {
+      if (!pointerStart) return
+      const dx = event.clientX - pointerStart.x
+      const dy = event.clientY - pointerStart.y
+      pointerStart = null
+      if (Math.abs(dx) < 40 || Math.abs(dx) <= Math.abs(dy)) return
+      dragged = true
+      setActive(activeIndex + (dx < 0 ? 1 : -1))
+      setTimeout(() => { dragged = false }, 250)
+    })
+    list.addEventListener('pointercancel', () => {
+      pointerStart = null
+    })
+    setActive(0)
+  }
+
+  function closeDetails(restoreFocus = true) {
     display.classList.remove('is-open')
     activeCrystal?.classList.remove('is-selected')
     activeCrystal?.setAttribute('aria-expanded', 'false')
     list.inert = false
     details.inert = true
     details.setAttribute('aria-hidden', 'true')
-    activeCrystal?.focus()
+    if (restoreFocus) activeCrystal?.focus()
+  }
+
+  closeButton?.addEventListener('click', () => closeDetails())
+  document.addEventListener('click', event => {
+    if (!display.classList.contains('is-open')) return
+    if (!display.contains(event.target)) closeDetails(false)
+  })
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && display.classList.contains('is-open')) closeDetails(false)
   })
 })()
 
@@ -108,7 +204,7 @@ function setupCrystalRenderer(crystal) {
 }
 
 /* =========================
-   Crystal Animation
+   Crystal Ball Animation
    ========================= */
 
 /* Draw a flickering rim and drifting dust inside the featured crystal. */
