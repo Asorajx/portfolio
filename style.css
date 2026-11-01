@@ -711,9 +711,9 @@ html[data-page-transition="ready"] {
   outline-offset: 5px;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .apothecary-arrive { animation: apothecary-arrive 650ms cubic-bezier(.2,.7,.2,1) both; }
+  .apothecary-arrive { animation: apothecary-arrive 850ms cubic-bezier(.2,.7,.2,1) both; }
   @keyframes apothecary-arrive {
-    from { opacity: .35; translate: 0 14px; }
+    from { opacity: 0; translate: 0 24px; }
     to { opacity: 1; translate: 0 0; }
   }
   .primary-button:active, .hero-actions .text-link:active { transform: translateY(1px) scale(.98); }

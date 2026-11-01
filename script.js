@@ -736,7 +736,7 @@ if (currentYear) {
   }, { threshold: 0.12 })
 
   const sections = document.querySelectorAll(
-    '.hero-copy, .hero-note-wrap, .projects-header, .about-intro, .listening-note, .project-detail-intro, .project-detail-section',
+    '.hero-copy, .hero-note-wrap, .featured-work-heading, .featured-list, .bookshelf-sign, .shelf-row, .about-page-grid > h1, .about-intro, .listening-note, .project-collection, .project-detail-intro, .project-record, .project-detail-section, .project-bottom-navigation',
   )
 
   sections.forEach(element => {
