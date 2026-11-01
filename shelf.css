@@ -464,6 +464,10 @@
 .book-tone-2 { --book-cover: #73545d; }
 .book-tone-3 { --book-cover: #82755f; }
 .book-tone-4 { --book-cover: #50685e; }
+.book-tone-5 { --book-cover: #596f7b; }
+.book-tone-6 { --book-cover: #896253; }
+.book-tone-7 { --book-cover: #71657e; }
+.book-tone-8 { --book-cover: #897b54; }
 
 /* Featured books keep their normal cover and gain a restrained warm glow. */
 .project-card.is-featured {
@@ -505,6 +509,10 @@
 [data-theme="dark"] .book-tone-2 { --book-cover: #644952; }
 [data-theme="dark"] .book-tone-3 { --book-cover: #6d634f; }
 [data-theme="dark"] .book-tone-4 { --book-cover: #42584f; }
+[data-theme="dark"] .book-tone-5 { --book-cover: #465b66; }
+[data-theme="dark"] .book-tone-6 { --book-cover: #704e43; }
+[data-theme="dark"] .book-tone-7 { --book-cover: #5b5068; }
+[data-theme="dark"] .book-tone-8 { --book-cover: #6d6244; }
 .shelf-books .project-card:nth-child(1) { transform: rotate(-.5deg); }
 .shelf-books .project-card:nth-child(2) { transform: rotate(.55deg); }
 .shelf-books .project-card:nth-child(3) { transform: rotate(-.25deg); }

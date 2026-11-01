@@ -20,7 +20,7 @@ function createProjectCard(project, index) {
   const featuredClass = project.featured ? ' is-featured' : ''
   const card = makeElement(
     'a',
-    `project-card book-${size} book-tone-${(index % 4) + 1}${featuredClass}`,
+    `project-card book-${size} book-tone-${(index % 8) + 1}${featuredClass}`,
   )
 
   card.href = `projects.html#${project.id}`

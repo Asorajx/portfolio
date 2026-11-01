@@ -24,7 +24,7 @@ const projectDetails = window.portfolioProjects
   const tabs = projectDetails.map((project, index) => {
     const tab = document.createElement('button')
     tab.type = 'button'
-    tab.className = `project-switcher-card project-switcher-card--${index % 4 + 1}`
+    tab.className = `project-switcher-card project-switcher-card--${index % 8 + 1}`
     tab.classList.toggle('is-featured', !!project.featured)
     tab.setAttribute('role', 'tab')
     tab.setAttribute('aria-selected', 'false')

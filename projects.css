@@ -252,6 +252,26 @@
   --switcher-ink: #edf0e5;
 }
 
+.project-switcher-card--5 {
+  --switcher-cover: #596f7b;
+  --switcher-ink: #f0eadb;
+}
+
+.project-switcher-card--6 {
+  --switcher-cover: #896253;
+  --switcher-ink: #f0eadb;
+}
+
+.project-switcher-card--7 {
+  --switcher-cover: #71657e;
+  --switcher-ink: #f0eadb;
+}
+
+.project-switcher-card--8 {
+  --switcher-cover: #897b54;
+  --switcher-ink: #f0eadb;
+}
+
 .project-switcher-number,
 .project-switcher-card strong {
   display: block;
@@ -322,6 +342,22 @@
 
 [data-theme="dark"] .project-switcher-card--4 {
   --switcher-cover: #42584f;
+}
+
+[data-theme="dark"] .project-switcher-card--5 {
+  --switcher-cover: #465b66;
+}
+
+[data-theme="dark"] .project-switcher-card--6 {
+  --switcher-cover: #704e43;
+}
+
+[data-theme="dark"] .project-switcher-card--7 {
+  --switcher-cover: #5b5068;
+}
+
+[data-theme="dark"] .project-switcher-card--8 {
+  --switcher-cover: #6d6244;
 }
 
 [data-theme="dark"] .project-featured-status {
