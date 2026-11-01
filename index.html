@@ -35,6 +35,14 @@
         document.documentElement.dataset.pageTransition = 'ready';
       }
     } catch (error) {}
+
+    /* Jump straight to a linked section instead of smooth-scrolling the whole page on arrival. */
+    if (location.hash) {
+      document.documentElement.style.scrollBehavior = 'auto';
+      addEventListener('load', () => requestAnimationFrame(() => {
+        document.documentElement.style.removeProperty('scroll-behavior');
+      }));
+    }
   </script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="home.css">

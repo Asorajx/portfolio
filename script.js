@@ -727,28 +727,34 @@ if (currentYear) {
   const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
   if (preference.matches || !('IntersectionObserver' in window)) return
 
+  /* Stagger elements that enter together so they arrive one after another. */
   const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return
-      entry.target.classList.add('apothecary-arrive')
+    entries.filter(entry => entry.isIntersecting).forEach((entry, index) => {
+      entry.target.style.setProperty('--arrive-delay', `${index * 110}ms`)
+      entry.target.classList.replace('apothecary-pending', 'apothecary-arrive')
       observer.unobserve(entry.target)
     })
-  }, { threshold: 0.12 })
+  }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' })
 
   const sections = document.querySelectorAll(
     '.hero-copy, .hero-note-wrap, .featured-work-heading, .featured-list, .bookshelf-sign, .shelf-row, .about-page-grid > h1, .about-intro, .listening-note, .project-collection, .project-detail-intro, .project-record, .project-detail-section, .project-bottom-navigation',
   )
 
   sections.forEach(element => {
+    if (element.closest('.about-page') && !preference.matches) return
+    /* Hide elements up front so they never flash in before their fade starts. */
+    element.classList.add('apothecary-pending')
     observer.observe(element)
     element.addEventListener('animationend', event => {
-      if (event.animationName === 'apothecary-arrive') element.classList.remove('apothecary-arrive')
+      if (event.animationName !== 'apothecary-arrive') return
+      element.classList.remove('apothecary-arrive')
+      element.style.removeProperty('--arrive-delay')
     })
   })
 
   preference.addEventListener('change', event => {
     if (!event.matches) return
     observer.disconnect()
-    document.querySelectorAll('.apothecary-arrive').forEach(element => element.classList.remove('apothecary-arrive'))
+    document.querySelectorAll('.apothecary-arrive, .apothecary-pending').forEach(element => element.classList.remove('apothecary-arrive', 'apothecary-pending'))
   })
 })()
