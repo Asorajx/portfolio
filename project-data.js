@@ -101,7 +101,7 @@ window.portfolioProjects = [
     documentation: 'https://github.com/Asorajx/starjot/blob/main/P04-starjot.pdf',
     github: 'https://github.com/Asorajx/starjot',
     hasVideoDemo: true,
-    videoDemo: '',
+    videoDemo: 'assets/demos/Starjot-Demo.mp4',
     liveDemo: 'https://asorajx.github.io/starjot/#home',
   },
 ]
