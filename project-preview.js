@@ -34,19 +34,11 @@
 
     /* Project Switcher Tabs */
     if (switcher && window.portfolioProjects?.length) {
-      const offsets = [-4, 6, -1]
-      const featuredColumns = Math.ceil(window.portfolioProjects.filter(project => project.featured).length / 3)
-      let featuredIndex = 0
-      let otherIndex = 0
-      switcher.replaceChildren(...window.portfolioProjects.map((project, index) => {
+      const tabs = window.portfolioProjects.map((project, index) => {
         const tab = document.createElement('span')
         tab.className = `project-switcher-card project-switcher-card--${index % 8 + 1}`
         tab.classList.toggle('is-featured', !!project.featured)
         tab.dataset.projectTab = project.id
-        const stackIndex = project.featured ? featuredIndex++ : otherIndex++
-        tab.style.setProperty('--book-x', `${offsets[stackIndex % offsets.length]}px`)
-        tab.style.gridColumn = String((project.featured ? 1 : featuredColumns + 1) + Math.floor(stackIndex / 3))
-        tab.style.gridRow = String(3 - stackIndex % 3)
         const number = document.createElement('span')
         number.className = 'project-switcher-number'
         number.textContent = String(index + 1).padStart(2, '0')
@@ -54,7 +46,9 @@
         title.textContent = project.shortTitle || project.title
         tab.append(number, title)
         return tab
-      }))
+      })
+      window.stackProjectTabs(tabs, window.portfolioProjects)
+      switcher.replaceChildren(...tabs)
     }
 
     /* Remove Media */

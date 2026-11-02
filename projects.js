@@ -17,10 +17,6 @@ const projectDetails = window.portfolioProjects
   if (!switcher || !content || !projectDetails.length) return
 
   /* Build the collection from the same data used by the bookshelf. */
-  const offsets = [-4, 6, -1]
-  const featuredColumns = Math.ceil(projectDetails.filter(project => project.featured).length / 3)
-  let featuredIndex = 0
-  let otherIndex = 0
   const tabs = projectDetails.map((project, index) => {
     const tab = document.createElement('button')
     tab.type = 'button'
@@ -31,11 +27,6 @@ const projectDetails = window.portfolioProjects
     tab.setAttribute('aria-controls', 'projectContent')
     tab.tabIndex = -1
     tab.dataset.projectTab = project.id
-    const stackIndex = project.featured ? featuredIndex++ : otherIndex++
-    tab.style.setProperty('--book-x', `${offsets[stackIndex % offsets.length]}px`)
-    const firstColumn = project.featured ? 1 : featuredColumns + 1
-    tab.style.gridColumn = String(firstColumn + Math.floor(stackIndex / 3))
-    tab.style.gridRow = String(3 - stackIndex % 3)
 
     const number = document.createElement('span')
     number.className = 'project-switcher-number'
@@ -53,6 +44,7 @@ const projectDetails = window.portfolioProjects
     tab.append(number, title)
     return tab
   })
+  window.stackProjectTabs(tabs, projectDetails)
   switcher.replaceChildren(...tabs)
 
   const fields = {
@@ -110,9 +102,10 @@ const projectDetails = window.portfolioProjects
       fields.description.textContent = project.description
       fields.reason.textContent = project.reason
 
-      /* Show the PDF link only when the project has a documentation URL. */
+      /* Links */
+      if (project.liveDemo) fields.liveDemo.href = project.liveDemo
       if (project.documentation) fields.documentation.href = project.documentation
-      fields.github.href = project.github
+      if (project.github) fields.github.href = project.github
 
       /* Demo Preview */
       if (project.hasVideoDemo) {
@@ -128,37 +121,6 @@ const projectDetails = window.portfolioProjects
           `
         }
       }
-
-      /* Live Demo in external website button. */
-      if (project.liveDemo) {
-        fields.liveDemo.outerHTML = `
-          <a
-            id="projectDemo"
-            class="project-detail-button project-detail-button--primary"
-            href="${project.liveDemo}"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Live demo <span aria-hidden="true">↗</span>
-          </a>
-        `
-      } else if (project.hasVideoDemo) {
-        fields.liveDemo.outerHTML = `
-          <span
-            id="projectDemo"
-            class="project-detail-button project-detail-button--primary is-disabled"
-            aria-disabled="true"
-          >
-            Live demo unavailable
-          </span>
-        `
-      } else {
-        fields.liveDemo.outerHTML = `
-          <span id="projectDemo" hidden></span>
-        `
-      }
-
-      fields.liveDemo = document.getElementById('projectDemo')
 
       /* Optional Sections */
       window.syncProjectSections(content, project)

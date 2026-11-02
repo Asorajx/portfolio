@@ -169,9 +169,10 @@ window.syncProjectSections = function syncProjectSections(root, project) {
 
   const fields = {
     projectDemoSection: !!project.hasVideoDemo,
-    projectDocumentation: !!project.documentation,
     projectReasonSection: !!project.reason,
-    projectDemo: !!(project.liveDemo || project.hasVideoDemo),
+    projectDemo: !!project.liveDemo,
+    projectGithub: !!project.github,
+    projectDocumentation: !!project.documentation,
   }
 
   Object.entries(fields).forEach(([id, visible]) => {
@@ -200,4 +201,35 @@ window.syncProjectSections = function syncProjectSections(root, project) {
     team.textContent = isGroup ? 'Group' : 'Solo'
     team.classList.toggle('is-group', isGroup)
   }
+}
+
+
+/* =========================
+   Project Book Stack
+   ========================= */
+
+/* Book Stack Placement */
+window.stackProjectTabs = function stackProjectTabs(tabs, projects) {
+  const looks = [
+    { x: -5, width: 4 },
+    { x: 9, width: -12 },
+    { x: -2, width: 0 },
+    { x: 4, width: -6 },
+    { x: -8, width: 8 },
+    { x: 6, width: -4 },
+  ]
+  const featuredColumns = Math.ceil(projects.filter(project => project.featured).length / 3)
+  let featuredIndex = 0
+  let otherIndex = 0
+
+  tabs.forEach((tab, index) => {
+    const project = projects[index]
+    const look = looks[index % looks.length]
+    const stackIndex = project.featured ? featuredIndex++ : otherIndex++
+    const firstColumn = project.featured ? 1 : featuredColumns + 1
+    tab.style.gridColumn = String(firstColumn + Math.floor(stackIndex / 3))
+    tab.style.gridRow = String(3 - stackIndex % 3)
+    tab.style.setProperty('--book-x', `${look.x}px`)
+    tab.style.setProperty('--book-width', `${look.width}px`)
+  })
 }
