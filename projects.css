@@ -444,6 +444,29 @@
     inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent);
 }
 
+/* Solo/Group Pill */
+.project-team-status {
+  --team-ink: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 3px 8px 2px;
+  border: 1.5px solid var(--team-ink);
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--team-ink) 25%, transparent);
+  color: var(--team-ink);
+  font-family: var(--font-serif);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  opacity: .82;
+  transform: rotate(-2deg);
+}
+.project-team-status.is-group { --team-ink: #8e1b1b; }
+[data-theme="dark"] .project-team-status.is-group { --team-ink: #d4544c; }
+
 .project-featured-status[hidden] {
   display: none;
 }
@@ -483,16 +506,17 @@
 }
 
 .project-detail-button {
-  min-height: 44px;
+  min-height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 11px 18px;
-  border: 1px solid color-mix(in srgb, var(--plum) 68%, var(--line));
-  background: color-mix(in srgb, var(--surface) 20%, transparent);
-  color: var(--plum);
-  font-size: 14px;
+  gap: 7px;
+  padding: 8px 16px;
+  border: 1px solid color-mix(in srgb, var(--ink) 55%, var(--line));
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
   font-weight: 700;
   line-height: 1;
   transition:
@@ -505,26 +529,30 @@
 .project-detail-button:hover,
 .project-detail-button:focus-visible {
   transform: translateY(-2px);
-  border-color: var(--plum);
-  background: color-mix(in srgb, var(--plum) 11%, transparent);
+  border-color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 7%, transparent);
+}
+
+.project-detail-button[hidden] {
+  display: none;
 }
 
 .project-detail-button:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--green) 64%, #fff);
+  outline: 2px solid color-mix(in srgb, var(--ink) 45%, transparent);
   outline-offset: 3px;
 }
 
 .project-detail-button--primary {
-  border-color: var(--green-deep);
-  background: var(--green-deep);
-  color: var(--surface);
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
 }
 
 .project-detail-button--primary:hover,
 .project-detail-button--primary:focus-visible {
-  border-color: var(--plum-deep);
-  background: var(--plum-deep);
-  color: var(--surface);
+  border-color: var(--ink);
+  background: color-mix(in srgb, var(--ink) 86%, var(--paper));
+  color: var(--paper);
 }
 
 .project-action-icon {
@@ -611,19 +639,11 @@
   display: none;
 }
 
-.project-section-heading {
-  display: grid;
-  grid-template-columns: 150px minmax(0, 1fr);
-  gap: 28px;
-  align-items: end;
-  margin-bottom: 26px;
+/* Chapter Title */
+:is(.project-chapter-heading, .project-plate-heading) .eyebrow {
+  margin: 0 0 10px;
 }
-
-.project-section-heading .eyebrow {
-  margin-bottom: 6px;
-}
-
-.project-section-heading h2 {
+:is(.project-chapter-heading, .project-plate-heading) h2 {
   margin: 0;
   font-family: var(--font-serif);
   font-size: clamp(38px, 5vw, 58px);
@@ -637,9 +657,33 @@
    Demo
    ========================= */
 
+/* Demo Plate */
+.project-plate {
+  padding: 44px 0 40px;
+  background: color-mix(in srgb, var(--ink) 5%, var(--paper));
+  border-block: 1px solid var(--line);
+  box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--ink) 5%, var(--paper));
+  clip-path: inset(0 -100vmax);
+}
+
+.project-plate-heading {
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+.project-plate-figure {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+/* Demo Frame */
 .project-demo-frame {
   position: relative;
-  min-height: 540px;
+  min-height: 340px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 4px;
@@ -666,7 +710,7 @@
 .project-demo-frame > iframe {
   width: 100%;
   height: 100%;
-  min-height: 540px;
+  min-height: 340px;
   display: block;
   border: 0;
   object-fit: cover;
@@ -679,7 +723,7 @@
 }
 
 .project-demo-placeholder {
-  min-height: 540px;
+  min-height: 340px;
   display: grid;
   place-content: center;
   gap: 7px;
@@ -704,63 +748,51 @@
 
 
 /* =========================
-   Explanation
+   Chapters
    ========================= */
 
-.project-explanation {
+/* Chapter Layout */
+.project-chapter {
   display: grid;
-  grid-template-columns: minmax(260px, .72fr) minmax(0, 1.28fr);
-  gap: 70px;
+  grid-template-columns: minmax(220px, .62fr) minmax(0, 1.38fr);
   align-items: start;
 }
 
-.project-explanation .project-section-heading {
-  display: block;
-  margin: 0;
+/* Sticky Chapter Heading */
+.project-chapter-heading {
+  position: sticky;
+  top: 96px;
+  padding: 2px 44px 8px 0;
 }
 
-.project-explanation .project-section-heading .eyebrow {
-  margin-bottom: 12px;
+/* Book Gutter */
+.project-chapter-body {
+  position: relative;
+  align-self: stretch;
+  padding: 2px 0 8px 48px;
+  border-left: 1px solid var(--line);
 }
 
-.project-overview {
-  max-width: 660px;
+/* Chapter Text */
+.project-chapter-text {
+  max-width: 640px;
 }
-
-.project-overview p {
+.project-chapter-text p {
   margin: 0;
   color: var(--muted);
   font-size: 16px;
   line-height: 1.85;
 }
 
-.project-overview p + p {
-  margin-top: 22px;
-}
-
-/* Keep the documentation link near the heading without changing the content columns. */
-.project-documentation-link {
-  margin-top: 24px;
-  gap: 6px;
-
-  color: var(--gold);
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--gold) 45%, transparent);
-  text-underline-offset: 4px;
-  transition: color 160ms ease, text-decoration-color 160ms ease;
-}
-
-.project-documentation-link[hidden] {
-  display: none;
-}
-
-.project-documentation-link:hover,
-.project-documentation-link:focus-visible {
+/* Pull Quote */
+.project-pull-quote p::first-line {
   color: var(--ink);
-  text-decoration-color: currentColor;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-style: italic;
 }
 
-/* For back to projects and back to the top. */
+/* Bottom Navigation */
 .project-bottom-navigation {
   display: flex;
   align-items: center;
@@ -797,9 +829,14 @@
     margin-top: 82px;
   }
 
-  .project-explanation {
+  .project-chapter {
     grid-template-columns: 1fr;
-    gap: 30px;
+    gap: 26px;
+  }
+
+  .project-chapter-heading {
+    position: static;
+    padding-right: 0;
   }
 }
 
@@ -860,25 +897,21 @@
     font-size: 16px;
   }
 
-  .project-detail-actions {
-    align-items: stretch;
-  }
-
-  .project-detail-button {
-    flex: 1 1 145px;
-  }
-
   .project-record {
     width: 100%;
     transform: none;
   }
 
-  .project-section-heading {
-    display: block;
+  .project-chapter-body {
+    padding-left: 22px;
   }
 
-  .project-section-heading .eyebrow {
-    margin-bottom: 11px;
+  .project-plate {
+    padding: 36px 0 32px;
+  }
+
+  .project-plate-figure {
+    padding: 8px;
   }
 
   .project-demo-frame,
@@ -887,7 +920,7 @@
   .project-demo-frame > iframe,
   .project-demo-placeholder,
   .project-demo-frame .demo-video {
-    min-height: 300px;
+    min-height: 240px;
   }
 
 }

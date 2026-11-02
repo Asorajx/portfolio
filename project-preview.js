@@ -2,13 +2,12 @@
    Shared Project Preview
    ========================= */
 
-/* Builds the open book's page preview from the real projects.html,
-   with text replaced by placeholders and media removed. */
+/* Book Page Preview */
 ;(function setupSharedProjectPreview() {
-  /* Runs only on the page with the bookshelf. */
+  /* Bookshelf Page Only */
   if (!document.getElementById('projectOverlay')) return
 
-  /* Loads projects.html as plain HTML; its scripts and videos do not run. */
+  /* Fetch Projects Page */
   const sourcePromise = fetch('projects.html', { cache: 'force-cache' })
     .then(response => {
       if (!response.ok) throw new Error('Could not read projects.html')
@@ -17,7 +16,7 @@
     .then(html => new DOMParser().parseFromString(html, 'text/html'))
     .catch(() => null)
 
-  /* Copies the page header and project section into a preview element. */
+  /* Create Skeleton */
   function createSkeleton(source) {
     const pageHeader = source.querySelector('.site-header')
     const projectPage = source.querySelector('article.project-detail')
@@ -33,7 +32,7 @@
     const article = projectPage.cloneNode(true)
     const switcher = article.querySelector('.project-switcher')
 
-    /* Rebuilds the project switcher tabs from project-data.js. */
+    /* Project Switcher Tabs */
     if (switcher && window.portfolioProjects?.length) {
       const offsets = [-4, 6, -1]
       const featuredColumns = Math.ceil(window.portfolioProjects.filter(project => project.featured).length / 3)
@@ -58,7 +57,7 @@
       }))
     }
 
-    /* Removes images, videos and embeds so nothing is downloaded. */
+    /* Remove Media */
     article.querySelectorAll('img, picture, video, iframe, audio, source').forEach(media => media.remove())
     const demo = article.querySelector('.project-demo-frame')
     if (demo) {
@@ -68,7 +67,7 @@
       demo.append(placeholder)
     }
 
-    /* Moves IDs to data attributes and disables links and buttons in the copy. */
+    /* Disable IDs and Controls */
     for (const element of [header, article]) {
       element.querySelectorAll('[id]').forEach(item => {
         item.dataset.sourceId = item.id
@@ -85,10 +84,10 @@
     return preview
   }
 
-  /* Scales the full-size layout down to the width of the book page. */
+  /* Book Preview Size */
   function sizeBookPreview(preview) {
     if (!preview || !preview.closest('.popup-back')) return
-    /* Laid out at screen width, so the zoomed-in page matches the real one. */
+    /* Screen-Width Layout */
     const documentWidth = innerWidth
     const pageWidth = preview.clientWidth
     if (!pageWidth) return
@@ -96,7 +95,7 @@
     preview.style.setProperty('--preview-scale', String(pageWidth / documentWidth))
   }
 
-  /* Fills the preview with a project's details and shows only its sections. */
+  /* Set Project */
   function setProject(preview, project) {
     if (!preview || !project) return
 
@@ -112,12 +111,12 @@
     assign('projectRecordType', project.type)
     assign('projectFocus', project.focus)
     assign('projectDescription', project.description)
-    assign('projectExtra', project.extra || '')
+    assign('projectReason', project.reason)
 
     const featured = preview.querySelector('[data-source-id="projectFeaturedStatus"]')
     if (featured) featured.hidden = !project.featured
 
-    /* Same section rules as projects.js (from project-data.js). */
+    /* Optional Sections */
     window.syncProjectSections(preview, project)
 
     preview.querySelectorAll('.project-switcher-card').forEach(tab => {
@@ -125,7 +124,7 @@
     })
   }
 
-  /* Puts the preview inside the book page and the full-screen zoom layer. */
+  /* Insert Previews */
   function upgradeBook(source) {
     const overlay = document.getElementById('projectOverlay')
     const back = overlay?.querySelector('.popup-back')
@@ -143,7 +142,7 @@
   sourcePromise.then(upgradeBook)
 
   window.ProjectSkeleton = {
-    /* Used by the shelf animation in script.js. */
+    /* Preview API */
     setProject,
     sizeBookPreview,
   }

@@ -41,7 +41,7 @@
         document.documentElement.dataset.pageTransition = 'ready';
       }
 
-      /* Starts the page in the placeholder look when arriving from a book zoom. */
+      /* Book Zoom Arrival */
       if (sessionStorage.getItem('portfolio-book-transition')) {
         document.documentElement.dataset.bookTransition = 'ready';
       }
@@ -264,6 +264,7 @@
                   <span class="project-featured-status__star" aria-hidden="true">✦</span>
                   Featured
                 </span>
+                <span id="projectTeamStatus" class="project-team-status">Solo</span>
               </div>
 
               <h1 id="projectTitle">Mosaic</h1>
@@ -290,6 +291,16 @@
                 >
                   <span class="project-action-icon project-action-icon--github" aria-hidden="true"></span>
                   GitHub
+                </a>
+                <a
+                  id="projectDocumentation"
+                  class="project-detail-button"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  hidden
+                >
+                  Documentation <span aria-hidden="true">↗</span>
                 </a>
               </div>
             </div>
@@ -321,41 +332,59 @@
 
 
         <!-- =========================
-             Demo
+             Overview
              ========================= -->
 
-        <section id="projectDemoSection" class="project-detail-section" aria-labelledby="demoTitle">
-          <div class="project-section-heading">
-            <p class="eyebrow">Demo</p>
-            <h2 id="demoTitle">See it in action</h2>
+        <section class="project-detail-section project-chapter" data-chapter aria-labelledby="aboutProjectTitle">
+          <div class="project-chapter-heading">
+            <p class="eyebrow"><span data-chapter-number>I</span> · Overview</p>
+            <h2 id="aboutProjectTitle">About the project</h2>
           </div>
 
-          <!-- Replace this placeholder with an image, video, GIF, or iframe. -->
-          <div class="project-demo-frame">
-            <div class="project-demo-placeholder">
-              <span id="projectDemoTitle">No preview currently available</span>
-              <p id="projectDemoText">A preview for this project may be added later.</p>
+          <div class="project-chapter-body">
+            <div class="project-chapter-text">
+              <p id="projectDescription"></p>
             </div>
           </div>
         </section>
 
 
         <!-- =========================
-             Explanation
+             Demo
              ========================= -->
 
-        <section class="project-detail-section project-explanation" aria-labelledby="aboutProjectTitle">
-          <div class="project-section-heading">
-            <p class="eyebrow">Overview</p>
-            <h2 id="aboutProjectTitle">About the project</h2>
-            <a id="projectDocumentation" class="project-back-link project-documentation-link" href="#" target="_blank" rel="noopener noreferrer" hidden>
-              View project documentation <span aria-hidden="true">↗</span>
-            </a>
+        <section id="projectDemoSection" class="project-detail-section project-plate" data-chapter aria-labelledby="demoTitle">
+          <div class="project-plate-heading">
+            <p class="eyebrow"><span data-chapter-number>II</span> · Demo</p>
+            <h2 id="demoTitle">See it in action</h2>
           </div>
 
-          <div class="project-overview">
-            <p id="projectDescription"></p>
-            <p id="projectExtra" hidden></p>
+          <figure class="project-plate-figure">
+            <!-- Replace this placeholder with an image, video, GIF, or iframe. -->
+            <div class="project-demo-frame">
+              <div class="project-demo-placeholder">
+                <span id="projectDemoTitle">No preview currently available</span>
+                <p id="projectDemoText">A preview for this project may be added later.</p>
+              </div>
+            </div>
+          </figure>
+        </section>
+
+
+        <!-- =========================
+             Reason
+             ========================= -->
+
+        <section id="projectReasonSection" class="project-detail-section project-chapter" data-chapter aria-labelledby="projectReasonTitle" hidden>
+          <div class="project-chapter-heading">
+            <p class="eyebrow"><span data-chapter-number>III</span> · Reason</p>
+            <h2 id="projectReasonTitle">Why This Project</h2>
+          </div>
+
+          <div class="project-chapter-body">
+            <div class="project-chapter-text project-pull-quote">
+              <p id="projectReason"></p>
+            </div>
           </div>
         </section>
         </div>

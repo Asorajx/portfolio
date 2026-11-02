@@ -300,8 +300,7 @@ if (themeButton) {
     sessionStorage.removeItem('portfolio-book-transition')
   } catch {}
 
-  /* Fades in the project text, which is already filled in under the placeholders. */
-  /* Uses a timer, which still runs when the tab is in the background. */
+  /* Reveal Content */
   setTimeout(() => {
     root.dataset.bookTransition = 'revealing'
     setTimeout(() => root.removeAttribute('data-book-transition'), 400)
@@ -433,7 +432,7 @@ let flightFrames
 let landingTransform
 let lastFocusedCard
 
-/* Wrapper that moves the open book and its page together during the zoom. */
+/* Book Camera */
 const bookCamera = document.createElement('div')
 if (overlay && popup) {
   bookCamera.className = 'project-book-camera'
@@ -441,7 +440,7 @@ if (overlay && popup) {
   bookCamera.append(popup)
 }
 
-/* Full-screen copy of the book page, filled by project-preview.js. */
+/* Zoom Surface */
 const zoomSurface = document.createElement('div')
 if (overlay) {
   zoomSurface.className = 'project-zoom-surface'
@@ -452,7 +451,7 @@ if (overlay) {
 /* Render project books only when the project manager and container are available. */
 window.ProjectManager?.render(projectContainer)
 
-/* Fill the book page and zoom surface with the selected project. */
+/* Set Book Preview */
 function setBookPreview(card) {
   overlay.dataset.projectId = card.dataset.id || ''
   const project = window.portfolioProjects?.find(item => item.id === card.dataset.id)
@@ -461,7 +460,7 @@ function setBookPreview(card) {
   })
 }
 
-/* Creates a copy of the shelf book on top of the original. */
+/* Create Flying Book */
 function createFlyingBook(card) {
   const bounds = card.getBoundingClientRect()
   const copy = document.createElement('div')
@@ -479,7 +478,7 @@ function createFlyingBook(card) {
   copy.style.setProperty('--book-cover', styles.getPropertyValue('--book-cover'))
   copy.style.setProperty('--book-ink', styles.getPropertyValue('--book-ink'))
 
-  /* Front shows the cover; the back shows the bookplate once it turns over. */
+  /* Cover Faces */
   front.classList.add('project-flying-book__front')
   front.removeAttribute('href')
   front.tabIndex = -1
@@ -494,7 +493,7 @@ function createFlyingBook(card) {
   return { copy, bounds }
 }
 
-/* Lifts the book to the centre of the screen and enlarges it evenly. */
+/* Lift Book */
 function liftBook(bounds) {
   const maxWidth = window.innerWidth - 56
   const maxHeight = window.innerHeight - 120
@@ -512,7 +511,7 @@ function liftBook(bounds) {
   const moveX = endX - bounds.left
   const moveY = endY - bounds.top
 
-  /* Builds one keyframe of the lift: position, rise and scale. */
+  /* Lift Keyframe */
   function frame(progress, rise) {
     const currentScale = 1 + (scale - 1) * progress
     return {
@@ -538,7 +537,7 @@ function liftBook(bounds) {
   })
 }
 
-/* Zooms in until the open page fills the screen width. */
+/* Zoom Into Page */
 function zoomIntoPage() {
   const page = popup.getBoundingClientRect()
   const scale = window.innerWidth / page.width
@@ -551,7 +550,7 @@ function zoomIntoPage() {
     fill: 'both',
   })
 
-  /* Fades in the sharp full-size page near the end of the zoom. */
+  /* Zoom Surface Fade */
   const surface = zoomSurface.animate([{ opacity: 0 }, { opacity: 1 }], {
     duration: bookZoomDuration * .25,
     delay: bookZoomDuration * .75,
@@ -560,7 +559,7 @@ function zoomIntoPage() {
   return [camera, surface]
 }
 
-/* Resets the book and overlay after closing or returning with Back. */
+/* Reset Book */
 function resetProjectBook() {
   flightAnimation?.cancel()
   flipAnimation?.cancel()
@@ -579,7 +578,7 @@ function resetProjectBook() {
   popupOpen = false
 }
 
-/* Opening sequence: lift the book, turn the cover, zoom into the page, then navigate. */
+/* Open Project */
 async function openProject(card) {
   if (!overlay || !popup || popupOpen) return
 
@@ -604,18 +603,18 @@ async function openProject(card) {
   document.body.classList.add('popup-open')
 
   flightAnimation = liftBook(bounds)
-  /* Sizes the page preview to the lifted book. */
+  /* Size Preview */
   window.ProjectSkeleton?.sizeBookPreview(popup.querySelector('.project-page-skeleton--shared'))
   try { await flightAnimation.finished } catch { return }
   if (bookOperation !== operation) return
 
-  /* Holds the book at its landed position and shows the page behind it. */
+  /* Landed */
   copy.style.transform = landingTransform
   flightAnimation.cancel()
   flightAnimation = null
   overlay.classList.add('arrived')
 
-  /* Turns the cover open to show the bookplate inside. */
+  /* Open Cover */
   flipAnimation = copy.animate([
     { transform: landingTransform },
     { transform: `${landingTransform} rotateY(-165deg)` },
@@ -632,12 +631,12 @@ async function openProject(card) {
   try { await zoomAnimations[0].finished } catch { return }
   if (bookOperation !== operation) return
 
-  /* Tells the projects page to start with the placeholder look. */
+  /* Navigate */
   try { sessionStorage.setItem('portfolio-book-transition', 'ready') } catch {}
   window.location.href = destination
 }
 
-/* Closing sequence: zoom out, close the cover, then return the book to the shelf. */
+/* Close Project */
 async function closeProject() {
   if (!overlay || !popupOpen) return
 
@@ -663,7 +662,7 @@ async function closeProject() {
     overlay.classList.remove('flipped', 'arrived')
   }
 
-  /* Plays the lift backwards, including when closed partway through. */
+  /* Reverse Lift */
   if (flightAnimation) {
     flightAnimation.reverse()
   } else if (flightFrames) {
@@ -684,7 +683,7 @@ async function closeProject() {
   lastFocusedCard?.focus({ preventScroll: true })
 }
 
-/* Clicking outside the book closes it. */
+/* Outside Click */
 bookCamera?.addEventListener('click', event => {
   if (event.target === bookCamera) closeProject()
 })
@@ -720,7 +719,7 @@ overlay?.addEventListener('click', event => { if (event.target === overlay) clos
 popup?.addEventListener('click', event => event.stopPropagation())
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && popupOpen) closeProject() })
 
-/* Resets the book when Back restores the page from the browser cache. */
+/* Back Navigation Reset */
 window.addEventListener('pageshow', event => {
   if (!event.persisted || !overlay) return
   ++bookOperation

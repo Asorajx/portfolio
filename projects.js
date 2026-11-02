@@ -64,7 +64,7 @@ const projectDetails = window.portfolioProjects
     recordType: document.getElementById('projectRecordType'),
     focus: document.getElementById('projectFocus'),
     description: document.getElementById('projectDescription'),
-    extra: document.getElementById('projectExtra'),
+    reason: document.getElementById('projectReason'),
     documentation: document.getElementById('projectDocumentation'),
     demoSection: document.getElementById('projectDemoSection'),
     demoFrame: document.querySelector('.project-demo-frame'),
@@ -108,7 +108,7 @@ const projectDetails = window.portfolioProjects
       fields.recordType.textContent = project.type
       fields.focus.textContent = project.focus
       fields.description.textContent = project.description
-      fields.extra.textContent = project.extra || ''
+      fields.reason.textContent = project.reason
 
       /* Show the PDF link only when the project has a documentation URL. */
       if (project.documentation) fields.documentation.href = project.documentation
@@ -160,7 +160,7 @@ const projectDetails = window.portfolioProjects
 
       fields.liveDemo = document.getElementById('projectDemo')
 
-      /* Shows only the sections this project has. */
+      /* Optional Sections */
       window.syncProjectSections(content, project)
 
       updateTabSelection(project.id)

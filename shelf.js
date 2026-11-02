@@ -41,8 +41,14 @@ function createProjectCard(project, index) {
     makeElement('p', 'project-type', project.type),
     title,
   )
-  card.append(
+  const header = makeElement('div', 'project-book-header')
+  header.append(
     makeElement('span', 'project-number', number),
+    makeElement('span', 'project-team', project.team === 'group' ? 'Group' : 'Solo'),
+  )
+
+  card.append(
+    header,
     content,
     makeElement('span', 'project-view', 'Open'),
   )
