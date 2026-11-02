@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 78">
+  <style>
+    .eye { transform-box: fill-box; transform-origin: center; animation: blink 4.6s 1.2s infinite; }
+    .tail { transform-origin: 44px 70px; animation: swish 2.4s ease-in-out infinite; }
+    @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+    @keyframes swish { 0%, 100% { transform: rotate(-8deg); } 50% { transform: rotate(10deg); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9a9aa3"/><stop offset=".5" stop-color="#9a9aa3"/>
+      <stop offset=".5" stop-color="#7a7a85"/><stop offset=".85" stop-color="#7a7a85"/>
+      <stop offset=".85" stop-color="#5d5d68"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="30" cy="75" rx="20" ry="2.6" fill="#1a110a" opacity=".3"/>
+  <g class="tail">
+    <path d="M42 71c10 1 16-5 16-13s-4-12-8-10" fill="none" stroke="#2e1d12" stroke-width="7.5" stroke-linecap="round"/>
+    <path d="M42 71c10 1 16-5 16-13s-4-12-8-10" fill="none" stroke="#8a8a94" stroke-width="4" stroke-linecap="round"/>
+  </g>
+  <path d="M13 72c-4-14 2-34 17-34s21 20 17 34z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M23 46c2 8 12 8 14 0v12c-2 6-12 6-14 0z" fill="#e9e3d8"/>
+  <path d="M20 50c2 6 3 13 3 21M40 50c-2 6-3 13-3 21" fill="none" stroke="#5d5d68" stroke-width="1.6" stroke-linecap="round"/>
+  <ellipse cx="22.5" cy="71.5" rx="5" ry="3.2" fill="#a6a6ae" stroke="#2e1d12" stroke-width="2.2"/>
+  <ellipse cx="37.5" cy="71.5" rx="5" ry="3.2" fill="#a6a6ae" stroke="#2e1d12" stroke-width="2.2"/>
+  <path d="M10 15L14 3l10 8z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M50 15L46 3l-10 8z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M15 8l1-2 3 3zM45 8l-1-2-3 3z" fill="#e8a8a0"/>
+  <path d="M6 26c0-11 10-18 24-18s24 7 24 18c0 11-10 17-24 17S6 37 6 26z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M12 19c3-4 7-6 12-7" fill="none" stroke="#c8c8cf" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M27 9v5M31 9v6M35 9v5" stroke="#5d5d68" stroke-width="1.8" stroke-linecap="round"/>
+  <ellipse class="eye" cx="21" cy="27" rx="2.5" ry="3.2" fill="#2e1d12"/>
+  <ellipse class="eye" cx="39" cy="27" rx="2.5" ry="3.2" fill="#2e1d12"/>
+  <circle cx="21.9" cy="25.8" r=".9" fill="#fff"/><circle cx="39.9" cy="25.8" r=".9" fill="#fff"/>
+  <ellipse cx="15" cy="32" rx="3" ry="1.7" fill="#e8a28c" opacity=".75"/>
+  <ellipse cx="45" cy="32" rx="3" ry="1.7" fill="#e8a28c" opacity=".75"/>
+  <path d="M28 31l2 1.5 2-1.5M30 32.5v1.5M27 34c1 1.2 2 1.2 3 0 1 1.2 2 1.2 3 0" fill="none" stroke="#2e1d12" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M3 29h8M3 32l8-1M57 29h-8M57 32l-8-1" stroke="#2e1d12" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+</svg>

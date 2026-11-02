@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 52">
+  <style>
+    .eye { transform-box: fill-box; transform-origin: center; animation: blink 6s .8s infinite; }
+    .stalks { transform-origin: 18px 26px; animation: wiggle 2.8s ease-in-out infinite; }
+    @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+    @keyframes wiggle { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(5deg); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8fb0c9"/><stop offset=".45" stop-color="#8fb0c9"/>
+      <stop offset=".45" stop-color="#6a8dab"/><stop offset=".82" stop-color="#6a8dab"/>
+      <stop offset=".82" stop-color="#4c6a85"/>
+    </linearGradient>
+    <linearGradient id="foot" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f3e2c2"/><stop offset=".6" stop-color="#f3e2c2"/>
+      <stop offset=".6" stop-color="#dcc39a"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="38" cy="49" rx="28" ry="2.6" fill="#1a110a" opacity=".3"/>
+  <path d="M8 46c0-9 5-16 14-17h30c10 0 15 6 15 12 0 4-3 6-7 6H12c-3 0-4-0-4-1z" fill="url(#foot)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <g class="stalks" stroke="#2e1d12" stroke-width="2.2" stroke-linecap="round">
+    <path d="M16 30l-4-14"/><path d="M22 30l1-15"/>
+    <circle cx="12" cy="15" r="3" fill="#f3e2c2"/><circle cx="23" cy="14" r="3" fill="#f3e2c2"/>
+  </g>
+  <circle cx="46" cy="27" r="18" fill="url(#shell)" stroke="#2e1d12" stroke-width="2.6"/>
+  <path d="M46 27m-9 0a9 9 0 1 1 9 9 5 5 0 1 1 -5-5 2 2 0 1 1 2 2" fill="none" stroke="#2e1d12" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M34 18c3-4 7-6 11-6" fill="none" stroke="#d6e4ef" stroke-width="2.6" stroke-linecap="round"/>
+  <ellipse class="eye" cx="14" cy="38" rx="1.8" ry="2.6" fill="#2e1d12"/>
+  <ellipse class="eye" cx="22" cy="38" rx="1.8" ry="2.6" fill="#2e1d12"/>
+  <ellipse cx="11" cy="42" rx="2.4" ry="1.4" fill="#e8a28c" opacity=".7"/>
+  <path d="M16 42c1 1.2 3 1.2 4 0" fill="none" stroke="#2e1d12" stroke-width="1.4" stroke-linecap="round"/>
+</svg>

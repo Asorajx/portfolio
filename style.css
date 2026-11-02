@@ -477,6 +477,33 @@ html[data-page-transition="ready"] {
 
 
 /* =========================
+   Cabinet Colours
+   ========================= */
+
+/* Bookshelf and project book tabs */
+:root {
+  --cabinet-line: #2e1d12;
+  --cabinet-wood: #74503a;
+  --cabinet-wood-light: #86603f;
+  --cabinet-back: #3a2a1e;
+  --cabinet-back-deep: #2f2218;
+  --cabinet-label: #c8b892;
+  --cabinet-label-shade: #b2a07b;
+  --cabinet-pages: #c4b48f;
+}
+[data-theme="dark"] {
+  --cabinet-line: #1a110a;
+  --cabinet-wood: #553c2a;
+  --cabinet-wood-light: #644733;
+  --cabinet-back: #2a1f16;
+  --cabinet-back-deep: #221911;
+  --cabinet-label: #a39577;
+  --cabinet-label-shade: #8f8164;
+  --cabinet-pages: #a19374;
+}
+
+
+/* =========================
    Shared Components
    ========================= */
 

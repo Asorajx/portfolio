@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 62">
+  <style>.spark { transform-box: fill-box; transform-origin: center; animation: spin 3.5s linear infinite; } @keyframes spin { 0% { transform: rotate(0) scale(.8); opacity: .5; } 50% { transform: rotate(180deg) scale(1.1); opacity: 1; } 100% { transform: rotate(360deg) scale(.8); opacity: .5; } } @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }</style>
+  <defs>
+    <linearGradient id="liquid" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e8cb72"/><stop offset=".45" stop-color="#e8cb72"/>
+      <stop offset=".45" stop-color="#c9a447"/><stop offset=".8" stop-color="#c9a447"/>
+      <stop offset=".8" stop-color="#94782d"/>
+    </linearGradient>
+    <linearGradient id="cork" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#c89058"/><stop offset=".55" stop-color="#c89058"/>
+      <stop offset=".55" stop-color="#9a6a3d"/>
+    </linearGradient>
+  </defs>
+  <path d="M18 4h10v10c0 4 2 6 6 9 6 5 9 12 9 19 0 10-8 16-20 16S3 52 3 42c0-7 3-14 9-19 4-3 6-5 6-9V4Z" fill="#efe8da" fill-opacity=".35"/>
+  <path d="M7 39c5-3 10-4 16-2 6 3 11 2 16 0 1 2 1 4 1 6 0 8-6 12-17 12S6 51 6 43c0-1 0-3 1-4Z" fill="url(#liquid)"/>
+  <path d="M7 39c5-3 10-4 16-2 6 3 11 2 16 0" fill="none" stroke="#e8cb72" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+  <path class="spark" d="M23 44l1.6 3.4 3.4 1.6-3.4 1.6-1.6 3.4-1.6-3.4-3.4-1.6 3.4-1.6z" fill="#fff6d6"/>
+  <path d="M18 4h10v10c0 4 2 6 6 9 6 5 9 12 9 19 0 10-8 16-20 16S3 52 3 42c0-7 3-14 9-19 4-3 6-5 6-9V4Z" fill="none" stroke="#2e1d12" stroke-width="2.8" stroke-linejoin="round"/>
+  <rect x="15" y="0" width="16" height="9" rx="2.5" fill="url(#cork)" stroke="#2e1d12" stroke-width="2.4"/>
+  <path d="M13 26c-3 3-5 7-5 11" fill="none" stroke="#fffaf0" stroke-width="3" stroke-linecap="round" opacity=".85"/>
+</svg>

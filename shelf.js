@@ -83,6 +83,17 @@ function renderProjects(container) {
     shelf.books.appendChild(createProjectCard(project, index))
     used += units
   })
+
+  /* Shelf Sprites */
+  const sprites = makeElement('div', 'shelf-sprites')
+  sprites.setAttribute('aria-hidden', 'true')
+  ;['slime', 'mushroom', 'potion'].forEach(name => {
+    const sprite = makeElement('img', `shelf-sprite shelf-sprite--${name}`)
+    sprite.src = `assets/shelf/${name}.svg`
+    sprite.alt = ''
+    sprites.appendChild(sprite)
+  })
+  container.querySelector('.shelf-row')?.appendChild(sprites)
 }
 
 /* Share project rendering and featured entries with the page scripts. */

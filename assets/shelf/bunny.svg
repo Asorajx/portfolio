@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 80">
+  <style>
+    .eye { transform-box: fill-box; transform-origin: center; animation: blink 5.5s 2.4s infinite; }
+    .ear-right { transform-origin: 34px 26px; animation: twitch 4s ease-in-out infinite; }
+    @keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+    @keyframes twitch { 0%, 80%, 100% { transform: rotate(0); } 85% { transform: rotate(14deg); } 90% { transform: rotate(-4deg); } }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+  </style>
+  <defs>
+    <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6efe3"/><stop offset=".55" stop-color="#f6efe3"/>
+      <stop offset=".55" stop-color="#ddd0bc"/><stop offset=".85" stop-color="#ddd0bc"/>
+      <stop offset=".85" stop-color="#c2b29b"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="28" cy="77" rx="17" ry="2.6" fill="#1a110a" opacity=".3"/>
+  <circle cx="44" cy="68" r="5" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.4"/>
+  <path d="M13 74c-3-10 2-21 15-21s18 11 15 21z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M22 57c2 4 10 4 12 0" fill="#fffaf2"/>
+  <ellipse cx="20" cy="74" rx="5.5" ry="3" fill="#f6efe3" stroke="#2e1d12" stroke-width="2.2"/>
+  <ellipse cx="36" cy="74" rx="5.5" ry="3" fill="#f6efe3" stroke="#2e1d12" stroke-width="2.2"/>
+  <ellipse cx="22" cy="63" rx="3.2" ry="4.2" fill="#f6efe3" stroke="#2e1d12" stroke-width="2"/>
+  <ellipse cx="34" cy="63" rx="3.2" ry="4.2" fill="#f6efe3" stroke="#2e1d12" stroke-width="2"/>
+  <path d="M17 28C14 18 14 7 19 5s7 10 6 23z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M19 10c1 4 2 9 2 14" fill="none" stroke="#e8b2a6" stroke-width="2.6" stroke-linecap="round"/>
+  <g class="ear-right">
+    <path d="M31 28c0-11 3-21 8-21s5 11 0 22z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+    <path d="M37 12c0 4-1 9-2 13" fill="none" stroke="#e8b2a6" stroke-width="2.6" stroke-linecap="round"/>
+  </g>
+  <path d="M8 42c0-11 9-17 20-17s20 6 20 17c0 10-8 14-20 14S8 52 8 42z" fill="url(#fur)" stroke="#2e1d12" stroke-width="2.6" stroke-linejoin="round"/>
+  <path d="M14 35c2-4 6-6 10-7" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/>
+  <ellipse class="eye" cx="21" cy="41" rx="2.3" ry="3" fill="#2e1d12"/>
+  <ellipse class="eye" cx="35" cy="41" rx="2.3" ry="3" fill="#2e1d12"/>
+  <circle cx="21.8" cy="39.8" r=".8" fill="#fff"/><circle cx="35.8" cy="39.8" r=".8" fill="#fff"/>
+  <ellipse cx="16" cy="46" rx="2.8" ry="1.6" fill="#e8a28c" opacity=".75"/>
+  <ellipse cx="40" cy="46" rx="2.8" ry="1.6" fill="#e8a28c" opacity=".75"/>
+  <path d="M26 45l2 1.6 2-1.6" fill="none" stroke="#2e1d12" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
