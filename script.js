@@ -288,6 +288,26 @@ if (themeButton) {
   })
 })()
 
+/* =========================
+   Book Zoom Arrival
+   ========================= */
+
+;(function setupBookZoomArrival() {
+  const root = document.documentElement
+  if (root.dataset.bookTransition !== 'ready') return
+
+  try {
+    sessionStorage.removeItem('portfolio-book-transition')
+  } catch {}
+
+  /* Fades in the project text, which is already filled in under the placeholders. */
+  /* Uses a timer, which still runs when the tab is in the background. */
+  setTimeout(() => {
+    root.dataset.bookTransition = 'revealing'
+    setTimeout(() => root.removeAttribute('data-book-transition'), 400)
+  }, 80)
+})()
+
 /* Clear the transition if the browser restores a cached page. */
 window.addEventListener('pageshow', event => {
   if (!event.persisted) return
@@ -398,118 +418,276 @@ window.addEventListener('pageshow', event => {
 const projectContainer = document.getElementById('projectSlider')
 const overlay = document.getElementById('projectOverlay')
 const popup = document.getElementById('projectPopup')
-const popupClose = document.getElementById('popupClose')
-const popupBindings = {
-  popupNumber: 'number',
-  popupType: 'type',
-  popupFrontTitle: 'title',
-  popupSummary: 'summary',
-  popupTitle: 'title',
-  popupDescription: 'preview',
-}
 const reducedProjectMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-const bookGrowDelay = reducedProjectMotion ? 0 : 60
-const bookGrowDuration = reducedProjectMotion ? 0 : 220
-const bookOpenDuration = reducedProjectMotion ? 0 : 400
-const bookCloseDuration = reducedProjectMotion ? 0 : 360
-const projectNavigateHold = reducedProjectMotion ? 0 : 320
+const bookLiftDuration = 580
+const bookOpenDuration = 440
+const bookZoomDuration = 760
+const bookEasing = 'cubic-bezier(.22, 1, .36, 1)'
 let popupOpen = false
-let growTimer
-let flipTimer
-let closeFocusTimer
-let closeTimer
-let projectNavigateTimer
+let bookOperation = 0
+let flightBook
+let flightAnimation
+let flipAnimation
+let zoomAnimations = []
+let flightFrames
+let landingTransform
 let lastFocusedCard
+
+/* Wrapper that moves the open book and its page together during the zoom. */
+const bookCamera = document.createElement('div')
+if (overlay && popup) {
+  bookCamera.className = 'project-book-camera'
+  overlay.append(bookCamera)
+  bookCamera.append(popup)
+}
+
+/* Full-screen copy of the book page, filled by project-preview.js. */
+const zoomSurface = document.createElement('div')
+if (overlay) {
+  zoomSurface.className = 'project-zoom-surface'
+  zoomSurface.setAttribute('aria-hidden', 'true')
+  overlay.append(zoomSurface)
+}
 
 /* Render project books only when the project manager and container are available. */
 window.ProjectManager?.render(projectContainer)
 
-/* Copy the selected project into the popup and match the shelf book. */
-function openProject(card) {
-  if (!overlay || !popup || popupOpen) return
-  popupOpen = true
-  lastFocusedCard = card
+/* Fill the book page and zoom surface with the selected project. */
+function setBookPreview(card) {
+  overlay.dataset.projectId = card.dataset.id || ''
+  const project = window.portfolioProjects?.find(item => item.id === card.dataset.id)
+  overlay.querySelectorAll('.project-page-skeleton--shared').forEach(preview => {
+    window.ProjectSkeleton?.setProject(preview, project)
+  })
+}
 
-  Object.entries(popupBindings).forEach(([id, key]) => {
-    const element = document.getElementById(id)
-    if (element) element.textContent = card.dataset[key]
+/* Creates a copy of the shelf book on top of the original. */
+function createFlyingBook(card) {
+  const bounds = card.getBoundingClientRect()
+  const copy = document.createElement('div')
+  const front = card.cloneNode(true)
+  const inside = document.createElement('div')
+  const watermark = document.createElement('span')
+  const styles = getComputedStyle(card)
+
+  copy.className = 'project-flying-book'
+  copy.setAttribute('aria-hidden', 'true')
+  copy.style.left = `${bounds.left}px`
+  copy.style.top = `${bounds.top}px`
+  copy.style.width = `${bounds.width}px`
+  copy.style.height = `${bounds.height}px`
+  copy.style.setProperty('--book-cover', styles.getPropertyValue('--book-cover'))
+  copy.style.setProperty('--book-ink', styles.getPropertyValue('--book-ink'))
+
+  /* Front shows the cover; the back shows the bookplate once it turns over. */
+  front.classList.add('project-flying-book__front')
+  front.removeAttribute('href')
+  front.tabIndex = -1
+  front.style.boxShadow = styles.boxShadow
+  front.style.filter = styles.filter
+  inside.className = 'project-flying-book__inside'
+  watermark.className = 'popup-cover-watermark'
+  inside.append(watermark)
+  copy.append(front, inside)
+  bookCamera.append(copy)
+  card.classList.add('is-lifted')
+  return { copy, bounds }
+}
+
+/* Lifts the book to the centre of the screen and enlarges it evenly. */
+function liftBook(bounds) {
+  const maxWidth = window.innerWidth - 56
+  const maxHeight = window.innerHeight - 120
+  const scale = Math.max(1, Math.min(
+    1.85,
+    390 / bounds.height,
+    maxWidth / bounds.width,
+    maxHeight / bounds.height,
+  ))
+
+  const width = bounds.width * scale
+  const height = bounds.height * scale
+  const endX = (window.innerWidth - width) / 2
+  const endY = (window.innerHeight - height) / 2
+  const moveX = endX - bounds.left
+  const moveY = endY - bounds.top
+
+  /* Builds one keyframe of the lift: position, rise and scale. */
+  function frame(progress, rise) {
+    const currentScale = 1 + (scale - 1) * progress
+    return {
+      offset: progress,
+      transform: `translate3d(${moveX * progress}px, ${moveY * progress - rise}px, 0) scale(${currentScale})`,
+    }
+  }
+
+  flightFrames = [
+    frame(0, 0),
+    frame(.3, 26),
+    frame(.75, 12),
+    frame(1, 0),
+  ]
+  landingTransform = flightFrames[flightFrames.length - 1].transform
+  popup.style.setProperty('--popup-start-width', `${width}px`)
+  popup.style.setProperty('--popup-start-height', `${height}px`)
+
+  return flightBook.animate(flightFrames, {
+    duration: bookLiftDuration,
+    easing: bookEasing,
+    fill: 'both',
+  })
+}
+
+/* Zooms in until the open page fills the screen width. */
+function zoomIntoPage() {
+  const page = popup.getBoundingClientRect()
+  const scale = window.innerWidth / page.width
+  const camera = bookCamera.animate([
+    { transform: 'translate3d(0, 0, 0) scale(1)' },
+    { transform: `translate3d(${-page.left * scale}px, ${-page.top * scale}px, 0) scale(${scale})` },
+  ], {
+    duration: bookZoomDuration,
+    easing: 'cubic-bezier(.65, 0, .25, 1)',
+    fill: 'both',
   })
 
-  const bookStyles = getComputedStyle(card)
-  const bookCover = bookStyles.getPropertyValue('--book-cover').trim()
-  const bookInk = bookStyles.getPropertyValue('--book-ink').trim()
-  const bookBounds = card.getBoundingClientRect()
+  /* Fades in the sharp full-size page near the end of the zoom. */
+  const surface = zoomSurface.animate([{ opacity: 0 }, { opacity: 1 }], {
+    duration: bookZoomDuration * .25,
+    delay: bookZoomDuration * .75,
+    fill: 'both',
+  })
+  return [camera, surface]
+}
 
-  if (bookCover) popup.style.setProperty('--popup-book-cover', bookCover)
-  if (bookInk) popup.style.setProperty('--popup-book-ink', bookInk)
+/* Resets the book and overlay after closing or returning with Back. */
+function resetProjectBook() {
+  flightAnimation?.cancel()
+  flipAnimation?.cancel()
+  zoomAnimations.forEach(animation => animation.cancel())
+  zoomAnimations = []
+  flightAnimation = null
+  flipAnimation = null
+  flightFrames = null
+  landingTransform = null
+  flightBook?.remove()
+  flightBook = null
+  lastFocusedCard?.classList.remove('is-lifted')
+  overlay?.classList.remove('zooming', 'flipped', 'arrived', 'open')
+  overlay?.setAttribute('aria-hidden', 'true')
+  document.body.classList.remove('popup-open')
+  popupOpen = false
+}
 
-  popup.style.setProperty('--popup-start-width', `${bookBounds.width}px`)
-  popup.style.setProperty('--popup-start-height', `${bookBounds.height}px`)
+/* Opening sequence: lift the book, turn the cover, zoom into the page, then navigate. */
+async function openProject(card) {
+  if (!overlay || !popup || popupOpen) return
 
-  clearTimeout(growTimer)
-  clearTimeout(flipTimer)
-  clearTimeout(closeFocusTimer)
-  clearTimeout(closeTimer)
-  clearTimeout(projectNavigateTimer)
+  const destination = card.href || card.dataset.page
+  if (!destination) return
 
-  overlay.classList.remove('expanded', 'flipped')
+  if (reducedProjectMotion) {
+    window.location.href = destination
+    return
+  }
+
+  popupOpen = true
+  const operation = ++bookOperation
+  lastFocusedCard = card
+  setBookPreview(card)
+
+  const { copy, bounds } = createFlyingBook(card)
+  flightBook = copy
+
   overlay.classList.add('open')
   overlay.setAttribute('aria-hidden', 'false')
   document.body.classList.add('popup-open')
 
-  /* Grow the shelf-sized book before opening its cover. */
-  growTimer = setTimeout(() => {
-    overlay.classList.add('expanded')
+  flightAnimation = liftBook(bounds)
+  /* Sizes the page preview to the lifted book. */
+  window.ProjectSkeleton?.sizeBookPreview(popup.querySelector('.project-page-skeleton--shared'))
+  try { await flightAnimation.finished } catch { return }
+  if (bookOperation !== operation) return
 
-    flipTimer = setTimeout(() => {
-      overlay.classList.add('flipped')
+  /* Holds the book at its landed position and shows the page behind it. */
+  copy.style.transform = landingTransform
+  flightAnimation.cancel()
+  flightAnimation = null
+  overlay.classList.add('arrived')
 
-      closeFocusTimer = setTimeout(
-        () => popupClose?.focus(),
-        bookOpenDuration,
-      )
+  /* Turns the cover open to show the bookplate inside. */
+  flipAnimation = copy.animate([
+    { transform: landingTransform },
+    { transform: `${landingTransform} rotateY(-165deg)` },
+  ], {
+    duration: bookOpenDuration,
+    easing: bookEasing,
+    fill: 'both',
+  })
+  try { await flipAnimation.finished } catch { return }
+  if (bookOperation !== operation) return
 
-      projectNavigateTimer = setTimeout(() => {
-        if (!popupOpen) return
+  overlay.classList.add('flipped', 'zooming')
+  zoomAnimations = zoomIntoPage()
+  try { await zoomAnimations[0].finished } catch { return }
+  if (bookOperation !== operation) return
 
-        const destination = card.href || card.dataset.page
-        if (!destination) return
-
-        if (window.navigateWithPageTransition) {
-          window.navigateWithPageTransition(destination)
-          return
-        }
-
-        window.location.href = destination
-      }, bookOpenDuration + projectNavigateHold)
-    }, bookGrowDuration)
-  }, bookGrowDelay)
+  /* Tells the projects page to start with the placeholder look. */
+  try { sessionStorage.setItem('portfolio-book-transition', 'ready') } catch {}
+  window.location.href = destination
 }
 
-/* Close the cover before shrinking and hiding the book. */
-function closeProject() {
+/* Closing sequence: zoom out, close the cover, then return the book to the shelf. */
+async function closeProject() {
   if (!overlay || !popupOpen) return
+
   popupOpen = false
+  const operation = ++bookOperation
 
-  clearTimeout(growTimer)
-  clearTimeout(flipTimer)
-  clearTimeout(closeFocusTimer)
-  clearTimeout(closeTimer)
-  clearTimeout(projectNavigateTimer)
+  if (zoomAnimations.length) {
+    zoomAnimations.forEach(animation => animation.reverse())
+    try { await zoomAnimations[0].finished } catch {}
+    if (bookOperation !== operation) return
+    zoomAnimations.forEach(animation => animation.cancel())
+    zoomAnimations = []
+    overlay.classList.remove('zooming')
+  }
 
-  overlay.classList.remove('flipped')
+  if (flipAnimation) {
+    flipAnimation.reverse()
+    try { await flipAnimation.finished } catch {}
+    if (bookOperation !== operation) return
+    flipAnimation.cancel()
+    flipAnimation = null
+    flightBook.style.transform = landingTransform
+    overlay.classList.remove('flipped', 'arrived')
+  }
 
-  closeTimer = setTimeout(() => {
-    overlay.classList.remove('expanded')
+  /* Plays the lift backwards, including when closed partway through. */
+  if (flightAnimation) {
+    flightAnimation.reverse()
+  } else if (flightFrames) {
+    flightAnimation = flightBook.animate(flightFrames, {
+      duration: bookLiftDuration,
+      direction: 'reverse',
+      easing: bookEasing,
+      fill: 'both',
+    })
+  }
 
-    setTimeout(() => {
-      overlay.classList.remove('open')
-      overlay.setAttribute('aria-hidden', 'true')
-      document.body.classList.remove('popup-open')
-      lastFocusedCard?.focus()
-    }, bookGrowDuration)
-  }, bookCloseDuration)
+  if (flightAnimation) {
+    try { await flightAnimation.finished } catch {}
+  }
+  if (bookOperation !== operation) return
+
+  resetProjectBook()
+  lastFocusedCard?.focus({ preventScroll: true })
 }
+
+/* Clicking outside the book closes it. */
+bookCamera?.addEventListener('click', event => {
+  if (event.target === bookCamera) closeProject()
+})
 
 /* Mouse/touch interaction for project books. */
 projectContainer?.addEventListener('click', event => {
@@ -522,9 +700,7 @@ projectContainer?.addEventListener('click', event => {
     event.ctrlKey ||
     event.shiftKey ||
     event.altKey
-  ) {
-    return
-  }
+  ) return
 
   event.preventDefault()
   openProject(card)
@@ -542,8 +718,14 @@ projectContainer?.addEventListener('keydown', event => {
 /* Close from the backdrop, close button, or Escape key. */
 overlay?.addEventListener('click', event => { if (event.target === overlay) closeProject() })
 popup?.addEventListener('click', event => event.stopPropagation())
-popupClose?.addEventListener('click', closeProject)
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && popupOpen) closeProject() })
+
+/* Resets the book when Back restores the page from the browser cache. */
+window.addEventListener('pageshow', event => {
+  if (!event.persisted || !overlay) return
+  ++bookOperation
+  resetProjectBook()
+})
 
 
 /* =========================

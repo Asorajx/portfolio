@@ -105,3 +105,26 @@ window.portfolioProjects = [
     liveDemo: 'https://asorajx.github.io/starjot/#home',
   },
 ]
+
+
+/* =========================
+   Project Section Visibility
+   ========================= */
+
+/* Shows or hides optional sections (demo, documentation, extra text, Live Demo)
+   based on a project's data. Used by the projects page and the book preview. */
+window.syncProjectSections = function syncProjectSections(root, project) {
+  if (!root || !project) return
+
+  const fields = {
+    projectDemoSection: !!project.hasVideoDemo,
+    projectDocumentation: !!project.documentation,
+    projectExtra: !!project.extra,
+    projectDemo: !!(project.liveDemo || project.hasVideoDemo),
+  }
+
+  Object.entries(fields).forEach(([id, visible]) => {
+    const element = root.querySelector(`[id="${id}"], [data-source-id="${id}"]`)
+    if (element) element.hidden = !visible
+  })
+}

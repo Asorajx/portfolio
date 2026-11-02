@@ -109,13 +109,10 @@ const projectDetails = window.portfolioProjects
       fields.focus.textContent = project.focus
       fields.description.textContent = project.description
       fields.extra.textContent = project.extra || ''
-      fields.extra.hidden = !project.extra
 
       /* Show the PDF link only when the project has a documentation URL. */
-      fields.documentation.hidden = !project.documentation
       if (project.documentation) fields.documentation.href = project.documentation
       fields.github.href = project.github
-      fields.demoSection.hidden = !project.hasVideoDemo
 
       /* Demo Preview */
       if (project.hasVideoDemo) {
@@ -162,6 +159,9 @@ const projectDetails = window.portfolioProjects
       }
 
       fields.liveDemo = document.getElementById('projectDemo')
+
+      /* Shows only the sections this project has. */
+      window.syncProjectSections(content, project)
 
       updateTabSelection(project.id)
 

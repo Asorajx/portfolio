@@ -1,0 +1,98 @@
+/* =========================
+   Shared Project Skeleton
+   ========================= */
+
+/* Skeleton styling for the projects page preview. Text is replaced with grey
+   blocks while the layout comes from projects.css. The same rules also mask the
+   real projects page while it loads after a book zoom. */
+.project-page-skeleton--shared {
+  position: relative;
+  --preview-document-width: 100%;
+  --preview-scale: 1;
+  overflow: hidden;
+  background: var(--paper);
+}
+
+.project-page-skeleton--shared .project-page-skeleton__viewport {
+  width: var(--preview-document-width);
+  min-height: 100%;
+  transform: scale(var(--preview-scale));
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+/* The site header scrolls with the preview instead of sticking. */
+.project-page-skeleton--shared .site-header {
+  position: relative;
+  top: auto;
+}
+
+/* Longer text is hidden and shown as grey placeholder blocks. */
+.project-page-skeleton--shared :is(.project-detail-summary, .project-record-list dd, .project-overview p),
+html[data-book-transition="ready"] :is(.project-detail-summary, .project-record-list dd, .project-overview p) {
+  color: transparent;
+  position: relative;
+}
+html[data-book-transition] :is(.project-detail-summary, .project-record-list dd, .project-overview p) { position: relative; }
+.project-page-skeleton--shared :is(.project-detail-summary, .project-record-list dd, .project-overview p)::after,
+html[data-book-transition] :is(.project-detail-summary, .project-record-list dd, .project-overview p)::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 35%;
+  width: 82%;
+  height: .65em;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ink) 15%, var(--surface-2));
+}
+.project-page-skeleton--shared .project-record-list dd::after,
+html[data-book-transition] .project-record-list dd::after { width: 65%; }
+
+/* Buttons keep their size but show as blank grey blocks. */
+.project-page-skeleton--shared .project-detail-actions > *,
+html[data-book-transition="ready"] .project-detail-actions > * {
+  color: transparent !important;
+  background: color-mix(in srgb, var(--ink) 14%, var(--surface-2)) !important;
+  border-color: var(--line) !important;
+}
+.project-page-skeleton--shared .project-action-icon,
+html[data-book-transition="ready"] .project-action-icon { visibility: hidden; }
+.project-page-skeleton--shared .project-demo-frame {
+  display: grid;
+  place-items: center;
+  background: var(--surface-2);
+}
+.project-page-skeleton--shared .project-preview-media-placeholder {
+  display: block;
+  width: 42%;
+  height: 12px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--ink) 13%, var(--surface-2));
+}
+html[data-book-transition="ready"] .project-demo-frame > * { opacity: 0; }
+.project-page-skeleton--shared .project-description,
+html[data-book-transition="ready"] .project-description { color: transparent; }
+
+/* Sections a project does not have stay hidden in the preview. */
+.project-page-skeleton--shared [hidden] { display: none !important; }
+
+/* Fades the real text in over the placeholder blocks once the projects page has loaded. */
+html[data-book-transition] .project-detail :is(.project-detail-summary, .project-record-list dd, .project-overview p, .project-description, .project-detail-actions > *, .project-demo-frame > *),
+html[data-book-transition] .project-detail :is(.project-detail-summary, .project-record-list dd, .project-overview p)::after {
+  transition: color 360ms ease, background-color 360ms ease, border-color 360ms ease, opacity 360ms ease;
+}
+html[data-book-transition="revealing"] :is(.project-detail-summary, .project-record-list dd, .project-overview p)::after { opacity: 0; }
+
+/* Book page: the whole projects page scaled down to fit inside the open book. */
+.popup-back > .project-page-skeleton--shared {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Full-screen copy of the preview, shown at normal page size. */
+.project-zoom-surface .project-page-skeleton--shared { height: 100%; }
+.project-zoom-surface .project-page-skeleton--shared .project-page-skeleton__viewport {
+  width: 100%;
+  transform: none;
+}

@@ -48,6 +48,9 @@
   <link rel="stylesheet" href="home.css">
   <link rel="stylesheet" href="shelf.css">
   <link rel="stylesheet" href="featured.css">
+  <!-- Projects page styles, used by the book preview. -->
+  <link rel="stylesheet" href="projects.css">
+  <link rel="stylesheet" href="project-preview.css">
 </head>
 
 <body>
@@ -488,34 +491,11 @@
        ========================= -->
 
   <div id="projectOverlay" class="project-overlay" aria-hidden="true">
-    <div id="projectPopup" class="project-popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+    <div id="projectPopup" class="project-popup" role="dialog" aria-modal="true" aria-label="Opening project">
       <div id="popupInner" class="popup-inner">
-        <div class="popup-face popup-front">
-          <div class="record-label">
-            <span id="popupNumber" class="project-number">01</span>
-            <span>Project</span>
-          </div>
-          <div>
-            <p id="popupType" class="project-type">Project</p>
-            <h3 id="popupFrontTitle">Project</h3>
-            <p id="popupSummary" class="project-summary">Project summary</p>
-          </div>
-          <span class="project-view">Opening project...</span>
-
-          <!-- Show the portfolio mark like a faint bookplate inside the open cover. -->
-          <div class="popup-cover-mark" aria-hidden="true">
-            <span class="popup-cover-watermark"></span>
-          </div>
-        </div>
-
+        <!-- Page shown inside the opened book. -->
         <div class="popup-face popup-back">
-          <button id="popupClose" class="popup-close" type="button" aria-label="Close project">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 7l10 10M17 7 7 17"></path></svg>
-          </button>
-          <div class="record-label popup-record-label"><span>Project preview</span></div>
-          <h3 id="popupTitle">Project title</h3>
-          <p id="popupDescription" class="popup-description">Short project description</p>
-          <p class="popup-opening">Opening full project…</p>
+          <!-- project-preview.js fills this page from the real projects.html. -->
         </div>
       </div>
     </div>
@@ -531,6 +511,7 @@
   <script src="shelf.js"></script>
   <script src="crystal-ball.js"></script>
   <script src="featured.js"></script>
+  <script src="project-preview.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

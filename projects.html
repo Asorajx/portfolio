@@ -40,12 +40,18 @@
       if (sessionStorage.getItem('portfolio-page-transition')) {
         document.documentElement.dataset.pageTransition = 'ready';
       }
+
+      /* Starts the page in the placeholder look when arriving from a book zoom. */
+      if (sessionStorage.getItem('portfolio-book-transition')) {
+        document.documentElement.dataset.bookTransition = 'ready';
+      }
     } catch (error) {}
   </script>
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="projects.css">
   <link rel="stylesheet" href="demo-video.css">
+  <link rel="stylesheet" href="project-preview.css">
 </head>
 
 <body>
