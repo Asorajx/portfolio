@@ -769,6 +769,58 @@
   line-height: 1.85;
 }
 
+/* Tech Stack */
+.project-tech {
+  max-width: 640px;
+  margin-top: 30px;
+}
+
+.project-tech-heading {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.project-tech-list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+
+.project-tech-list > div {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+}
+
+.project-tech-list dt {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.project-tech-list dd {
+  min-height: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  color: var(--muted);
+}
+
+.project-tech-tag {
+  padding: 3px 9px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
 /* Pull Quote */
 .project-pull-quote p::first-line {
   color: var(--ink);

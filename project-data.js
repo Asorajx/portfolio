@@ -27,6 +27,11 @@ window.portfolioProjects = [
     focus: 'Secure collaborative research',
     // Overview
     description: 'A secure research collaboration platform designed for controlled data sharing and privacy protection. Collaborated in a 5-member team to design and implement the system.',
+    tech: {
+      frontend: [],
+      backend: [],
+      tools: [],
+    },
     // Demo
     hasVideoDemo: true,
     videoDemo: '',
@@ -58,6 +63,11 @@ window.portfolioProjects = [
     focus: 'SSH attack analysis',
     // Overview
     description: 'A cybersecurity project using a honeypot server to capture, monitor, and analyse malicious SSH access attempts.',
+    tech: {
+      frontend: [],
+      backend: [],
+      tools: ['Cowrie', 'Hydra', 'Ubuntu 22.04', 'Kali Linux', 'Oracle VirtualBox'],
+    },
     // Demo
     hasVideoDemo: false,
     videoDemo: '',
@@ -89,6 +99,11 @@ window.portfolioProjects = [
     focus: 'Text cleanup',
     // Overview
     description: 'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
+    tech: {
+      frontend: ['HTML', 'CSS', 'JavaScript'],
+      backend: [],
+      tools: [],
+    },
     // Demo
     hasVideoDemo: true,
     videoDemo: 'assets/demos/WritePretty-Demo.mp4',
@@ -119,6 +134,11 @@ window.portfolioProjects = [
     focus: 'Python OOP learning',
     // Overview
     description: 'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, object interactions, state changes, inheritance, and source code in real time.',
+    tech: {
+      frontend: ['HTML', 'CSS', 'JavaScript'],
+      backend: ['Python', 'FastAPI'],
+      tools: [],
+    },
     // Demo
     hasVideoDemo: true,
     videoDemo: 'assets/demos/LOOP-Demo.mp4',
@@ -149,6 +169,11 @@ window.portfolioProjects = [
     focus: 'Note-taking and planning',
     // Overview
     description: 'A browser-based workspace that brings notes and project work together. Notespace supports rich text and visual canvases, while Boardspace organises work through list, board, and timeline views. Workspace data is stored locally in the browser.',
+    tech: {
+      frontend: ['React', 'TypeScript', 'CSS'],
+      backend: [],
+      tools: ['Vite', 'Vitest', 'GitHub Actions CI/CD'],
+    },
     // Demo
     hasVideoDemo: true,
     videoDemo: 'assets/demos/Starjot-Demo.mp4',
@@ -163,7 +188,7 @@ window.portfolioProjects = [
    Project Section Visibility
    ========================= */
 
-/* Optional Sections, Chapter Numbers and Solo/Group Pill */
+/* Optional Sections, Chapter Numbers, Tech Stack and Solo/Group Pill */
 window.syncProjectSections = function syncProjectSections(root, project) {
   if (!root || !project) return
 
@@ -194,6 +219,22 @@ window.syncProjectSections = function syncProjectSections(root, project) {
         number.textContent = numerals[index]
       })
     })
+
+  /* Tech Stack: every group shows, with a dash when empty. */
+  const tech = project.tech || {}
+  ;['frontend', 'backend', 'tools'].forEach(group => {
+    const id = `projectTech${group[0].toUpperCase()}${group.slice(1)}`
+    const list = root.querySelector(`[id="${id}"], [data-source-id="${id}"]`)
+    if (!list) return
+    const items = tech[group] || []
+    list.replaceChildren(...items.map(item => {
+      const tag = document.createElement('span')
+      tag.className = 'project-tech-tag'
+      tag.textContent = item
+      return tag
+    }))
+    if (!items.length) list.textContent = '-'
+  })
 
   const team = root.querySelector('[id="projectTeamStatus"], [data-source-id="projectTeamStatus"]')
   if (team) {
