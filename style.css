@@ -692,6 +692,53 @@ html[data-page-transition="ready"] {
 }
 
 /* =========================
+   Shimmer Text
+   ========================= */
+
+/* Shimmer Text: add data-shimmer (optional data-wave, data-duration) to any text. */
+.shimmer-text {
+  --shimmer-base: color-mix(in srgb, var(--ink) 58%, var(--paper));
+  --shimmer-highlight: var(--ink);
+  --peak-transform: none;
+}
+
+.shimmer-text[data-wave="true"] {
+  --peak-transform: translateY(-4px) rotate(6deg);
+}
+
+.shimmer-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.shimmer-letter {
+  display: inline-block;
+  color: var(--shimmer-base);
+  animation: shimmer var(--loop) ease-in-out infinite;
+  animation-delay: calc(var(--i) * var(--stagger));
+}
+
+@keyframes shimmer {
+  0%, 40%, 100% {
+    color: var(--shimmer-base);
+    transform: none;
+  }
+
+  20% {
+    color: var(--shimmer-highlight);
+    transform: var(--peak-transform);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-letter {
+    color: inherit;
+    animation: none;
+  }
+}
+
+
+/* =========================
    Shared Interaction Details
    ========================= */
 .apothecary-note {

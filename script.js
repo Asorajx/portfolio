@@ -940,3 +940,40 @@ if (currentYear) {
     document.querySelectorAll('.apothecary-arrive, .apothecary-pending').forEach(element => element.classList.remove('apothecary-arrive', 'apothecary-pending'))
   })
 })()
+
+
+/* =========================
+   Shimmer Text
+   ========================= */
+
+/* Split each [data-shimmer] element into letters that light up from left to right. */
+;(function setupShimmerText() {
+  document.querySelectorAll('[data-shimmer]').forEach(element => {
+    const text = element.textContent.trim().replace(/\s+/g, ' ')
+    const duration = Math.max(0.2, Number(element.dataset.duration) || 1)
+    const letterCount = text.replace(/ /g, '').length
+    let index = 0
+
+    element.classList.add('shimmer-text')
+    element.dataset.wave = String(element.dataset.wave === 'true')
+    element.setAttribute('aria-label', text)
+    element.style.setProperty('--loop', `${duration * 2 + 0.6}s`)
+    element.style.setProperty('--stagger', `${duration / Math.max(letterCount, 1)}s`)
+
+    /* Words stay together so the text still wraps between words. */
+    const parts = text.split(' ').flatMap((word, wordIndex) => {
+      const wordSpan = document.createElement('span')
+      wordSpan.className = 'shimmer-word'
+      wordSpan.setAttribute('aria-hidden', 'true')
+      Array.from(word).forEach(character => {
+        const letter = document.createElement('span')
+        letter.className = 'shimmer-letter'
+        letter.textContent = character
+        letter.style.setProperty('--i', index++)
+        wordSpan.append(letter)
+      })
+      return wordIndex === 0 ? [wordSpan] : [' ', wordSpan]
+    })
+    element.replaceChildren(...parts)
+  })
+})()

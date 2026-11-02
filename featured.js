@@ -2,7 +2,7 @@
    Featured Crystal Ball
    ========================= */
 
-/* Build a crystal for every project marked as featured. */
+/* Build a crystal ball for every project marked as featured. */
 ;(function setupFeaturedCrystals() {
   const list = document.querySelector('.featured-list')
   const details = document.getElementById('featuredDetails')
@@ -207,7 +207,7 @@ function setupCrystalRenderer(crystal) {
    Crystal Ball Animation
    ========================= */
 
-/* Draw a flickering rim and drifting dust inside the featured crystal. */
+/* Draw a flickering rim and drifting dust inside the featured crystal ball. */
 function setupCrystalEffect(crystal, drawBackground) {
   const canvas = crystal.querySelector('.featured-orb-canvas')
   const backgroundCanvas = drawBackground
