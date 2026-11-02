@@ -159,118 +159,173 @@
    Listening Note
    ========================= */
 
+/* Album Player */
 .listening-note {
+  position: relative;
   width: min(88%, 440px);
-  min-height: 0;
   margin-top: 72px;
   justify-self: end;
 }
 
-.listening-card {
+.album-player {
+  padding-top: 34px;
+}
+
+/* Album Sleeve */
+.album-display {
+  position: relative;
+  z-index: 2;
+  width: 58%;
+  aspect-ratio: 1;
+}
+
+.album-cover,
+.album-vinyl {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
   width: 100%;
-  margin: 0;
-  padding: 19px 0 2px;
+  height: 100%;
 }
 
-.listening-header {
+.album-cover {
+  z-index: 1;
+  object-fit: cover;
+  border-radius: 2px;
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px rgba(20, 14, 10, .3);
+  transition: transform 320ms cubic-bezier(.22, 1, .36, 1), opacity 220ms ease;
+}
+
+.album-vinyl {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle, rgba(255, 255, 255, .04) 0 1px, transparent 1px 3px),
+    radial-gradient(circle, #2a2420 0 30%, #14110e 31%);
+  box-shadow: 0 8px 18px rgba(20, 14, 10, .3);
+  transform: translateX(46%);
+  transition: transform 420ms cubic-bezier(.22, 1, .36, 1), opacity 260ms ease;
+}
+
+.album-vinyl-label {
+  width: 32%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  animation: record-spin 6s linear infinite;
+}
+
+/* Changing Song */
+.album-display.is-changing .album-vinyl {
+  opacity: 0;
+  transform: translateX(46%) translateY(40%);
+}
+
+.album-display.is-changing .album-cover {
+  opacity: 0;
+  transform: scale(.88);
+}
+
+@keyframes record-spin {
+  to { rotate: 360deg; }
+}
+
+/* Now Playing */
+.album-now {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 0;
+  left: 0;
   display: flex;
-  align-items: center;
-  gap: 11px;
-  padding: 0 0 15px;
-  border-bottom: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 40px 12px 10px;
+  background: linear-gradient(transparent, rgba(10, 8, 6, .82));
+  color: #f1ecdc;
+  text-align: right;
+  transition: opacity 220ms ease;
 }
 
-.listening-logo {
-  width: 38px;
-  height: 38px;
-  flex: 0 0 38px;
-  overflow: visible;
+.album-display.is-changing .album-now {
+  opacity: 0;
 }
 
-.listening-logo-disc {
-  fill: color-mix(in srgb, var(--green) 82%, var(--surface));
-  stroke: color-mix(in srgb, var(--green-deep) 62%, var(--line));
-  stroke-width: 1;
-}
-
-.listening-logo-wave {
-  fill: none;
-  stroke: var(--surface);
-  stroke-width: 2.4;
-  stroke-linecap: round;
-}
-
-.listening-heading,
-.listening-kicker,
-.track-name,
-.track-artist {
+.album-title,
+.album-artist {
   margin: 0;
 }
 
-.listening-heading {
-  color: var(--ink);
+.album-title {
   font-family: var(--font-serif);
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 700;
-  line-height: 1;
+  line-height: 1.05;
 }
 
-.listening-kicker {
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+.album-artist {
+  margin-top: 3px;
+  font-size: 10px;
+  opacity: .78;
 }
 
+/* Song List */
 .track-list {
   display: grid;
-  gap: 3px;
-  padding-top: 8px;
+  gap: 1px;
+  margin-top: -26px;
+  padding: 32px 6px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface);
 }
 
 .track-row {
-  min-height: 56px;
+  width: 100%;
+  min-height: 42px;
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr) 32px;
+  grid-template-columns: 30px minmax(0, 1fr) 22px;
   align-items: center;
-  gap: 11px;
-  padding: 7px 8px;
+  gap: 10px;
+  padding: 5px 8px;
+  border: 0;
   border-radius: 3px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
   transition: background 180ms ease, transform 180ms ease;
 }
 
-.track-row:hover {
+.track-row:hover,
+.track-row:focus-visible {
   background: color-mix(in srgb, var(--surface-2) 78%, transparent);
   transform: translateX(2px);
 }
 
-.track-row.is-playing {
-  background: color-mix(in srgb, var(--green) 10%, transparent);
-}
-
 .track-cover {
-  width: 38px;
-  height: 38px;
-  display: block;
-  object-fit: cover;
-  object-position: center;
+  width: 30px;
+  height: 30px;
   border: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
   border-radius: 3px;
-  background: var(--surface-2);
-  box-shadow: 0 1px 3px color-mix(in srgb, var(--ink) 14%, transparent);
+  object-fit: cover;
 }
 
 .track-info {
   min-width: 0;
+  display: grid;
+  gap: 3px;
 }
 
 .track-name {
   overflow: hidden;
   color: var(--ink);
   font-family: var(--font-serif);
-  font-size: 19px;
+  font-size: 16px;
   font-weight: 700;
   line-height: 1.05;
   text-overflow: ellipsis;
@@ -278,23 +333,47 @@
 }
 
 .track-artist {
-  margin-top: 5px;
   color: var(--muted);
   font-size: 10px;
   line-height: 1.2;
 }
 
-.track-equalizer {
-  height: 24px;
+.track-play {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--line) 90%, transparent);
+  border-radius: 50%;
+  color: var(--muted);
+}
+
+.track-play::before {
+  content: "";
+  margin-left: 2px;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 8px solid currentColor;
+}
+
+/* Equalizer */
+.about-sticky-heading {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.track-equalizer {
+  height: 18px;
+  display: flex;
+  align-items: flex-end;
   gap: 3px;
 }
 
 .equalizer-bar {
   width: 3px;
-  height: 20px;
+  height: 18px;
   border-radius: 4px;
   background: var(--green);
   transform: scaleY(.28);
@@ -306,34 +385,67 @@
 .equalizer-bar:nth-child(3) { animation-delay: 280ms; }
 .equalizer-bar:nth-child(4) { animation-delay: 420ms; }
 
-.track-play {
-  position: relative;
-  width: 26px;
-  height: 26px;
-  display: grid;
-  place-items: center;
-  justify-self: center;
-  border: 1px solid color-mix(in srgb, var(--line) 90%, transparent);
-  border-radius: 50%;
-  color: var(--muted);
-}
-
-.track-play::before {
-  content: "";
-  width: 0;
-  height: 0;
-  margin-left: 2px;
-  border-top: 5px solid transparent;
-  border-bottom: 5px solid transparent;
-  border-left: 8px solid currentColor;
-}
-
 @keyframes listening-pulse {
   0%, 100% { transform: scaleY(.28); }
   45% { transform: scaleY(1); }
   70% { transform: scaleY(.55); }
 }
 
+/* Section Sticky Note */
+.about-sticky {
+  position: absolute;
+  z-index: 3;
+  top: -34px;
+  left: -26px;
+  width: max-content;
+  padding: 14px 16px 14px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--surface) 72%, transparent);
+  color: var(--ink);
+  box-shadow: var(--shadow);
+  transform: rotate(-2deg);
+  transition: border-color 240ms ease, box-shadow 240ms ease;
+}
+
+.about-sticky:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow), 0 0 28px color-mix(in srgb, var(--gold) 9%, transparent);
+}
+
+.about-sticky::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  width: 54px;
+  height: 18px;
+  border: 1px solid rgba(150, 129, 79, .14);
+  background: rgba(150, 129, 79, .17);
+  translate: -50% 0;
+  rotate: -4deg;
+}
+
+.about-sticky-title,
+.about-sticky-note {
+  margin: 0;
+}
+
+.about-sticky-title {
+  white-space: nowrap;
+  font-family: var(--font-serif);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.about-sticky-note {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
 
 /* =========================
    Responsive CSS
@@ -354,7 +466,7 @@
   .about-back-link { grid-row: 4; justify-self: start; }
 
   .listening-note {
-    margin-top: 0;
+    margin-top: 28px;
     justify-self: center;
   }
 }
@@ -378,17 +490,16 @@
     margin-top: 32px;
   }
 
-  .listening-card {
-    width: 100%;
-    padding: 16px 0 2px;
+  .about-sticky {
+    left: -6px;
   }
 
-  .track-row {
-    gap: 9px;
-    padding-inline: 6px;
-  }
 
   .listening-note {
     width: min(100%, 440px);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .album-vinyl-label { animation: none; }
 }

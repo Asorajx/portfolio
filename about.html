@@ -163,38 +163,42 @@
 
         <div class="about-intro">
           <div class="about-summary">
-            <p>I enjoy exploring ideas through cybersecurity and web development, and building tools that make technical concepts easier to understand.</p>
-            <p>I'm curious about how things work behind the scenes. I like experimenting, learning from what breaks, and refining the details along the way.</p>
+            <p>I mostly spend my time building apps and websites, from small tools I end up using every day to ideas I just want to see come to life.</p>
+            <p>The part I enjoy most is the design: working out how something should look and feel, and refining the small details until it feels right to use.</p>
+            <p>Alongside that, I'm studying cybersecurity. It's given me a habit of looking past the surface and asking how things actually work.</p>
           </div>
 
           <a class="text-link about-back-link" href="index.html">← Back to home</a>
         </div>
 
-        <aside class="apothecary-note listening-note" aria-labelledby="listeningTitle">
-          <div class="note-topline">
-            <span>Listening</span>
-            <span>Rotation</span>
+        <aside class="album-player listening-note" aria-labelledby="listeningTitle">
+          <!-- Section Sticky Note -->
+          <div class="about-sticky">
+            <div class="about-sticky-heading">
+              <p id="listeningTitle" class="about-sticky-title">Currently Playing</p>
+              <div id="albumEqualizer"></div>
+            </div>
+            <p class="about-sticky-note">My Favourites</p>
           </div>
 
-          <!-- A static listening snapshot styled like an apothecary note. -->
-          <section class="listening-card">
-            <div class="listening-header">
-              <svg class="listening-logo" viewBox="0 0 48 48" aria-hidden="true">
-                <circle class="listening-logo-disc" cx="24" cy="24" r="21"></circle>
-                <path class="listening-logo-wave" d="M13 19.5c7.4-2.7 15.4-2.2 22 1.4"></path>
-                <path class="listening-logo-wave" d="M15 25c6-2 12.4-1.6 18 1.2"></path>
-                <path class="listening-logo-wave" d="M17 30.3c4.4-1.3 9.1-.9 13.1 1"></path>
-              </svg>
+          <!-- Album Sleeve -->
+          <div id="albumDisplay" class="album-display">
+            <span class="album-vinyl">
+              <img id="albumVinylLabel" class="album-vinyl-label" src="" alt="">
+            </span>
+            <img id="albumCover" class="album-cover" src="" alt="">
 
+            <!-- Now Playing -->
+            <div class="album-now">
               <div>
-                <p id="listeningTitle" class="listening-heading">Currently Playing</p>
-                <p class="listening-kicker">My Favourites</p>
+                <p id="albumTitle" class="album-title"></p>
+                <p id="albumArtist" class="album-artist"></p>
               </div>
             </div>
+          </div>
 
-            <!-- Tracks are generated from the data in music.js. -->
-            <div id="musicTrackList" class="track-list"></div>
-          </section>
+          <!-- Song List: tracks are generated from the data in music.js. -->
+          <div id="musicTrackList" class="track-list"></div>
         </aside>
       </div>
     </section>
