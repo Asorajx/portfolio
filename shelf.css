@@ -925,7 +925,8 @@
 }
 
 @media (max-width: 980px) {
-.shelf-potions { transform: scale(.86); transform-origin: center; }
+/* Smaller bottles, each shrunk in place. */
+.potion-fixture { scale: .86; }
 .mortar-set { right: 108px; transform: scale(.88); transform-origin: bottom right; }
 .potion-upper-right { right: 4px; }
 .potion-mid-left { left: -7px; }
@@ -947,13 +948,15 @@
 }
 .bookshelf::before, .bookshelf::after { display: none; }
 .shelf-row { min-height: 238px; }
-.shelf-books { gap: 8px; padding: 30px 16px 24px; overflow-x: auto; scrollbar-width: thin; }
-.book-wide { height: 214px; }
-.book-regular { height: 198px; }
-.book-slim { height: 182px; }
-.project-card { flex: 1 1 0; min-width: 110px; padding: 15px 10px 14px; }
-.project-card h3 { font-size: clamp(19px, 5.5vw, 24px); }
-.project-card.is-featured .project-book-title { font-size: clamp(21px, 6vw, 28px); }
+/* Books shrink with the screen and keep their proportions. */
+.shelf-row { min-height: 0; }
+.shelf-books { gap: 7px; padding: 26px 12px 24px; }
+.project-card { min-width: 0; height: auto; padding: 12px 8px 11px; }
+.book-wide { flex: 1.3 1 0; max-width: 160px; aspect-ratio: 194 / 228; }
+.book-regular { flex: 1 1 0; max-width: 124px; aspect-ratio: 148 / 214; }
+.book-slim { flex: 1 1 0; max-width: 112px; aspect-ratio: 116 / 198; }
+.project-card h3 { font-size: clamp(15px, 4.6vw, 22px); }
+.project-card.is-featured .project-book-title { font-size: clamp(17px, 5.2vw, 26px); }
 .popup-face { padding: 26px 22px; }
 .popup-close { top: 14px; right: 14px; }
 }
