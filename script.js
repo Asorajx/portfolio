@@ -765,6 +765,24 @@ contactOpeners.forEach(button => {
   button.addEventListener('click', () => openContactForm(button))
 })
 
+/* Contact Nav: jump to the contact section, then open the form. */
+document.querySelectorAll('[data-contact-nav]').forEach(link => {
+  link.addEventListener('click', () => {
+    if (contactModal) {
+      setTimeout(() => openContactForm(link), 450)
+      return
+    }
+    try { sessionStorage.setItem('portfolio-open-contact', 'ready') } catch {}
+  })
+})
+
+try {
+  if (contactModal && sessionStorage.getItem('portfolio-open-contact')) {
+    sessionStorage.removeItem('portfolio-open-contact')
+    setTimeout(() => openContactForm(document.querySelector('[data-contact-nav]')), 700)
+  }
+} catch {}
+
 contactClose?.addEventListener('click', closeContactForm)
 
 contactModal?.addEventListener('click', event => {
