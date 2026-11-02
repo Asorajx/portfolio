@@ -35,7 +35,8 @@
   <script>
     try {
       document.documentElement.dataset.theme =
-        localStorage.getItem('portfolio-theme') || 'dark';
+        localStorage.getItem('portfolio-theme') ||
+        (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
       if (sessionStorage.getItem('portfolio-page-transition')) {
         document.documentElement.dataset.pageTransition = 'ready';

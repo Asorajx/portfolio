@@ -3,7 +3,8 @@
    ========================= */
 
 const themeButton = document.getElementById('themeToggle')
-const savedTheme = localStorage.getItem('portfolio-theme') || 'dark'
+const savedTheme = localStorage.getItem('portfolio-theme') ||
+  (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark')
 
 document.documentElement.dataset.theme = savedTheme
 
