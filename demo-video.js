@@ -26,6 +26,7 @@
       <div class="demo-video__loading" role="status" aria-label="Loading video"><span class="demo-video__spinner"></span></div>
       <div class="demo-video__notice" role="alert" hidden>Unable to play this video. Please check the MP4 file.</div>
       <div class="demo-video__seek-feedback" aria-hidden="true"></div>
+      <div class="demo-video__center-play" aria-hidden="true">${icons.play}</div>
       <div class="demo-video__controls">
         <div class="demo-video__timeline">
           <div class="demo-video__buffered" aria-hidden="true"></div>
@@ -92,6 +93,7 @@
     }
 
     function updatePlayback() {
+      player.classList.toggle('is-paused', video.paused)
       play.textContent = video.paused ? icons.play : icons.pause
       play.setAttribute('aria-label', video.paused ? 'Play' : 'Pause')
     }
@@ -120,7 +122,61 @@
     function closeSpeedMenu() {
       speedMenu.hidden = true
       speed.setAttribute('aria-expanded', 'false')
+      wakeControls()
     }
+
+    /* Fade the controls out after 2.5 seconds without activity, paused or playing. */
+    const controls = player.querySelector('.demo-video__controls')
+    const idleDelay = 2500
+    let idleTimer
+    let pointerOverControls = false
+    let pointerHeld = false
+
+    function controlsBusy() {
+      const focused = document.activeElement
+      return pointerOverControls || pointerHeld || !speedMenu.hidden ||
+        (controls.contains(focused) && focused.matches(':focus-visible'))
+    }
+
+    function wakeControls() {
+      player.classList.remove('is-idle')
+      clearTimeout(idleTimer)
+      if (controlsBusy()) return
+      idleTimer = setTimeout(() => {
+        if (player.isConnected && !controlsBusy()) player.classList.add('is-idle')
+      }, idleDelay)
+    }
+
+    ;['pointermove', 'pointerdown', 'keydown', 'focusin'].forEach(name => player.addEventListener(name, wakeControls))
+    player.addEventListener('pointerleave', event => {
+      pointerOverControls = false
+      /* A mouse leaving hides the controls at once; touch relies on the timer. */
+      if (event.pointerType === 'touch' || controlsBusy()) {
+        wakeControls()
+        return
+      }
+      clearTimeout(idleTimer)
+      player.classList.add('is-idle')
+    })
+    controls.addEventListener('pointerenter', () => {
+      pointerOverControls = true
+      wakeControls()
+    })
+    controls.addEventListener('pointerleave', () => {
+      pointerOverControls = false
+      wakeControls()
+    })
+    controls.addEventListener('pointerdown', () => {
+      pointerHeld = true
+      window.addEventListener('pointerup', () => {
+        pointerHeld = false
+        wakeControls()
+      }, { once: true })
+    })
+    player.addEventListener('focusout', () => setTimeout(wakeControls))
+    video.addEventListener('play', wakeControls)
+    video.addEventListener('pause', wakeControls)
+    video.addEventListener('ended', wakeControls)
 
     play.addEventListener('click', togglePlayback)
     video.addEventListener('play', updatePlayback)
@@ -140,6 +196,7 @@
     video.addEventListener('seeked', () => player.classList.remove('is-buffering'))
     video.addEventListener('error', () => {
       player.classList.remove('is-loading', 'is-buffering')
+      player.classList.add('has-error')
       player.querySelector('.demo-video__notice').hidden = false
     })
     seek.addEventListener('input', () => {
@@ -154,6 +211,7 @@
     speed.addEventListener('click', () => {
       speedMenu.hidden = !speedMenu.hidden
       speed.setAttribute('aria-expanded', String(!speedMenu.hidden))
+      wakeControls()
     })
     speedMenu.addEventListener('click', event => {
       const option = event.target.closest('[data-speed]')
@@ -213,6 +271,7 @@
     updatePlayback()
     updateVolume()
     updateTimeline()
+    wakeControls()
     return player
   }
 
