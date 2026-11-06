@@ -268,7 +268,7 @@
 
 .album-artist {
   margin-top: 3px;
-  font-size: 10px;
+  font-size: var(--text-micro);
   opacity: .78;
 }
 
@@ -334,7 +334,7 @@
 
 .track-artist {
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--text-micro);
   line-height: 1.2;
 }
 
@@ -441,7 +441,7 @@
 .about-sticky-note {
   margin-top: 5px;
   color: var(--muted);
-  font-size: 9px;
+  font-size: var(--text-micro);
   font-weight: 700;
   letter-spacing: .14em;
   text-transform: uppercase;

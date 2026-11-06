@@ -16,6 +16,14 @@
   --plum-deep: #5e3440;
   --gold: #9a7b45;
   --max-width: 1120px;
+  --text-micro: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 20px;
+  --hit-target: 44px;
+  --btn-lift: translateY(-2px);
+  --focus-ring: 2px solid var(--gold);
+  --focus-ring-offset: 5px;
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "DM Sans", system-ui, sans-serif;
   --shadow: 0 18px 50px rgba(63, 54, 37, 0.08);
@@ -508,8 +516,6 @@ html[data-page-transition="ready"] {
    ========================= */
 
 .text-link { color: var(--plum); font-size: 14px; font-weight: 700; }
-.text-link span { display: inline-block; transition: transform 160ms ease; }
-.text-link:hover span { transform: translate(2px, -2px); }
 
 /* Shared sticky note used for contact/profile notes. */
 .apothecary-note {
@@ -539,7 +545,7 @@ html[data-page-transition="ready"] {
   padding-bottom: 12px;
   border-bottom: 1px solid var(--line);
   color: var(--muted);
-  font-size: 10px;
+  font-size: var(--text-micro);
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -556,6 +562,7 @@ html[data-page-transition="ready"] {
   inset: 0;
   overflow: hidden;
   pointer-events: none;
+  contain: layout paint style;
 }
 
 .spirit-light {
@@ -602,6 +609,13 @@ html[data-page-transition="ready"] {
 @media (max-width: 680px) {
   #bookshelf .spirit-light:not(:nth-child(3n + 1)) { display: none; }
   #projects .spirit-light:nth-child(even) { display: none; }
+}
+
+/* Off-screen sections hold their lights and shelf sprites mid-motion. */
+.is-offscreen .spirit-light,
+.is-offscreen .spirit-light::before,
+.is-offscreen .shelf-sprite {
+  animation-play-state: paused;
 }
 
 .spirit-light.still {
@@ -780,9 +794,10 @@ html[data-page-transition="ready"] {
 .text-link:hover span { transform: translate(2px, -2px); }
 .primary-button:focus-visible,
 .text-link:focus-visible,
+.featured-display-link:focus-visible,
 .project-detail-button:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 5px;
+  outline: var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
 }
 @media (prefers-reduced-motion: no-preference) {
   .apothecary-pending { opacity: 0; }
@@ -794,3 +809,65 @@ html[data-page-transition="ready"] {
   }
   .primary-button:active, .hero-actions .text-link:active { transform: translateY(1px) scale(.98); }
 }
+
+
+/* =========================
+   Accessibility Helpers
+   ========================= */
+
+.skip-link {
+  position: fixed;
+  z-index: 2000;
+  top: 8px;
+  left: 8px;
+  padding: 10px 16px;
+  background: var(--surface);
+  color: var(--ink);
+  border: 1px solid var(--plum);
+  font-size: var(--text-sm);
+  font-weight: 700;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  outline: 2px solid var(--plum);
+  outline-offset: 2px;
+}
+
+main:focus { outline: none; }
+html { color-scheme: light; }
+html[data-theme="dark"] { color-scheme: dark; }
+
+/* Expand small hit areas to 44px without changing the visual layout. */
+.logo,
+.nav-links a,
+.contact-copy-button,
+.contact-dialog-close,
+.featured-dialog-close,
+.contact-form-button,
+.featured-display-link,
+.contact-email-address,
+.project-back-link {
+  position: relative;
+}
+
+.logo::before,
+.nav-links a::before,
+.contact-copy-button::before,
+.contact-dialog-close::before,
+.featured-dialog-close::before,
+.contact-form-button::before,
+.featured-display-link::before,
+.contact-email-address::before,
+.project-back-link::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, var(--hit-target));
+  height: max(100%, var(--hit-target));
+  transform: translate(-50%, -50%);
+}
+
+h1, h2, h3 { text-wrap: balance; }

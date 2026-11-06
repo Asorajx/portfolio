@@ -102,7 +102,7 @@
   .demo-video { min-height: 260px; }
   .demo-video__controls { padding: 28px 9px 6px; }
   .demo-video__toolbar { gap: 3px; }
-  .demo-video__time { font-size: 10px; }
+  .demo-video__time { font-size: var(--text-micro); }
   .demo-video__volume { width: 40px; }
   .demo-video__button { min-width: 30px; }
 }

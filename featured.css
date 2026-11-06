@@ -483,11 +483,6 @@
   color: #d7e9c5;
 }
 
-.featured-display-link:focus-visible {
-  outline: 2px solid var(--gold);
-  outline-offset: 5px;
-}
-
 @media (max-width: 680px) {
   .featured-gallery {
     padding: 48px 20px 0;

@@ -14,7 +14,7 @@ window.portfolioProjects = [
     shortTitle: 'Mosaic',
     // Hero
     title: 'Mosaic',
-    type: 'Full-Stack Development',
+    type: 'Full-Stack',
     featured: true,
     team: 'group',
     summary: 'Secure Data Sharing Platform for Collaborative Research · Final Year Capstone Project.',

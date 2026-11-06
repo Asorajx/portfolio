@@ -378,6 +378,15 @@ window.addEventListener('pageshow', event => {
     projectDetail: [[7, 12],[93, 17],[9, 39],[91, 47],[5, 67],[95, 76],[22, 91],[79, 92]],
   }
 
+  /* Pause a layer's CSS animations only while it is genuinely off-screen (200px margin so lights are already moving as they scroll in). Paused animations resume where they stopped. */
+  const visibility = !reducedMotion && 'IntersectionObserver' in window
+    ? new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          entry.target.classList.toggle('is-offscreen', !entry.isIntersecting)
+        })
+      }, { rootMargin: '200px 0px' })
+    : null
+
   Object.entries(layouts).forEach(([id, anchors]) => {
     const section = document.getElementById(id)
     if (!section) return
@@ -386,6 +395,7 @@ window.addEventListener('pageshow', event => {
     layer.className = 'spirit-layer'
     layer.setAttribute('aria-hidden', 'true')
     section.prepend(layer)
+    visibility?.observe(section)
 
     anchors.forEach(([x, y], index) => {
       const light = document.createElement('span')

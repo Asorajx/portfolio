@@ -244,6 +244,27 @@ function setupCrystalEffect(crystal, drawBackground) {
   let glowAngle = 0
   let targetGlowAngle = 0
   let animation = 0
+  let crystalVisible = true
+  let backgroundVisible = !!backgroundCanvas
+  let backgroundBounds = { width: 0, height: 0 }
+  let backgroundRatio = 1
+  let backgroundWidth = 0
+  let backgroundHeight = 0
+
+  function measureBackground() {
+    if (!backgroundCanvas) return
+    backgroundRatio = Math.min(window.devicePixelRatio || 1, 2)
+    backgroundBounds = {
+      width: backgroundCanvas.clientWidth,
+      height: backgroundCanvas.clientHeight,
+    }
+    backgroundWidth = Math.round(backgroundBounds.width * backgroundRatio)
+    backgroundHeight = Math.round(backgroundBounds.height * backgroundRatio)
+  }
+  measureBackground()
+
+  /* Animate only while this crystal (or the background it paints) is on screen. */
+  const shouldAnimate = () => (crystalVisible || backgroundVisible) && !document.hidden
 
   function draw(time = 0) {
     const lightTheme = document.documentElement.dataset.theme === 'light'
@@ -300,13 +321,12 @@ function setupCrystalEffect(crystal, drawBackground) {
     })
     context.restore()
     if (backgroundContext && backgroundCanvas) {
-      const bounds = backgroundCanvas.getBoundingClientRect()
-      const ratio = Math.min(window.devicePixelRatio || 1, 2)
-      const width = Math.round(bounds.width * ratio)
-      const height = Math.round(bounds.height * ratio)
-      if (backgroundCanvas.width !== width || backgroundCanvas.height !== height) {
-        backgroundCanvas.width = width
-        backgroundCanvas.height = height
+      /* Size comes from the cached ResizeObserver measurement, not a per-frame layout read. */
+      const bounds = backgroundBounds
+      const ratio = backgroundRatio
+      if (backgroundCanvas.width !== backgroundWidth || backgroundCanvas.height !== backgroundHeight) {
+        backgroundCanvas.width = backgroundWidth
+        backgroundCanvas.height = backgroundHeight
       }
       backgroundContext.setTransform(ratio, 0, 0, ratio, 0, 0)
       backgroundContext.clearRect(0, 0, bounds.width, bounds.height)
@@ -324,12 +344,30 @@ function setupCrystalEffect(crystal, drawBackground) {
         backgroundContext.fill()
       })
     }
-    if (!motion.matches && !document.hidden) animation = requestAnimationFrame(draw)
+    if (!motion.matches && shouldAnimate()) animation = requestAnimationFrame(draw)
     else animation = 0
   }
 
   function start() {
-    if (!animation) draw()
+    if (!animation) draw(performance.now())
+  }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      crystalVisible = entry.isIntersecting
+      if (crystalVisible && !motion.matches) start()
+    }).observe(crystal)
+
+    if (backgroundCanvas) {
+      new IntersectionObserver(([entry]) => {
+        backgroundVisible = entry.isIntersecting
+        if (backgroundVisible && !motion.matches) start()
+      }).observe(backgroundCanvas)
+      new ResizeObserver(() => {
+        measureBackground()
+        if (motion.matches) draw()
+      }).observe(backgroundCanvas)
+    }
   }
   crystal.addEventListener('pointermove', event => {
     targetSpread = 0.88
