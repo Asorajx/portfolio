@@ -59,7 +59,9 @@ const projectDetails = window.portfolioProjects
     reason: document.getElementById('projectReason'),
     documentation: document.getElementById('projectDocumentation'),
     demoSection: document.getElementById('projectDemoSection'),
-    demoFrame: document.querySelector('.project-demo-frame'),
+    demoFrame: document.getElementById('projectDemoSection')?.querySelector('.project-demo-frame'),
+    oldDemo: document.getElementById('projectOldDemo'),
+    thenNowNote: document.getElementById('projectThenNowNote'),
     github: document.getElementById('projectGithub'),
     liveDemo: document.getElementById('projectDemo'),
   }
@@ -120,6 +122,16 @@ const projectDetails = window.portfolioProjects
             </div>
           `
         }
+      }
+
+      /* Then & Now */
+      if (project.oldDemo) {
+        /* Same custom player as the main demo, rebuilt when a project is selected. */
+        fields.oldDemo.replaceChildren(window.DemoVideo.create(project.oldDemo, `${project.title} earlier demonstration`))
+        fields.thenNowNote.textContent = project.thenNowNote || ''
+        fields.thenNowNote.hidden = !project.thenNowNote
+      } else {
+        fields.oldDemo.replaceChildren()
       }
 
       /* Optional Sections */

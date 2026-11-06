@@ -540,6 +540,27 @@
   box-shadow: var(--shadow);
 }
 
+/* Then & Now */
+.project-old-demo {
+  width: 100%;
+  max-width: 420px;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.project-old-demo .demo-video { min-height: 0; }
+
+.project-then-now-note {
+  max-width: 640px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.project-then-now-note[hidden] { display: none; }
+
 /* Demo Frame */
 .project-demo-frame {
   position: relative;
@@ -694,14 +715,6 @@
   color: var(--ink);
   font-size: 12px;
   line-height: 1.3;
-}
-
-/* Pull Quote */
-.project-pull-quote p::first-line {
-  color: var(--ink);
-  font-family: var(--font-serif);
-  font-size: 22px;
-  font-style: italic;
 }
 
 /* Bottom Navigation */

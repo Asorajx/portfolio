@@ -36,8 +36,8 @@ window.portfolioProjects = [
     hasVideoDemo: true,
     videoDemo: '',
     // Reason
-    reason: '',
     reasonTitle: '',
+    reason: '',
   },
 
   {
@@ -72,8 +72,8 @@ window.portfolioProjects = [
     hasVideoDemo: false,
     videoDemo: '',
     // Reason
-    reason: '',
     reasonTitle: '',
+    reason: '',
   },
 
   {
@@ -108,8 +108,8 @@ window.portfolioProjects = [
     hasVideoDemo: true,
     videoDemo: 'assets/demos/WritePretty-Demo.mp4',
     // Reason
-    reason: '',
     reasonTitle: '',
+    reason: '',
   },
   {
     // Bookshelf
@@ -128,7 +128,7 @@ window.portfolioProjects = [
     // Buttons
     liveDemo: 'https://loop-duzg.onrender.com/',
     github: 'https://github.com/Asorajx/LOOP',
-    documentation: 'https://github.com/Asorajx/LOOP/blob/main/P03-LOOP.pdf',
+    documentation: 'https://github.com/Asorajx/LOOP/blob/main/P03-LOOP-v2.pdf',
     // Project Record
     date: 'October 2026',
     focus: 'Python OOP learning',
@@ -141,10 +141,13 @@ window.portfolioProjects = [
     },
     // Demo
     hasVideoDemo: true,
-    videoDemo: 'assets/demos/LOOP-Demo.mp4',
+    videoDemo: 'assets/demos/LOOP-Demo2.mp4',
     // Reason
-    reason: '',
     reasonTitle: '',
+    reason: 'I built this project to help students learn Python OOP concepts through interactive visualizations. It allows users to see how objects interact, how methods are executed, and how state changes occur in real time, making it easier to understand complex programming concepts.',
+    // Then & Now
+    oldDemo: 'assets/demos/LOOP-Demo.mp4',
+    thenNowNote: 'The original interface was cluttered, making the source code difficult to follow. The updated version has a cleaner, more intuitive layout, with clearer code visualization and brief explanations of each concept, so Python OOP is easier to understand.',
   },
   {
     // Bookshelf
@@ -178,8 +181,8 @@ window.portfolioProjects = [
     hasVideoDemo: true,
     videoDemo: 'assets/demos/Starjot-Demo.mp4',
     // Reason
-    reason: '',
     reasonTitle: '',
+    reason: '',
   },
 ]
 
@@ -195,6 +198,7 @@ window.syncProjectSections = function syncProjectSections(root, project) {
   const fields = {
     projectDemoSection: !!project.hasVideoDemo,
     projectReasonSection: !!project.reason,
+    projectThenNowSection: !!project.oldDemo,
     projectDemo: !!project.liveDemo,
     projectGithub: !!project.github,
     projectDocumentation: !!project.documentation,
@@ -211,7 +215,7 @@ window.syncProjectSections = function syncProjectSections(root, project) {
   }
 
   /* Chapter Numbers */
-  const numerals = ['I', 'II', 'III', 'IV', 'V']
+  const numerals = ['I', 'II', 'III', 'IV', 'V', 'VI']
   ;[...root.querySelectorAll('[data-chapter]')]
     .filter(chapter => !chapter.hidden)
     .forEach((chapter, index) => {
