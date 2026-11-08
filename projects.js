@@ -111,6 +111,7 @@ const projectDetails = window.portfolioProjects
 
       /* Demo Preview */
       if (project.hasVideoDemo) {
+        fields.demoFrame.classList.toggle('has-video', !!project.videoDemo)
         if (project.videoDemo) {
           /* Recreate controls when a different project is selected. */
           fields.demoFrame.replaceChildren(window.DemoVideo.create(project.videoDemo, `${project.title} demonstration`))

@@ -884,6 +884,19 @@ if (currentYear) {
 
 
 /* =========================
+   Footer Back To Top
+   ========================= */
+
+/* Scroll without changing the URL hash, which the project page uses as its project ID. */
+document.querySelectorAll('.footer-back-link').forEach(link => {
+  link.addEventListener('click', event => {
+    event.preventDefault()
+    window.scrollTo({ top: 0 })
+  })
+})
+
+
+/* =========================
    Copy Email Button
    ========================= */
 

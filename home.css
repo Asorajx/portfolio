@@ -99,9 +99,24 @@
     transform 160ms ease;
 }
 
-.magic-social-email { animation-delay: 0s; }
-.magic-social-github { animation-delay: 1.6s; }
-.magic-social-linkedin { animation-delay: 3.2s; }
+/* Match the interactive icons to the three SVG seal centers. */
+.magic-social-email {
+  top: 9.72%;
+  left: 50%;
+  animation-delay: 0s;
+}
+
+.magic-social-github {
+  top: 71.67%;
+  left: 15.83%;
+  animation-delay: 1.6s;
+}
+
+.magic-social-linkedin {
+  top: 71.67%;
+  left: 84.17%;
+  animation-delay: 3.2s;
+}
 
 .magic-social-link:hover,
 .magic-social-link:focus-visible {
@@ -138,44 +153,30 @@
 }
 
 .magic-social-icon-email {
+  width: 20px;
+  height: 20px;
   -webkit-mask-image: url("assets/icons/email.svg");
   mask-image: url("assets/icons/email.svg");
 }
 
 .magic-social-icon-github {
+  width: 22px;
+  height: 22px;
   -webkit-mask-image: url("assets/icons/github.svg");
   mask-image: url("assets/icons/github.svg");
 }
 
 .magic-social-icon-linkedin {
+  width: 21px;
+  height: 21px;
   -webkit-mask-image: url("assets/icons/linkedin.svg");
   mask-image: url("assets/icons/linkedin.svg");
 }
-
-.magic-social-icon-email { width: 20px; height: 20px; }
-.magic-social-icon-github { width: 22px; height: 22px; }
-.magic-social-icon-linkedin { width: 21px; height: 21px; }
 
 .magic-social-link:hover .magic-social-icon,
 .magic-social-link:focus-visible .magic-social-icon {
   opacity: 1;
   transform: scale(1.08);
-}
-
-/* Match the interactive icons to the three SVG seal centers. */
-.magic-social-email {
-  top: 9.72%;
-  left: 50%;
-}
-
-.magic-social-github {
-  top: 71.67%;
-  left: 15.83%;
-}
-
-.magic-social-linkedin {
-  top: 71.67%;
-  left: 84.17%;
 }
 
 .magic-glyph {

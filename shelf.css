@@ -614,8 +614,8 @@
   aspect-ratio: 1;
   background: currentColor;
   opacity: .1;
-  -webkit-mask: url("assets/icons/porfolio-apple-icon.png") center / contain no-repeat;
-  mask: url("assets/icons/porfolio-apple-icon.png") center / contain no-repeat;
+  -webkit-mask: url("assets/icons/portfolio-apple-icon.png") center / contain no-repeat;
+  mask: url("assets/icons/portfolio-apple-icon.png") center / contain no-repeat;
 }
 
 .project-card.is-lifted { visibility: hidden; }

@@ -266,9 +266,6 @@
   }
 }
 
-.featured-orb-title {
-  transition: opacity 220ms ease;
-}
 .featured-display.is-open .featured-orb-title {
   opacity: 0;
 }
@@ -365,6 +362,7 @@
   color: #f3eedf;
   text-shadow: 0 1px 6px rgba(19, 35, 27, 0.8);
   font: 600 36px/1 var(--font-serif);
+  transition: opacity 220ms ease;
 }
 
 [data-theme='light'] .featured-orb {

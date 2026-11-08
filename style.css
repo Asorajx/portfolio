@@ -47,6 +47,10 @@
   --spirit-a: #754354;
   --spirit-b: #7fae70;
   --spirit-c: #245b55;
+  --demo-video-bg: #1c1b19;
+  --demo-video-skeleton-a: #2b2a27;
+  --demo-video-skeleton-b: #403e39;
+  --demo-video-shade: #0d0c0b;
 }
 
 /* Dark mode overrides the shared theme colors above. */
@@ -84,6 +88,10 @@
   --spirit-a: #95556b;
   --spirit-b: #9acb85;
   --spirit-c: #4f8c82;
+  --demo-video-bg: #111b17;
+  --demo-video-skeleton-a: #202e25;
+  --demo-video-skeleton-b: #344437;
+  --demo-video-shade: #08110d;
 }
 
 
@@ -92,7 +100,10 @@
    ========================= */
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
 body {
   margin: 0;
   background:
@@ -526,6 +537,7 @@ html[data-page-transition="ready"] {
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   box-shadow: var(--shadow);
   transform: rotate(1.3deg);
+  transition: border-color 240ms ease, box-shadow 240ms ease;
 }
 
 .apothecary-note::before, .apothecary-note::after {
@@ -538,7 +550,7 @@ html[data-page-transition="ready"] {
 }
 .apothecary-note::before { top: -10px; left: 38px; transform: rotate(-4deg); }
 .apothecary-note::after { right: 30px; bottom: -9px; transform: rotate(5deg); }
-.note-topline, .record-label {
+.note-topline {
   display: flex;
   justify-content: space-between;
   gap: 18px;
@@ -684,8 +696,8 @@ html[data-page-transition="ready"] {
 .footer-inner { display: flex; flex-direction: column; }
 .footer-inner p { margin: 0; }
 
-/* Footer Top */
-.footer-top {
+/* Footer Row */
+.footer-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
@@ -698,33 +710,7 @@ html[data-page-transition="ready"] {
   line-height: 1.1;
   color: var(--ink);
 }
-.footer-tagline { margin-top: 6px !important; }
-
-.footer-contact,
-.footer-top-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  min-height: 32px;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color .2s ease;
-}
-.footer-contact {
-  text-decoration: underline;
-  text-decoration-color: var(--line);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
-  transition: color .2s ease, text-decoration-color .2s ease;
-}
-.footer-contact:hover { text-decoration-color: var(--green-deep); }
-.footer-contact:hover,
-.footer-top-link:hover { color: var(--green-deep); }
-.footer-contact:focus-visible,
-.footer-top-link:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: 3px;
-}
+.footer-inner .footer-tagline { margin-top: 6px; }
 
 /* Footer Links */
 .footer-links {
@@ -732,6 +718,30 @@ html[data-page-transition="ready"] {
   flex-direction: column;
   align-items: flex-end;
   gap: 2px;
+}
+.footer-contact,
+.footer-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 32px;
+  color: var(--muted);
+  transition: color .2s ease, text-decoration-color .2s ease;
+}
+.footer-back-link { text-decoration: none; }
+.footer-contact {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+}
+.footer-contact:hover,
+.footer-back-link:hover { color: var(--green-deep); }
+.footer-contact:hover { text-decoration-color: var(--green-deep); }
+.footer-contact:focus-visible,
+.footer-back-link:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 3px;
 }
 
 
@@ -831,9 +841,6 @@ html[data-page-transition="ready"] {
 /* =========================
    Shared Interaction Details
    ========================= */
-.apothecary-note {
-  transition: border-color 240ms ease, box-shadow 240ms ease;
-}
 .apothecary-note:hover,
 .apothecary-note:focus-within {
   border-color: var(--gold);
@@ -885,7 +892,6 @@ html[data-page-transition="ready"] {
 }
 
 main:focus { outline: none; }
-html { color-scheme: light; }
 html[data-theme="dark"] { color-scheme: dark; }
 
 /* Expand small hit areas to 44px without changing the visual layout. */

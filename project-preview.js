@@ -53,13 +53,7 @@
 
     /* Remove Media */
     article.querySelectorAll('img, picture, video, iframe, audio, source').forEach(media => media.remove())
-    const demo = article.querySelector('.project-demo-frame')
-    if (demo) {
-      demo.replaceChildren()
-      const placeholder = document.createElement('span')
-      placeholder.className = 'project-preview-media-placeholder skeleton-line'
-      demo.append(placeholder)
-    }
+    article.querySelectorAll('.project-demo-frame, .project-old-demo').forEach(area => area.replaceChildren())
 
     /* Disable IDs and Controls */
     for (const element of [header, article]) {
@@ -89,6 +83,26 @@
     preview.style.setProperty('--preview-scale', String(pageWidth / documentWidth))
   }
 
+  /* Video Placeholder */
+  function createVideoPlaceholder() {
+    const placeholder = document.createElement('div')
+    const mark = document.createElement('span')
+    const controls = document.createElement('span')
+    placeholder.className = 'project-preview-video'
+    mark.className = 'project-preview-video__mark'
+    controls.className = 'project-preview-video__controls'
+    placeholder.append(mark, controls)
+    return placeholder
+  }
+
+  /* Empty Placeholder */
+  function createEmptyPlaceholder() {
+    const placeholder = document.createElement('div')
+    placeholder.className = 'project-demo-placeholder project-preview-empty'
+    placeholder.append(document.createElement('span'), document.createElement('span'))
+    return placeholder
+  }
+
   /* Set Project */
   function setProject(preview, project) {
     if (!preview || !project) return
@@ -109,6 +123,16 @@
 
     const featured = preview.querySelector('[data-source-id="projectFeaturedStatus"]')
     if (featured) featured.hidden = !project.featured
+
+    /* Demo Areas */
+    const demoFrame = preview.querySelector('.project-demo-frame')
+    if (demoFrame) {
+      demoFrame.classList.toggle('has-video', !!project.videoDemo)
+      demoFrame.replaceChildren(project.videoDemo ? createVideoPlaceholder() : createEmptyPlaceholder())
+    }
+
+    const oldDemo = preview.querySelector('.project-old-demo')
+    if (oldDemo) oldDemo.replaceChildren(...(project.oldDemo ? [createVideoPlaceholder()] : []))
 
     /* Optional Sections */
     window.syncProjectSections(preview, project)
