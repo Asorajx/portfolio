@@ -304,29 +304,6 @@
     inset 0 1px 0 color-mix(in srgb, #fff 18%, transparent);
 }
 
-/* Solo/Group Pill */
-.project-team-status {
-  --team-ink: var(--ink);
-  display: inline-flex;
-  align-items: center;
-  min-height: 22px;
-  padding: 3px 8px 2px;
-  border: 1.5px solid var(--team-ink);
-  border-radius: 3px;
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--team-ink) 25%, transparent);
-  color: var(--team-ink);
-  font-family: var(--font-serif);
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  opacity: .82;
-  transform: rotate(-2deg);
-}
-.project-team-status.is-group { --team-ink: #8e1b1b; }
-[data-theme="dark"] .project-team-status.is-group { --team-ink: #d4544c; }
-
 .project-featured-status[hidden] {
   display: none;
 }

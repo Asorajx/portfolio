@@ -73,7 +73,7 @@ window.portfolioProjects = [
     videoDemo: '',
     // Reason
     reasonTitle: '',
-    reason: '',
+    reason: 'I wanted to learn more about how honeypots work, so I decided to try setting one up myself. I deployed a honeypot server to capture and monitor SSH login attempts, and analysed the activity it received. It was mainly a hands-on way for me to explore how honeypots are used to observe potential cyber threats.',
   },
 
   {
@@ -109,7 +109,7 @@ window.portfolioProjects = [
     videoDemo: 'assets/demos/WritePretty-Demo.mp4',
     // Reason
     reasonTitle: '',
-    reason: '',
+    reason: 'I work with a lot of documents and reports for school, and I often find myself spending time fixing small formatting issues, especially when copying text from different sources. I wanted a quick way to clean things up without having to rely on AI every time. So I decided to build WritePretty, a tool that lets users quickly clean up their text and choose which formatting they want to remove, while keeping the original content unchanged.',
   },
   {
     // Bookshelf
@@ -144,7 +144,7 @@ window.portfolioProjects = [
     videoDemo: 'assets/demos/LOOP-Demo2.mp4',
     // Reason
     reasonTitle: '',
-    reason: 'I built this project to help students learn Python OOP concepts through interactive visualizations. It allows users to see how objects interact, how methods are executed, and how state changes occur in real time, making it easier to understand complex programming concepts.',
+    reason: 'I built LOOP as a way to practise and reinforce what I\'d learnt about Python OOP in school, while also creating something that could help other students understand these concepts better. I wanted to make it easier to visualise how objects interact, how methods run, and how their states change in real time.',
     // Then & Now
     oldDemo: 'assets/demos/LOOP-Demo.mp4',
     thenNowNote: 'The original interface was cluttered, making the source code difficult to follow. The updated version has a cleaner, more intuitive layout, with clearer code visualization and brief explanations of each concept, so Python OOP is easier to understand.',
@@ -182,7 +182,7 @@ window.portfolioProjects = [
     videoDemo: 'assets/demos/Starjot-Demo.mp4',
     // Reason
     reasonTitle: '',
-    reason: '',
+    reason: 'I use note-taking apps a lot for school and projects, mainly Notion, but lately I\'ve found it a little too bloated with features I don\'t really need. I was curious about what a simpler alternative could look like, so I decided to experiment with building my own workspace for notes and project work. I also wanted to explore the idea of local data storage rather than relying entirely on the cloud. This led me to build Starjot.',
   },
 ]
 
@@ -191,7 +191,7 @@ window.portfolioProjects = [
    Project Section Visibility
    ========================= */
 
-/* Optional Sections, Chapter Numbers, Tech Stack and Solo/Group Pill */
+/* Optional Sections, Chapter Numbers, Tech Stack and Team */
 window.syncProjectSections = function syncProjectSections(root, project) {
   if (!root || !project) return
 
@@ -244,7 +244,6 @@ window.syncProjectSections = function syncProjectSections(root, project) {
   if (team) {
     const isGroup = project.team === 'group'
     team.textContent = isGroup ? 'Group' : 'Solo'
-    team.classList.toggle('is-group', isGroup)
   }
 }
 
