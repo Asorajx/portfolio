@@ -454,6 +454,15 @@
   text-transform: uppercase;
 }
 
+.project-record-updated {
+  grid-column: 2;
+  margin-top: -9px;
+  color: var(--muted);
+  font-size: var(--text-micro);
+  font-style: italic;
+  line-height: 1;
+}
+
 .project-record-list dd {
   color: var(--ink);
   font-family: var(--font-serif);
@@ -532,6 +541,18 @@
 }
 .project-old-demo .demo-video__media { height: 100%; }
 
+.project-old-demo--image {
+  max-width: 640px;
+  margin-inline: 0;
+  border: 1px solid var(--line);
+}
+
+.project-old-demo--image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .project-then-now-note {
   max-width: 640px;
   margin: 14px 0 0;
@@ -541,6 +562,16 @@
 }
 
 .project-then-now-note[hidden] { display: none; }
+
+.project-chapter-updated {
+  display: block;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: var(--text-micro);
+  font-style: italic;
+}
+
+.project-chapter-updated[hidden] { display: none; }
 
 /* Demo Frame */
 .project-demo-frame {

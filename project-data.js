@@ -96,6 +96,7 @@ window.portfolioProjects = [
     documentation: 'https://github.com/Asorajx/writepretty/blob/main/P02-writepretty.pdf',
     // Project Record
     date: 'September 2026',
+    updated: 'November 2026',
     focus: 'Text cleanup',
     // Overview
     description: 'A lightweight client-side writing cleanup tool with configurable formatting rules, optional Markdown cleanup, browser-based spellcheck, History Mode, and local autosave without AI rewriting.',
@@ -106,7 +107,10 @@ window.portfolioProjects = [
     },
     // Demo
     hasVideoDemo: true,
-    videoDemo: 'assets/demos/WritePretty-Demo.mp4',
+    videoDemo: 'assets/demos/WritePretty-Demo2.mp4',
+    // Then & Now
+    oldImage: 'assets/images/WritePretty-v1.png',
+    thenNowNote: 'The original version hid the cleanup controls in a separate panel away from the text, and its punctuation rule could wrongly alter names like “Fuse.js”. The updated version keeps the controls beside the editor as an icon rail and refines the rules to leave such names intact, so the tool is easier to use and more reliable.',
     // Reason
     reasonTitle: '',
     reason: 'I work with a lot of documents and reports for school, and I often find myself spending time fixing small formatting issues, especially when copying text from different sources. I wanted a quick way to clean things up without having to rely on AI every time. So I decided to build WritePretty, a tool that lets users quickly clean up their text and choose which formatting they want to remove, while keeping the original content unchanged.',
@@ -131,6 +135,7 @@ window.portfolioProjects = [
     documentation: 'https://github.com/Asorajx/LOOP/blob/main/P03-LOOP-v2.pdf',
     // Project Record
     date: 'October 2026',
+    updated: 'November 2026',
     focus: 'Python OOP learning',
     // Overview
     description: 'An interactive Python OOP visualizer that uses scenario-based simulations to show method execution, object interactions, state changes, inheritance, and source code in real time.',
@@ -198,7 +203,7 @@ window.syncProjectSections = function syncProjectSections(root, project) {
   const fields = {
     projectDemoSection: !!project.hasVideoDemo,
     projectReasonSection: !!project.reason,
-    projectThenNowSection: !!project.oldDemo,
+    projectThenNowSection: !!(project.oldDemo || project.oldImage || project.thenNowNote),
     projectDemo: !!project.liveDemo,
     projectGithub: !!project.github,
     projectDocumentation: !!project.documentation,
@@ -211,7 +216,7 @@ window.syncProjectSections = function syncProjectSections(root, project) {
 
   const reasonTitle = root.querySelector('[id="projectReasonTitle"], [data-source-id="projectReasonTitle"]')
   if (reasonTitle) {
-    reasonTitle.textContent = project.reasonTitle || 'Why This Project'
+    reasonTitle.textContent = project.reasonTitle || 'Why this project'
   }
 
   /* Chapter Numbers */
@@ -239,6 +244,19 @@ window.syncProjectSections = function syncProjectSections(root, project) {
     }))
     if (!items.length) list.textContent = '-'
   })
+
+  /* Updated Note */
+  const updated = root.querySelector('[id="projectUpdated"], [data-source-id="projectUpdated"]')
+  if (updated) {
+    updated.hidden = !project.updated
+    updated.textContent = project.updated ? `Updated ${project.updated}` : ''
+  }
+
+  const thenNowUpdated = root.querySelector('[id="projectThenNowUpdated"], [data-source-id="projectThenNowUpdated"]')
+  if (thenNowUpdated) {
+    thenNowUpdated.hidden = !project.updated
+    thenNowUpdated.textContent = project.updated ? `Updated ${project.updated}` : ''
+  }
 
   const team = root.querySelector('[id="projectTeamStatus"], [data-source-id="projectTeamStatus"]')
   if (team) {

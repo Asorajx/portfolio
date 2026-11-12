@@ -129,11 +129,18 @@ const projectDetails = window.portfolioProjects
       if (project.oldDemo) {
         /* Same custom player as the main demo, rebuilt when a project is selected. */
         fields.oldDemo.replaceChildren(window.DemoVideo.create(project.oldDemo, `${project.title} earlier demonstration`))
-        fields.thenNowNote.textContent = project.thenNowNote || ''
-        fields.thenNowNote.hidden = !project.thenNowNote
+      } else if (project.oldImage) {
+        const image = document.createElement('img')
+        image.src = project.oldImage
+        image.alt = `${project.title} earlier version`
+        image.loading = 'lazy'
+        fields.oldDemo.replaceChildren(image)
       } else {
         fields.oldDemo.replaceChildren()
       }
+      fields.oldDemo.classList.toggle('project-old-demo--image', !project.oldDemo && !!project.oldImage)
+      fields.thenNowNote.textContent = project.thenNowNote || ''
+      fields.thenNowNote.hidden = !project.thenNowNote
 
       /* Optional Sections */
       window.syncProjectSections(content, project)
