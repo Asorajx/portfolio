@@ -76,7 +76,7 @@
       crystal.classList.add('is-selected')
       details.querySelector('.eyebrow').textContent = project.type
       details.querySelector('h3').textContent = project.title
-      details.querySelector('.featured-description').textContent = project.preview
+      details.querySelector('.featured-description').textContent = project.summary
       details.querySelector('.featured-display-link').href = `projects.html#${project.id}`
       display.classList.add('is-open')
       crystal.setAttribute('aria-expanded', 'true')

@@ -9,7 +9,6 @@ window.portfolioProjects = [
     id: 'secure-data-sharing',
     bookTitle: 'Mosaic',
     bookSize: 'wide',
-    preview: 'A secure platform for controlled research data sharing and privacy protection.',
     // Project Switcher
     shortTitle: 'Mosaic',
     // Hero
@@ -45,7 +44,6 @@ window.portfolioProjects = [
     id: 'honeypot',
     bookTitle: 'Honeypot Simulation',
     bookSize: 'wide',
-    preview: 'A Cowrie honeypot environment for capturing and analysing malicious SSH activity.',
     // Project Switcher
     shortTitle: 'Honeypot',
     // Hero
@@ -81,7 +79,6 @@ window.portfolioProjects = [
     id: 'writepretty',
     bookTitle: 'WritePretty',
     bookSize: 'regular',
-    preview: 'A client-side writing cleanup tool with configurable formatting and local autosave.',
     // Project Switcher
     shortTitle: 'WritePretty',
     // Hero
@@ -120,7 +117,6 @@ window.portfolioProjects = [
     id: 'loop',
     bookTitle: 'LOOP',
     bookSize: 'regular',
-    preview: 'An interactive visualizer for exploring Python OOP execution, state, and inheritance.',
     // Project Switcher
     shortTitle: 'LOOP',
     // Hero
@@ -159,7 +155,6 @@ window.portfolioProjects = [
     id: 'starjot',
     bookTitle: 'Starjot',
     bookSize: 'regular',
-    preview: 'A browser-based workspace for notes, visual ideas, and project planning.',
     // Project Switcher
     shortTitle: 'Starjot',
     // Hero
@@ -224,6 +219,7 @@ window.syncProjectSections = function syncProjectSections(root, project) {
   ;[...root.querySelectorAll('[data-chapter]')]
     .filter(chapter => !chapter.hidden)
     .forEach((chapter, index) => {
+      chapter.dataset.band = index % 2
       chapter.querySelectorAll('[data-chapter-number]').forEach(number => {
         number.textContent = numerals[index]
       })
@@ -245,18 +241,13 @@ window.syncProjectSections = function syncProjectSections(root, project) {
     if (!items.length) list.textContent = '-'
   })
 
-  /* Updated Note */
-  const updated = root.querySelector('[id="projectUpdated"], [data-source-id="projectUpdated"]')
-  if (updated) {
-    updated.hidden = !project.updated
-    updated.textContent = project.updated ? `Updated ${project.updated}` : ''
-  }
-
-  const thenNowUpdated = root.querySelector('[id="projectThenNowUpdated"], [data-source-id="projectThenNowUpdated"]')
-  if (thenNowUpdated) {
-    thenNowUpdated.hidden = !project.updated
-    thenNowUpdated.textContent = project.updated ? `Updated ${project.updated}` : ''
-  }
+  /* Updated Note: shown in the project record and under What changed? */
+  ;['projectUpdated', 'projectThenNowUpdated'].forEach(id => {
+    const note = root.querySelector(`[id="${id}"], [data-source-id="${id}"]`)
+    if (!note) return
+    note.hidden = !project.updated
+    note.textContent = project.updated ? `Updated ${project.updated}` : ''
+  })
 
   const team = root.querySelector('[id="projectTeamStatus"], [data-source-id="projectTeamStatus"]')
   if (team) {

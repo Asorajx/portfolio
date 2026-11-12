@@ -262,14 +262,16 @@
 
 .project-detail-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(250px, .65fr);
-  gap: 56px;
-  align-items: end;
-  margin-top: 32px;
+  grid-template-columns: minmax(0, 580px) minmax(250px, 320px);
+  justify-content: start;
+  gap: 40px;
+  align-items: start;
+  margin-top: 20px;
 }
 
 .project-detail-intro {
   max-width: 700px;
+  padding-top: 28px;
 }
 
 .project-title-meta {
@@ -277,6 +279,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: 9px 12px;
+  min-height: 24px;
   margin-bottom: 8px;
 }
 
@@ -457,9 +460,6 @@
 .project-record-updated {
   grid-column: 2;
   margin-top: -9px;
-  color: var(--muted);
-  font-size: var(--text-micro);
-  font-style: italic;
   line-height: 1;
 }
 
@@ -477,7 +477,25 @@
    ========================= */
 
 .project-detail-section {
-  margin-top: 72px;
+  --band: color-mix(in srgb, var(--green) 14%, var(--paper));
+  margin-top: 0;
+  padding: 48px 0;
+}
+
+[data-theme="dark"] .project-detail-section {
+  --band: color-mix(in srgb, var(--green) 11%, var(--paper));
+}
+
+/* First section keeps a gap below the hero. */
+.project-detail-section:first-of-type {
+  margin-top: 56px;
+}
+
+/* Alternate Bands: full-width tint on every second visible section. */
+.project-detail-section[data-band="1"] {
+  background: var(--band);
+  box-shadow: 0 0 0 100vmax var(--band);
+  clip-path: inset(0 -100vmax);
 }
 
 /* Hidden demo sections should not leave vertical space behind. */
@@ -492,10 +510,10 @@
 :is(.project-chapter-heading, .project-plate-heading) h2 {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: clamp(38px, 5vw, 58px);
+  font-size: clamp(32px, 4vw, 44px);
   font-weight: 600;
-  line-height: .95;
-  letter-spacing: -.03em;
+  line-height: 1;
+  letter-spacing: -.025em;
 }
 
 
@@ -504,16 +522,8 @@
    ========================= */
 
 /* Demo Plate */
-.project-plate {
-  padding: 44px 0 40px;
-  background: color-mix(in srgb, var(--ink) 5%, var(--paper));
-  border-block: 1px solid var(--line);
-  box-shadow: 0 0 0 100vmax color-mix(in srgb, var(--ink) 5%, var(--paper));
-  clip-path: inset(0 -100vmax);
-}
-
 .project-plate-heading {
-  margin-bottom: 22px;
+  margin-bottom: 28px;
   text-align: center;
 }
 
@@ -543,7 +553,7 @@
 
 .project-old-demo--image {
   max-width: 640px;
-  margin-inline: 0;
+  margin-inline: auto;
   border: 1px solid var(--line);
 }
 
@@ -551,6 +561,26 @@
   display: block;
   width: 100%;
   height: auto;
+}
+
+.project-zoomable { cursor: zoom-in; }
+
+/* Image Zoom */
+.image-zoom {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: rgba(8, 12, 10, .86);
+  cursor: zoom-out;
+  outline: 0;
+}
+
+.image-zoom__image {
+  position: fixed;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .5);
+  transform-origin: top left;
 }
 
 .project-then-now-note {
@@ -566,6 +596,10 @@
 .project-chapter-updated {
   display: block;
   margin-top: 10px;
+}
+
+/* Shared Updated Note */
+:is(.project-record-updated, .project-chapter-updated) {
   color: var(--muted);
   font-size: var(--text-micro);
   font-style: italic;
@@ -650,27 +684,27 @@
    Chapters
    ========================= */
 
-/* Chapter Layout */
-.project-chapter {
-  display: grid;
-  grid-template-columns: minmax(220px, .62fr) minmax(0, 1.38fr);
-  align-items: start;
-}
-
-/* Sticky Chapter Heading */
+/* Chapter Layout: centred heading above a centred column. */
 .project-chapter-heading {
-  position: sticky;
-  top: 96px;
-  padding: 2px 44px 8px 0;
+  margin-bottom: 28px;
+  text-align: center;
 }
 
-/* Book Gutter */
 .project-chapter-body {
   position: relative;
-  align-self: stretch;
-  padding: 2px 0 8px 48px;
-  border-left: 1px solid var(--line);
+  max-width: 640px;
+  margin-inline: auto;
 }
+
+/* Split Body: description beside the tech list. */
+.project-chapter-body--split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(220px, 1fr);
+  gap: 56px;
+  align-items: start;
+  max-width: 880px;
+}
+.project-chapter-body--split .project-tech { margin-top: 0; }
 
 /* Chapter Text */
 .project-chapter-text {
@@ -769,17 +803,12 @@
   }
 
   .project-detail-section {
-    margin-top: 82px;
+    padding: 40px 0;
   }
 
-  .project-chapter {
+  .project-chapter-body--split {
     grid-template-columns: 1fr;
-    gap: 26px;
-  }
-
-  .project-chapter-heading {
-    position: static;
-    padding-right: 0;
+    gap: 28px;
   }
 }
 
@@ -848,13 +877,6 @@
     transform: none;
   }
 
-  .project-chapter-body {
-    padding-left: 22px;
-  }
-
-  .project-plate {
-    padding: 36px 0 32px;
-  }
 
   .project-plate-figure {
     padding: 8px;

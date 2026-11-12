@@ -134,6 +134,9 @@ const projectDetails = window.portfolioProjects
         image.src = project.oldImage
         image.alt = `${project.title} earlier version`
         image.loading = 'lazy'
+        image.className = 'project-zoomable'
+        image.tabIndex = 0
+        image.setAttribute('role', 'button')
         fields.oldDemo.replaceChildren(image)
       } else {
         fields.oldDemo.replaceChildren()
