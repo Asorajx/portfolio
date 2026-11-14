@@ -375,6 +375,7 @@ window.addEventListener('pageshow', event => {
     projects: [[9, 24],[28, 68],[75, 25],[91, 70]],
     bookshelf: [[8, 24],[25, 19],[53, 23],[84, 21],[94, 38],[7, 48],[92, 58],[13, 73],[38, 84],[67, 79],[89, 86]],
     about: [[12, 22],[88, 18],[18, 76],[82, 72]],
+    background: [[7, 8],[93, 14],[9, 32],[91, 40],[6, 58],[94, 64],[11, 84],[89, 90]],
     projectDetail: [[7, 12],[93, 17],[9, 39],[91, 47],[5, 67],[95, 76],[22, 91],[79, 92]],
   }
 
@@ -980,6 +981,89 @@ document.querySelectorAll('.footer-back-link').forEach(link => {
     observer.disconnect()
     document.querySelectorAll('.apothecary-arrive, .apothecary-pending').forEach(element => element.classList.remove('apothecary-arrive', 'apothecary-pending'))
   })
+})()
+
+
+/* =========================
+   Hero Tagline Rotation
+   ========================= */
+
+/* Cycle the phrase after "Building"; a click moves to the next one straight away. */
+;(function setupTaglineRotation() {
+  const phrase = document.querySelector('.hero-tagline__phrase')
+  if (!phrase) return
+
+  const words = phrase.dataset.words.split('|')
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+  /* The timings live in home.css (--phrase-time and --phrase-hold) so they are changed in one place. */
+  const style = getComputedStyle(phrase)
+  const slideTime = parseFloat(style.getPropertyValue('--phrase-time')) || 420
+  const readTime = parseFloat(style.getPropertyValue('--phrase-hold')) || 3200
+  let index = 0
+  let timer
+  let paused = false
+  let busy = false
+
+  const current = () => phrase.querySelector('.is-current')
+
+  /* Size the button to the phrase on screen, including after the web fonts load. */
+  function fitWidth() {
+    phrase.style.width = `${current().offsetWidth}px`
+  }
+
+  function show(next) {
+    const old = current()
+    phrase.setAttribute('aria-label', `${words[next].replace(/\.$/, '')}, press for the next phrase`)
+
+    if (motion.matches) {
+      old.textContent = words[next]
+      fitWidth()
+      return
+    }
+
+    busy = true
+    const incoming = document.createElement('span')
+    incoming.className = 'hero-tagline__word is-incoming'
+    incoming.textContent = words[next]
+    phrase.append(incoming)
+    phrase.style.width = `${incoming.offsetWidth}px`
+    incoming.getBoundingClientRect()
+    incoming.classList.replace('is-incoming', 'is-current')
+    old.classList.replace('is-current', 'is-leaving')
+    setTimeout(() => {
+      old.remove()
+      busy = false
+    }, slideTime + 20)
+  }
+
+  function advance() {
+    if (busy) return
+    index = (index + 1) % words.length
+    show(index)
+  }
+
+  /* Wait a few seconds so the full line is read first, then keep going unless paused. */
+  function schedule(delay = readTime) {
+    clearTimeout(timer)
+    if (motion.matches) return
+    timer = setTimeout(() => {
+      if (!paused && !document.hidden) advance()
+      schedule()
+    }, delay)
+  }
+
+  phrase.addEventListener('click', () => {
+    advance()
+    schedule()
+  })
+  ;['pointerenter', 'focusin'].forEach(name => phrase.addEventListener(name, () => { paused = true }))
+  ;['pointerleave', 'focusout'].forEach(name => phrase.addEventListener(name, () => { paused = false }))
+
+  window.addEventListener('resize', fitWidth)
+  motion.addEventListener('change', () => schedule())
+  fitWidth()
+  if (document.fonts) document.fonts.ready.then(fitWidth)
+  schedule(readTime + 600)
 })()
 
 

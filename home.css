@@ -686,20 +686,96 @@
   font-size: 22px;
   font-weight: 500;
   letter-spacing: .01em;
-  line-height: 1.45;
+  line-height: var(--tagline-line);
   text-wrap: balance;
+
+  /* Phrase settings: line height, slide time, how long each phrase stays and its inner padding. */
+  --tagline-line: 1.45;
+  --phrase-time: 420ms;
+  --phrase-hold: 3200ms;
+  --phrase-pad: .5em;
 }
 
 .hero-tagline__line { white-space: nowrap; }
 
-.hero-tagline__accent {
+/* Rotating Phrase: the word slides up and out while the next one slides in from below. */
+/* Four separate rounded corners frame it, using the same corner curve as the buttons. */
+.hero-tagline__phrase {
+  --bracket-color: color-mix(in srgb, var(--plum) 80%, transparent);
+  --bracket-len: 11px;
+  --bracket-reach: 11px;
+  --bracket-radius: .45em;
+  --bracket-width: 2px;
+
+  position: relative;
+  display: inline-block;
+  box-sizing: content-box;
+  height: calc(var(--tagline-line) * 1em);
+  padding: 0 var(--phrase-pad);
+  border: 0;
+  border-radius: var(--bracket-radius);
+  background: transparent;
   color: var(--plum);
-  font-family: inherit;
-  font-size: 1em;
-  font-style: normal;
+  cursor: pointer;
+  font: inherit;
   font-weight: 700;
+  letter-spacing: inherit;
+  overflow: hidden;
+  text-align: left;
+  vertical-align: bottom;
+  transition: width var(--phrase-time) var(--ease-out), background-color 200ms ease;
+}
+
+/* A full outline that a mask cuts down to its four corners. */
+.hero-tagline__phrase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: var(--bracket-width) solid var(--bracket-color);
+  border-radius: inherit;
+  corner-shape: inherit;
+  pointer-events: none;
+  mask:
+    linear-gradient(#000 0 0) top left / var(--bracket-len) var(--bracket-reach) no-repeat,
+    linear-gradient(#000 0 0) top right / var(--bracket-len) var(--bracket-reach) no-repeat,
+    linear-gradient(#000 0 0) bottom left / var(--bracket-len) var(--bracket-reach) no-repeat,
+    linear-gradient(#000 0 0) bottom right / var(--bracket-len) var(--bracket-reach) no-repeat;
+  transition: border-color 200ms ease, mask-size 200ms ease;
+}
+
+.hero-tagline__phrase:is(:hover, :focus-visible) {
+  --bracket-color: var(--plum);
+  --bracket-len: 15px;
+
+  /* Just over half the height, so the top and bottom marks meet on each side. */
+  --bracket-reach: 51%;
+  background-color: color-mix(in srgb, var(--plum) 8%, transparent);
+}
+.hero-tagline__phrase:focus-visible { outline: var(--focus-ring); outline-offset: 4px; }
+
+/* Same smoother corner as the buttons where the browser supports it. */
+@supports (corner-shape: squircle) {
+  .hero-tagline__phrase { corner-shape: squircle; }
+}
+
+.hero-tagline__word {
+  display: block;
+  white-space: nowrap;
+  transition: transform var(--phrase-time) var(--ease-out), opacity var(--phrase-time) ease;
+}
+.hero-tagline__word:not(.is-current) { position: absolute; top: 0; left: var(--phrase-pad); }
+.hero-tagline__word.is-incoming { transform: translateY(100%); opacity: 0; }
+.hero-tagline__word.is-leaving { transform: translateY(-100%); opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-tagline__phrase, .hero-tagline__word { transition: none; }
 }
 
 @media (max-width: 680px) {
-  .hero-tagline { margin-top: 46px; font-size: 18px; }
+  .hero-tagline { margin-top: 46px; font-size: 18px; --phrase-pad: .25em; }
+}
+
+/* On narrow phones the longest phrase would wrap, so keep two lines and the tagline never changes height. */
+@media (max-width: 420px) {
+  .hero-tagline__line { display: block; }
 }

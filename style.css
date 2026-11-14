@@ -23,6 +23,7 @@
   --text-lg: 20px;
   --hit-target: 44px;
   --btn-lift: translateY(-2px);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
   --focus-ring: 2px solid var(--gold);
   --focus-ring-offset: 5px;
   --font-serif: "Cormorant Garamond", Georgia, serif;
@@ -626,6 +627,7 @@ html[data-page-transition="ready"] {
 @media (max-width: 680px) {
   #bookshelf .spirit-light:not(:nth-child(3n + 1)) { display: none; }
   #projects .spirit-light:nth-child(even) { display: none; }
+  #background .spirit-light:nth-child(even) { display: none; }
 }
 
 /* Off-screen sections hold their lights and shelf sprites mid-motion. */
