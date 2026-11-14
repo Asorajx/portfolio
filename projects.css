@@ -354,14 +354,14 @@
   padding: 8px 16px;
   border: 1px solid color-mix(in srgb, var(--ink) 55%, var(--line));
   border-radius: 999px;
-  background: transparent;
+  background: linear-gradient(var(--ink), var(--ink)) no-repeat left / 0% 100%;
   color: var(--ink);
   font-size: 13px;
   font-weight: 700;
   line-height: 1;
   transition:
     transform 160ms ease,
-    background 160ms ease,
+    background-size 260ms ease,
     border-color 160ms ease,
     color 160ms ease;
 }
@@ -370,7 +370,8 @@
 .project-detail-button:focus-visible {
   transform: var(--btn-lift);
   border-color: var(--ink);
-  background: color-mix(in srgb, var(--ink) 7%, transparent);
+  background-size: 100% 100%;
+  color: var(--paper);
 }
 
 .project-detail-button[hidden] {
@@ -384,15 +385,44 @@
 
 .project-detail-button--primary {
   border-color: var(--ink);
-  background: var(--ink);
+  background: linear-gradient(color-mix(in srgb, var(--ink) 86%, var(--paper)), color-mix(in srgb, var(--ink) 86%, var(--paper))) no-repeat left / 0% 100% var(--ink);
   color: var(--paper);
 }
 
 .project-detail-button--primary:hover,
 .project-detail-button--primary:focus-visible {
   border-color: var(--ink);
-  background: color-mix(in srgb, var(--ink) 86%, var(--paper));
+  background-size: 100% 100%;
   color: var(--paper);
+}
+
+/* Flying Arrow: the arrow slides out top right while a copy slides in from bottom left. */
+.project-detail-arrow {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 1.2em;
+  height: 1.2em;
+  overflow: hidden;
+}
+
+.project-detail-arrow > span:last-child {
+  position: absolute;
+  transform: translate(-150%, 150%);
+}
+
+.project-detail-button:is(:hover, :focus-visible) .project-detail-arrow > span:first-child {
+  transition: transform 300ms ease-in-out;
+  transform: translate(150%, -150%);
+}
+
+.project-detail-button:is(:hover, :focus-visible) .project-detail-arrow > span:last-child {
+  transition: transform 300ms ease-in-out 100ms;
+  transform: translate(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-detail-button .project-detail-arrow > span { transition: none !important; }
 }
 
 .project-action-icon {
@@ -528,6 +558,7 @@
 }
 
 .project-plate-figure {
+  position: relative;
   max-width: 720px;
   margin: 0 auto;
   padding: 14px;
@@ -580,8 +611,36 @@
   display: block;
   border-radius: 4px;
   box-shadow: 0 24px 70px rgba(0, 0, 0, .5);
+  max-width: none;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-drag: none;
   transform-origin: top left;
+  cursor: default;
 }
+.image-zoom__image.is-zoomable { cursor: zoom-in; }
+.image-zoom__image.is-zoomed { cursor: grab; }
+.image-zoom__image.is-zoomed:active { cursor: grabbing; }
+
+.image-zoom__close {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  padding: 0 0 3px;
+  border: 1px solid rgba(255, 255, 255, .35);
+  border-radius: 50%;
+  background: rgba(8, 12, 10, .6);
+  color: #faf6e9;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.image-zoom__close:hover,
+.image-zoom__close:focus-visible { background: rgba(250, 246, 233, .2); }
 
 .project-then-now-note {
   max-width: 640px;
@@ -649,6 +708,145 @@
   border: 0;
   object-fit: cover;
 }
+
+/* Demo Track: a video and images side by side, snapped one at a time. */
+/* The height follows the current slide, set from projects.js. */
+.project-demo-track {
+  display: flex;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  transition: height 260ms ease;
+}
+.project-demo-track::-webkit-scrollbar { display: none; }
+.project-demo-track:focus-visible { outline: 2px solid color-mix(in srgb, var(--ink) 45%, transparent); outline-offset: 2px; }
+
+.project-demo-slide {
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 16 / 10;
+  background: var(--surface-2);
+  scroll-snap-align: center;
+}
+
+.project-demo-slide > :is(.demo-video, img) {
+  display: block;
+  width: 100%;
+  min-height: 0;
+}
+.project-demo-slide > img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  max-height: 75vh;
+}
+.project-demo-slide .demo-video__media { max-height: 75vh; }
+
+/* Demo Controls */
+/* The counter and arrows position against the figure; only the dots sit in the flow. */
+.project-demo-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.project-demo-count {
+  position: absolute;
+  z-index: 3;
+  top: 24px;
+  right: 24px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(8, 12, 10, .62);
+  color: #faf6e9;
+  font-size: var(--text-micro);
+  font-variant-numeric: tabular-nums;
+  pointer-events: none;
+  transition: opacity 250ms ease;
+}
+.project-demo-count.is-idle { opacity: 0; }
+
+/* Arrows sit beside the figure, level with the middle of the frame (the dots row is about 30px). */
+.project-demo-arrow {
+  position: absolute;
+  top: calc(50% - 15px);
+  width: 36px;
+  height: 36px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  padding: 0 0 2px;
+  border: 1px solid color-mix(in srgb, var(--ink) 55%, var(--line));
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(var(--ink), var(--ink)) no-repeat var(--fill-side) / 0% 100%;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-size 260ms ease, color 160ms ease, opacity 160ms ease;
+}
+.project-demo-arrow:hover:not(:disabled),
+.project-demo-arrow:focus-visible { background-size: 100% 100%; color: var(--paper); }
+.project-demo-arrow:disabled { opacity: .35; cursor: default; }
+.project-demo-arrow--previous { left: -54px; --fill-side: right; --glyph-out: -26px; --glyph-in: 26px; }
+.project-demo-arrow--next { right: -54px; --fill-side: left; --glyph-out: 26px; --glyph-in: -26px; }
+
+/* Sliding Glyph: the arrow slides out while a copy slides in from the other side. */
+.project-demo-arrow > span:last-child {
+  position: absolute;
+  transform: translateX(var(--glyph-in));
+}
+.project-demo-arrow:hover:not(:disabled) > span:first-child,
+.project-demo-arrow:focus-visible > span:first-child {
+  transition: transform 300ms ease-in-out;
+  transform: translateX(var(--glyph-out));
+}
+.project-demo-arrow:hover:not(:disabled) > span:last-child,
+.project-demo-arrow:focus-visible > span:last-child {
+  transition: transform 300ms ease-in-out 100ms;
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-demo-arrow, .project-demo-arrow > span { transition: none !important; }
+}
+
+/* No room beside the figure on narrow screens; swiping and the dots do the job. */
+@media (max-width: 860px) {
+  .project-demo-arrow { display: none; }
+}
+
+.project-demo-dots {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Each dot keeps a larger click area than its visible size. */
+.project-demo-dot {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+.project-demo-dot::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 30%, transparent);
+  transition: background 160ms ease, transform 160ms ease;
+}
+.project-demo-dot[aria-current="true"]::before { background: var(--ink); transform: scale(1.25); }
 
 /* Keep screen-recording demos fully visible inside the preview frame. */
 .project-demo-frame > video {

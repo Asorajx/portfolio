@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta
     name="description"
-    content="Project details for Mosaic by Jun Xiang."
+    content="Project details by Jun Xiang."
   >
-  <title>Mosaic | Jun Xiang</title>
+  <title>Projects | Jun Xiang</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -198,62 +198,7 @@
           <a class="project-back-link" href="index.html#bookshelf">← Back to projects</a>
 
           <div class="project-switcher" role="tablist" aria-label="Project collection">
-              <button
-                class="project-switcher-card project-switcher-card--1 is-featured is-active"
-                type="button"
-                role="tab"
-                aria-selected="true"
-                aria-controls="projectContent"
-                data-project-tab="secure-data-sharing"
-                style="--book-x:6px;"
-              >
-                <span class="project-switcher-number">01</span>
-                <strong class="project-switcher-title">
-                Mosaic <span class="project-switcher-featured" aria-hidden="true">✦</span>
-              </strong>
-              </button>
-
-              <button
-                class="project-switcher-card project-switcher-card--2"
-                type="button"
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                aria-controls="projectContent"
-                data-project-tab="honeypot"
-                style="--book-x:-4px;"
-              >
-                <span class="project-switcher-number">02</span>
-                <strong>Honeypot</strong>
-              </button>
-
-              <button
-                class="project-switcher-card project-switcher-card--3"
-                type="button"
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                aria-controls="projectContent"
-                data-project-tab="writepretty"
-                style="--book-x:3px;"
-              >
-                <span class="project-switcher-number">03</span>
-                <strong>WritePretty</strong>
-              </button>
-
-              <button
-                class="project-switcher-card project-switcher-card--4"
-                type="button"
-                role="tab"
-                tabindex="-1"
-                aria-selected="false"
-                aria-controls="projectContent"
-                data-project-tab="loop"
-                style="--book-x:-2px;"
-              >
-                <span class="project-switcher-number">04</span>
-                <strong>LOOP</strong>
-              </button>
+              <!-- projects.js builds the tabs from project-data.js. -->
           </div>
         </section>
 
@@ -262,24 +207,21 @@
              Active Project
              ========================= -->
 
-        <!-- Mosaic provides the default project content. -->
-        <!-- projects.js replaces these values when another project is selected. -->
+        <!-- projects.js fills these fields from project-data.js; the first project is the default. -->
         <div id="projectContent" class="project-content" role="tabpanel" aria-label="Project details">
           <header class="project-detail-hero">
             <div class="project-detail-intro">
               <div class="project-title-meta">
-                <p id="projectType" class="eyebrow">Full-Stack</p>
-                <span id="projectFeaturedStatus" class="project-featured-status">
+                <p id="projectType" class="eyebrow"></p>
+                <span id="projectFeaturedStatus" class="project-featured-status" hidden>
                   <span class="project-featured-status__star" aria-hidden="true">✦</span>
                   Featured
                 </span>
               </div>
 
-              <h1 id="projectTitle">Mosaic</h1>
+              <h1 id="projectTitle"></h1>
 
-              <p id="projectSummary" class="project-detail-summary">
-                Secure Data Sharing Platform for Collaborative Research · Final Year Capstone Project.
-              </p>
+              <p id="projectSummary" class="project-detail-summary"></p>
 
               <div class="project-detail-actions">
                 <a
@@ -290,7 +232,7 @@
                   rel="noopener noreferrer"
                   hidden
                 >
-                  Live demo <span aria-hidden="true">↗</span>
+                  Live demo <span class="project-detail-arrow" aria-hidden="true"><span>↗</span><span>↗</span></span>
                 </a>
 
                 <a
@@ -312,7 +254,7 @@
                   rel="noopener noreferrer"
                   hidden
                 >
-                  Documentation <span aria-hidden="true">↗</span>
+                  Documentation <span class="project-detail-arrow" aria-hidden="true"><span>↗</span><span>↗</span></span>
                 </a>
               </div>
             </div>
@@ -326,23 +268,23 @@
               <dl class="project-record-list">
                 <div>
                   <dt>Date</dt>
-                  <dd id="projectDate">July 2026 - Present</dd>
+                  <dd id="projectDate"></dd>
                   <small class="project-record-updated" id="projectUpdated" hidden></small>
                 </div>
 
                 <div>
                   <dt>Type</dt>
-                  <dd id="projectRecordType">Full-Stack</dd>
+                  <dd id="projectRecordType"></dd>
                 </div>
 
                 <div>
                   <dt>Team</dt>
-                  <dd id="projectTeamStatus">Solo</dd>
+                  <dd id="projectTeamStatus"></dd>
                 </div>
 
                 <div>
                   <dt>Focus</dt>
-                  <dd id="projectFocus">Secure collaboration</dd>
+                  <dd id="projectFocus"></dd>
                 </div>
               </dl>
             </aside>
@@ -392,12 +334,12 @@
 
         <section id="projectDemoSection" class="project-detail-section project-plate" data-chapter aria-labelledby="demoTitle">
           <div class="project-plate-heading">
-            <p class="eyebrow"><span data-chapter-number>II</span> · Demo</p>
-            <h2 id="demoTitle">See it in action</h2>
+            <p class="eyebrow"><span data-chapter-number>II</span> · Preview</p>
+            <h2 id="demoTitle">Take a look</h2>
           </div>
 
           <figure class="project-plate-figure">
-            <!-- Replace this placeholder with an image, video, GIF, or iframe. -->
+            <!-- Filled from project-data.js with a video, images, or both. -->
             <div class="project-demo-frame">
               <div class="project-demo-placeholder">
                 <span id="projectDemoTitle">No preview currently available</span>

@@ -86,6 +86,100 @@ const projectDetails = window.portfolioProjects
     )
   }
 
+  /* Wrap a video or image so each one fills the track width. */
+  function createDemoSlide(content) {
+    const slide = document.createElement('div')
+    slide.className = 'project-demo-slide'
+    slide.append(content)
+
+    /* Use a 16:10 box until the real size is known, then follow the media. */
+    const settle = () => { slide.style.aspectRatio = 'auto' }
+    if (content.tagName === 'IMG') {
+      content.complete && content.naturalWidth ? settle() : content.addEventListener('load', settle, { once: true })
+    } else {
+      content.querySelector('video')?.addEventListener('loadedmetadata', settle, { once: true })
+    }
+    return slide
+  }
+
+  /* Arrows, dots and a counter for the demo track; the frame height follows the current slide. */
+  function createDemoControls(track) {
+    const slides = [...track.children]
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const controls = document.createElement('div')
+    controls.className = 'project-demo-controls'
+    controls.innerHTML = `
+      <span class="project-demo-count" aria-live="polite"></span>
+      <button class="project-demo-arrow project-demo-arrow--previous" type="button" aria-label="Previous preview"><span aria-hidden="true">‹</span><span aria-hidden="true">‹</span></button>
+      <button class="project-demo-arrow project-demo-arrow--next" type="button" aria-label="Next preview"><span aria-hidden="true">›</span><span aria-hidden="true">›</span></button>
+      <div class="project-demo-dots"></div>
+    `
+    const [previous, next] = controls.querySelectorAll('.project-demo-arrow')
+    const count = controls.querySelector('.project-demo-count')
+    const dots = slides.map((_, index) => {
+      const dot = document.createElement('button')
+      dot.className = 'project-demo-dot'
+      dot.type = 'button'
+      dot.setAttribute('aria-label', `Show preview ${index + 1}`)
+      dot.addEventListener('click', () => goTo(index))
+      return dot
+    })
+    controls.querySelector('.project-demo-dots').append(...dots)
+
+    function current() {
+      return Math.round(track.scrollLeft / track.clientWidth) || 0
+    }
+
+    function goTo(index) {
+      const target = Math.max(0, Math.min(slides.length - 1, index))
+      track.scrollTo({ left: target * track.clientWidth, behavior: motion.matches ? 'auto' : 'smooth' })
+    }
+
+    /* Fade the counter out after 2.5 seconds without activity, like the video controls. */
+    let idleTimer
+    function wakeCount() {
+      count.classList.remove('is-idle')
+      clearTimeout(idleTimer)
+      idleTimer = setTimeout(() => {
+        if (count.isConnected) count.classList.add('is-idle')
+      }, 2500)
+    }
+
+    function update() {
+      wakeCount()
+      const index = Math.min(current(), slides.length - 1)
+      track.style.height = `${slides[index].offsetHeight}px`
+      count.textContent = `${index + 1} / ${slides.length}`
+      previous.disabled = index === 0
+      next.disabled = index === slides.length - 1
+      dots.forEach((dot, dotIndex) => dot.setAttribute('aria-current', String(dotIndex === index)))
+    }
+
+    previous.addEventListener('click', () => goTo(current() - 1))
+    next.addEventListener('click', () => goTo(current() + 1))
+    track.addEventListener('scroll', update, { passive: true })
+    ;[track, controls].forEach(area => {
+      ;['pointermove', 'pointerdown', 'focusin'].forEach(name => area.addEventListener(name, wakeCount))
+      /* A mouse leaving hides the counter at once; touch relies on the timer. */
+      area.addEventListener('pointerleave', event => {
+        if (event.pointerType === 'touch') return wakeCount()
+        clearTimeout(idleTimer)
+        count.classList.add('is-idle')
+      })
+    })
+    track.addEventListener('keydown', event => {
+      if (event.target !== track) return
+      if (event.key === 'ArrowLeft') goTo(current() - 1)
+      if (event.key === 'ArrowRight') goTo(current() + 1)
+    })
+
+    /* Resize the frame when a slide changes size (media loaded, window resized). */
+    const observer = new ResizeObserver(update)
+    slides.forEach(slide => observer.observe(slide))
+    update()
+    return controls
+  }
+
   /* Update the page content for the selected project. */
   function showProject(projectId, updateHash = true) {
     const project = getProject(projectId)
@@ -110,11 +204,35 @@ const projectDetails = window.portfolioProjects
       if (project.github) fields.github.href = project.github
 
       /* Demo Preview */
-      if (project.hasVideoDemo) {
+      if (project.hasDemo) {
+        const images = project.demoImages || []
+        fields.demoFrame.parentElement.querySelector('.project-demo-controls')?.remove()
         fields.demoFrame.classList.toggle('has-video', !!project.videoDemo)
-        if (project.videoDemo) {
-          /* Recreate controls when a different project is selected. */
-          fields.demoFrame.replaceChildren(window.DemoVideo.create(project.videoDemo, `${project.title} demonstration`))
+        if (project.videoDemo || images.length) {
+          /* One scrollable track: the video first, then each image. */
+          const track = document.createElement('div')
+          track.className = 'project-demo-track'
+          if (project.videoDemo) {
+            /* Recreate controls when a different project is selected. */
+            track.append(createDemoSlide(window.DemoVideo.create(project.videoDemo, `${project.title} demonstration`)))
+          }
+          images.forEach((source, index) => {
+            const image = document.createElement('img')
+            image.src = source
+            image.alt = `${project.title} screenshot ${index + 1}`
+            image.className = 'project-zoomable'
+            image.tabIndex = 0
+            image.setAttribute('role', 'button')
+            track.append(createDemoSlide(image))
+          })
+          fields.demoFrame.replaceChildren(track)
+          if (track.children.length > 1) {
+            track.tabIndex = 0
+            track.setAttribute('role', 'group')
+            track.setAttribute('aria-roledescription', 'carousel')
+            track.setAttribute('aria-label', `${project.title} previews`)
+            fields.demoFrame.after(createDemoControls(track))
+          }
         } else {
           fields.demoFrame.innerHTML = `
             <div class="project-demo-placeholder">

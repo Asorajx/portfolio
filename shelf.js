@@ -68,7 +68,13 @@ function renderProjects(container) {
   if (!container) return
   container.replaceChildren()
 
-  const capacity = 6
+  /* Wide screens fit more books per shelf; phones keep the smaller row. */
+  const phoneWidth = window.matchMedia('(max-width: 680px)')
+  const capacity = phoneWidth.matches ? 6 : 8
+  if (!container.dataset.repackOnResize) {
+    container.dataset.repackOnResize = 'true'
+    phoneWidth.addEventListener('change', () => renderProjects(container))
+  }
   let used = 0
   let shelf = createShelfRow()
   container.appendChild(shelf.row)
