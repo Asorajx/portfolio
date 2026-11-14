@@ -18,7 +18,7 @@ window.portfolioProjects = [
     team: 'group',
     summary: 'Secure Data Sharing Platform for Collaborative Research · Final Year Capstone Project.',
     // Buttons
-    liveDemo: '',
+    liveDemo: 'https://app.mosaic-fyp.com/',
     github: 'https://github.com/fyp-26-s3-07/secure-data-sharing-platform',
     documentation: '',
     // Project Record
@@ -32,7 +32,7 @@ window.portfolioProjects = [
       tools: [],
     },
     // Demo
-    hasVideoDemo: true,
+    hasDemo: true,
     videoDemo: '',
     // Reason
     reasonTitle: '',
@@ -67,7 +67,7 @@ window.portfolioProjects = [
       tools: ['Cowrie', 'Hydra', 'Ubuntu 22.04', 'Kali Linux', 'Oracle VirtualBox'],
     },
     // Demo
-    hasVideoDemo: false,
+    hasDemo: false,
     videoDemo: '',
     // Reason
     reasonTitle: '',
@@ -103,8 +103,8 @@ window.portfolioProjects = [
       tools: [],
     },
     // Demo
-    hasVideoDemo: true,
-    videoDemo: 'assets/demos/WritePretty-Demo2.mp4',
+    hasDemo: true,
+    videoDemo: 'assets/previews/WritePretty-Demo2.mp4',
     // Then & Now
     oldImage: 'assets/images/WritePretty-v1.png',
     thenNowNote: 'The original version hid the cleanup controls in a separate panel away from the text, and its punctuation rule could wrongly alter names like “Fuse.js”. The updated version keeps the controls beside the editor as an icon rail and refines the rules to leave such names intact, so the tool is easier to use and more reliable.',
@@ -141,13 +141,13 @@ window.portfolioProjects = [
       tools: [],
     },
     // Demo
-    hasVideoDemo: true,
-    videoDemo: 'assets/demos/LOOP-Demo2.mp4',
+    hasDemo: true,
+    videoDemo: 'assets/previews/LOOP-Demo2.mp4',
     // Reason
     reasonTitle: '',
     reason: 'I built LOOP as a way to practise and reinforce what I\'d learnt about Python OOP in school, while also creating something that could help other students understand these concepts better. I wanted to make it easier to visualise how objects interact, how methods run, and how their states change in real time.',
     // Then & Now
-    oldDemo: 'assets/demos/LOOP-Demo.mp4',
+    oldDemo: 'assets/previews/LOOP-Demo1.mp4',
     thenNowNote: 'The original interface was cluttered, making the source code difficult to follow. The updated version has a cleaner, more intuitive layout, with clearer code visualization and brief explanations of each concept, so Python OOP is easier to understand.',
   },
   {
@@ -178,11 +178,50 @@ window.portfolioProjects = [
       tools: ['Vite', 'Vitest', 'GitHub Actions CI/CD'],
     },
     // Demo
-    hasVideoDemo: true,
-    videoDemo: 'assets/demos/Starjot-Demo.mp4',
+    hasDemo: true,
+    videoDemo: 'assets/previews/Starjot-Demo.mp4',
     // Reason
     reasonTitle: '',
     reason: 'I use note-taking apps a lot for school and projects, mainly Notion, but lately I\'ve found it a little too bloated with features I don\'t really need. I was curious about what a simpler alternative could look like, so I decided to experiment with building my own workspace for notes and project work. I also wanted to explore the idea of local data storage rather than relying entirely on the cloud. This led me to build Starjot.',
+  },
+  {
+    // Bookshelf
+    id: 'exceldex',
+    bookTitle: 'ExcelDex',
+    bookSize: 'regular',
+    // Project Switcher
+    shortTitle: 'ExcelDex',
+    // Hero
+    title: 'ExcelDex',
+    type: 'Web Application',
+    featured: false,
+    team: 'solo',
+    summary: 'Search-first quick reference for Excel functions and tips.',
+    // Buttons
+    liveDemo: 'https://asorajx.github.io/exceldex/',
+    github: 'https://github.com/Asorajx/exceldex',
+    documentation: '',
+    // Project Record
+    date: 'November 2026',
+    focus: 'Excel quick reference',
+    // Overview
+    description: 'A browser-based quick reference for Excel functions and tips. Search by function name, task, or even a typo, then get a simple explanation, sample data, and an editable formula to copy into Excel. Search quality is measured against a set of test queries, including held-out ones.',
+    tech: {
+      frontend: ['React', 'TypeScript', 'CSS'],
+      backend: [],
+      tools: ['Vite', 'Vitest', 'axe-core'],
+    },
+    // Demo
+    hasDemo: true,
+    videoDemo: '',
+    demoImages: [
+      'assets/previews/ExcelDex-Preview1.png',
+      'assets/previews/ExcelDex-Preview2.png',
+      'assets/previews/ExcelDex-Preview3.png',
+    ],
+    // Reason
+    reasonTitle: '',
+    reason: 'I wanted to get better at Excel, and building a quick reference for it was a way to go through the functions and shortcuts I wasn\'t familiar with. My family also finds Excel confusing sometimes, so I made it something they could use too.',
   },
 ]
 
@@ -196,7 +235,7 @@ window.syncProjectSections = function syncProjectSections(root, project) {
   if (!root || !project) return
 
   const fields = {
-    projectDemoSection: !!project.hasVideoDemo,
+    projectDemoSection: !!project.hasDemo,
     projectReasonSection: !!project.reason,
     projectThenNowSection: !!(project.oldDemo || project.oldImage || project.thenNowNote),
     projectDemo: !!project.liveDemo,
