@@ -111,6 +111,7 @@
   /* Click toggles between fitted and real size, unless it was the end of a drag. */
   function onImageClick(event) {
     event.stopPropagation()
+    if (!active) return
     if (moved > 4) return (moved = 0)
     if (active.maxZoom <= 1.05) return
     setZoom(active.zoom > 1.01 ? 1 : active.maxZoom, event.clientX, event.clientY, true)
@@ -118,10 +119,14 @@
 
   function onWheel(event) {
     event.preventDefault()
+    if (!active) return
     setZoom(active.zoom * Math.exp(-event.deltaY * .002), event.clientX, event.clientY)
   }
 
   function onPointerDown(event) {
+    /* The viewer is already closing, so ignore new touches. */
+    if (!active) return
+
     /* Stop the browser starting its own image drag, which would cancel the pan. */
     event.preventDefault()
     event.currentTarget.setPointerCapture(event.pointerId)
@@ -134,6 +139,7 @@
   }
 
   function onPointerMove(event) {
+    if (!active) return
     const previous = pointers.get(event.pointerId)
     if (!previous) return
     const point = { x: event.clientX, y: event.clientY }

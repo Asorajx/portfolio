@@ -960,7 +960,7 @@ document.querySelectorAll('.footer-back-link').forEach(link => {
   }, { threshold: 0.15, rootMargin: '0px 0px -8% 0px' })
 
   const sections = document.querySelectorAll(
-    '.hero-copy, .hero-note-wrap, .featured-work-heading, .featured-list, .bookshelf-sign, .shelf-row, .about-page-grid > h1, .about-intro, .listening-note, .project-collection, .project-detail-intro, .project-record, .project-detail-section, .project-bottom-navigation',
+    '.hero-copy, .hero-note-wrap, .featured-work-heading, .featured-list, .bookshelf-sign, .shelf-row, .about-page-grid > h1, .about-intro, .listening-note, .project-collection, .project-detail-intro, .project-record, .project-detail-section, .project-bottom-navigation, .about-background-row',
   )
 
   sections.forEach(element => {

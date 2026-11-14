@@ -58,7 +58,6 @@ const projectDetails = window.portfolioProjects
     description: document.getElementById('projectDescription'),
     reason: document.getElementById('projectReason'),
     documentation: document.getElementById('projectDocumentation'),
-    demoSection: document.getElementById('projectDemoSection'),
     demoFrame: document.getElementById('projectDemoSection')?.querySelector('.project-demo-frame'),
     oldDemo: document.getElementById('projectOldDemo'),
     thenNowNote: document.getElementById('projectThenNowNote'),

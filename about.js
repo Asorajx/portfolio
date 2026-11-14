@@ -164,3 +164,33 @@ function playAboutBorderGlow(motion) {
   window.addEventListener('pagehide', stop, { once: true })
   animation = requestAnimationFrame(draw)
 }
+
+
+
+/* =========================
+   Course List
+   ========================= */
+
+/* Slide each description band in from the edge the pointer enters or leaves by. */
+;(function setupCourseList() {
+  document.querySelectorAll('.about-flow-item').forEach(item => {
+    const setEdge = event => {
+      if (event.pointerType === 'touch') return
+      const box = item.getBoundingClientRect()
+      item.dataset.from = event.clientY < box.top + box.height / 2 ? 'top' : 'bottom'
+    }
+    item.addEventListener('pointerenter', setEdge)
+    item.addEventListener('pointerleave', setEdge)
+
+    /* A tap or Enter opens one row at a time. */
+    item.querySelector('.about-flow-name').addEventListener('click', event => {
+      const open = !item.classList.contains('is-open')
+      document.querySelectorAll('.about-flow-item.is-open').forEach(other => {
+        other.classList.remove('is-open')
+        other.querySelector('.about-flow-name').setAttribute('aria-expanded', 'false')
+      })
+      item.classList.toggle('is-open', open)
+      event.currentTarget.setAttribute('aria-expanded', String(open))
+    })
+  })
+})()
