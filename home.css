@@ -318,36 +318,12 @@
 .hero-actions { display: flex; align-items: center; gap: 12px; margin-top: 30px; }
 .hero-actions-minimal { margin-top: 40px; }
 
-/* Keep the two hero actions visually related while preserving hierarchy. */
+/* Hero button size; the look is shared in style.css. */
 .primary-button,
 .hero-actions .text-link {
   min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   padding: 11px 18px;
-  border: 1px solid var(--green-deep);
   font-size: 14px;
-  font-weight: 700;
-  line-height: 1;
-  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
-}
-
-.primary-button { background: var(--green-deep); color: var(--surface); }
-.primary-button:hover {
-  transform: var(--btn-lift);
-  background: var(--plum-deep);
-  border-color: var(--plum-deep);
-}
-.hero-actions .text-link {
-  border-color: color-mix(in srgb, var(--plum) 68%, var(--line));
-  background: color-mix(in srgb, var(--surface) 20%, transparent);
-  color: var(--plum);
-}
-.hero-actions .text-link:hover {
-  transform: var(--btn-lift);
-  border-color: var(--plum);
-  background: color-mix(in srgb, var(--plum) 11%, transparent);
 }
 
 

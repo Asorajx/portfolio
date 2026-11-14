@@ -14,6 +14,7 @@
   --green-deep: #344c3d;
   --plum: #7a4855;
   --plum-deep: #5e3440;
+  --button-accent: var(--green);
   --gold: #9a7b45;
   --max-width: 1120px;
   --text-micro: 12px;
@@ -66,6 +67,7 @@
   --green-deep: #bfd0a6;
   --plum: #c07c8f;
   --plum-deep: #d59aae;
+  --button-accent: var(--green-deep);
   --gold: #c7a869;
   --shadow: 0 18px 55px rgba(0, 0, 0, 0.24);
   --shelf: #4d4136;
@@ -104,6 +106,9 @@ html {
   scroll-behavior: smooth;
   color-scheme: light;
 }
+
+/* Linked sections stop right under the sticky header line (the header is 67px tall). */
+section[id] { scroll-margin-top: 67px; }
 body {
   margin: 0;
   background:
@@ -700,8 +705,17 @@ html[data-page-transition="ready"] {
 .footer-row {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 32px;
+  align-items: center;
+  gap: 12px 32px;
+  flex-wrap: wrap;
+}
+
+/* Name and tagline share one baseline. */
+.footer-brand {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 16px;
 }
 .footer-name {
   font-family: var(--font-serif);
@@ -710,14 +724,12 @@ html[data-page-transition="ready"] {
   line-height: 1.1;
   color: var(--ink);
 }
-.footer-inner .footer-tagline { margin-top: 6px; }
 
 /* Footer Links */
 .footer-links {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 2px;
+  align-items: center;
+  gap: 14px;
 }
 .footer-contact,
 .footer-back-link {
@@ -728,16 +740,16 @@ html[data-page-transition="ready"] {
   color: var(--muted);
   transition: color .2s ease, text-decoration-color .2s ease;
 }
+.footer-contact,
 .footer-back-link { text-decoration: none; }
-.footer-contact {
-  text-decoration: underline;
-  text-decoration-color: var(--line);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 6px;
+
+/* Thin divider between the two links. */
+.footer-back-link {
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
 }
 .footer-contact:hover,
 .footer-back-link:hover { color: var(--green-deep); }
-.footer-contact:hover { text-decoration-color: var(--green-deep); }
 .footer-contact:focus-visible,
 .footer-back-link:focus-visible {
   outline: var(--focus-ring);
@@ -756,6 +768,7 @@ html[data-page-transition="ready"] {
 @media (max-width: 680px) {
   .container { width: min(calc(100% - 30px), var(--max-width)); }
   .site-header { position: relative; }
+  section[id] { scroll-margin-top: 0; }
   .nav-wrapper { min-height: 72px; flex-wrap: wrap; gap: 12px 18px; padding: 12px 0; }
   .logo { flex: 1; }
 
@@ -846,8 +859,37 @@ html[data-page-transition="ready"] {
   border-color: var(--gold);
   box-shadow: var(--shadow), 0 0 28px color-mix(in srgb, var(--gold) 9%, transparent);
 }
-.text-link span { display: inline-block; transition: transform 220ms ease; }
-.text-link:hover span { transform: translate(2px, -2px); }
+
+/* Flying Arrow: the arrow slides out while a copy slides in from the opposite side. */
+.fly-arrow {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 1.2em;
+  height: 1.2em;
+  overflow: hidden;
+}
+.fly-arrow > span:last-child {
+  position: absolute;
+  transform: translate(-150%, 150%);
+}
+a:is(:hover, :focus-visible) .fly-arrow > span:first-child {
+  transition: transform 300ms ease-in-out;
+  transform: translate(150%, -150%);
+}
+a:is(:hover, :focus-visible) .fly-arrow > span:last-child {
+  transition: transform 300ms ease-in-out 100ms;
+  transform: translate(0);
+}
+
+/* Upward variant for back-to-top links. */
+.fly-arrow--up > span:last-child { transform: translateY(150%); }
+a:is(:hover, :focus-visible) .fly-arrow--up > span:first-child { transform: translateY(-150%); }
+a:is(:hover, :focus-visible) .fly-arrow--up > span:last-child { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .fly-arrow > span { transition: none !important; }
+}
 .primary-button:focus-visible,
 .text-link:focus-visible,
 .featured-display-link:focus-visible,
@@ -864,6 +906,63 @@ html[data-page-transition="ready"] {
     to { opacity: 1; translate: 0 0; filter: blur(0); }
   }
   .primary-button:active, .hero-actions .text-link:active { transform: translateY(1px) scale(.98); }
+}
+
+
+/* =========================
+   Buttons
+   ========================= */
+
+/* Pill buttons: an outline that fills on hover. Primary buttons start filled. */
+.primary-button,
+.hero-actions .text-link,
+.project-detail-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, var(--button-accent) 55%, var(--line));
+  border-radius: 16px;
+  background: linear-gradient(var(--button-accent), var(--button-accent)) no-repeat left / 0% 100%;
+  color: var(--button-accent);
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    transform 160ms ease,
+    background-size 260ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.primary-button:is(:hover, :focus-visible),
+.hero-actions .text-link:is(:hover, :focus-visible),
+.project-detail-button:is(:hover, :focus-visible) {
+  transform: var(--btn-lift);
+  border-color: var(--button-accent);
+  background-size: 100% 100%;
+  color: var(--paper);
+}
+
+/* Squircle: smoother corners where supported; other browsers show the same 16px rounded corners. */
+@supports (corner-shape: squircle) {
+  .primary-button,
+  .hero-actions .text-link,
+  .project-detail-button {
+    corner-shape: squircle;
+  }
+}
+
+/* Primary: solid ink that sweeps to a slightly softer shade. */
+.primary-button,
+.project-detail-button--primary {
+  --button-sweep: color-mix(in srgb, var(--button-accent) 86%, var(--paper));
+  border-color: var(--button-accent);
+  background: linear-gradient(var(--button-sweep), var(--button-sweep)) no-repeat left / 0% 100% var(--button-accent);
+  color: var(--paper);
+}
+
+.primary-button:is(:hover, :focus-visible),
+.project-detail-button--primary:is(:hover, :focus-visible) {
+  background-size: 100% 100%;
 }
 
 
