@@ -298,6 +298,9 @@
   align-items: flex-end;
   gap: 6px;
 }
+
+/* Sprites stand beside the props when everything is on one shelf. */
+.shelf-row:only-child .shelf-sprites { right: 200px; bottom: 0; }
 .shelf-sprite--slime { width: 42px; }
 .shelf-sprite--mushroom { width: 46px; }
 .shelf-sprite--potion { width: 50px; }

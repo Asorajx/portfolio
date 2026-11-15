@@ -5,6 +5,9 @@
 /* Stack Size */
 const stackSize = 2
 
+/* Solo Shelf Reserve */
+const soloShelfReserve = 180
+
 /* Small helper to avoid repeating createElement/className/textContent setup. */
 const makeElement = (tag, className, text = '') => {
   const element = document.createElement(tag)
@@ -115,12 +118,57 @@ function addShelfProps(container) {
   container.querySelector('.shelf-row:last-child .shelf-books')?.appendChild(props)
 }
 
+/* Pack Stacks */
+function packStacks(stacks, books, reserve = 0) {
+  const style = getComputedStyle(books)
+  const room = books.closest('.project-library').clientWidth - parseFloat(style.paddingLeft) - parseFloat(style.paddingRight) - reserve
+  const gap = parseFloat(style.columnGap) || 0
+  const rows = []
+  let used = 0
+
+  /* Stacks are measured at full length, so they cannot shrink to fit a row. */
+  stacks.forEach(stack => { stack.style.flex = 'none' })
+  const widths = stacks.map(stack => stack.offsetWidth)
+  stacks.forEach(stack => { stack.style.flex = '' })
+
+  stacks.forEach((stack, index) => {
+    const width = widths[index]
+    if (rows.length && used + gap + width <= room) {
+      rows[rows.length - 1].push(stack)
+      used += gap + width
+    } else {
+      rows.push([stack])
+      used = width
+    }
+  })
+  return rows
+}
+
+/* Shelf Layout */
+function layoutStacks(stacks, books) {
+  const rows = packStacks(stacks, books)
+
+  /* A single shelf also holds the sprites beside the props, so it needs extra room. */
+  return rows.length === 1 ? packStacks(stacks, books, soloShelfReserve) : rows
+}
+
+/* Repack Shelves */
+function repackShelves(container) {
+  const rows = [...container.querySelectorAll('.shelf-row')]
+  const stacks = [...container.querySelectorAll('.book-stack')]
+  if (!rows.length) return
+
+  const current = rows.map(row => row.querySelectorAll('.book-stack').length)
+  const next = layoutStacks(stacks, rows[0].querySelector('.shelf-books')).map(items => items.length)
+  if (current.join() !== next.join()) renderProjects(container)
+}
+
 /* Spine Shelves */
 function renderSpineShelves(container) {
-  const compactWidth = window.matchMedia('(max-width: 1060px)')
   if (!container.dataset.repackOnResize) {
     container.dataset.repackOnResize = 'true'
-    compactWidth.addEventListener('change', () => renderProjects(container))
+    new ResizeObserver(() => repackShelves(container)).observe(container)
+    document.fonts?.ready.then(() => repackShelves(container))
   }
   const projects = window.portfolioProjects
   const stacks = []
@@ -133,12 +181,18 @@ function renderSpineShelves(container) {
     stacks.push(stack)
   }
 
-  const stacksPerShelf = compactWidth.matches ? 1 : 2
-  for (let start = 0; start < stacks.length; start += stacksPerShelf) {
+  /* Measure the stacks on one row, then give each shelf as many as fit. */
+  const measure = createShelfRow()
+  measure.books.append(...stacks)
+  container.appendChild(measure.row)
+  const rows = layoutStacks(stacks, measure.books)
+  measure.row.remove()
+
+  rows.forEach(items => {
     const shelf = createShelfRow()
-    shelf.books.append(...stacks.slice(start, start + stacksPerShelf))
+    shelf.books.append(...items)
     container.appendChild(shelf.row)
-  }
+  })
   addShelfSprites(container)
   addShelfProps(container)
 }
