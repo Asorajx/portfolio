@@ -432,7 +432,7 @@ const overlay = document.getElementById('projectOverlay')
 const popup = document.getElementById('projectPopup')
 const reducedProjectMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 const bookPulloutDuration = 580
-const bookTurnDuration = 1100
+const bookTurnDuration = 760
 const bookTurnEasing = 'cubic-bezier(.45, .05, .25, 1)'
 const bookOpenDuration = 440
 const bookZoomDuration = 760
@@ -705,9 +705,10 @@ async function openProject(card) {
   overlay.setAttribute('aria-hidden', 'false')
   document.body.classList.add('popup-open')
 
+  pulloutAnimation = pullOutBook(bounds)
+
   /* Size Preview */
   window.ProjectSkeleton?.sizeBookPreview(popup.querySelector('.project-page-skeleton--shared'))
-  pulloutAnimation = pullOutBook(bounds)
   try { await pulloutAnimation.finished } catch { return }
   if (bookOperation !== operation) return
 
