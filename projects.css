@@ -453,7 +453,7 @@
    ========================= */
 
 .project-detail-section {
-  --band: color-mix(in srgb, var(--green) 14%, var(--paper));
+  --band: color-mix(in srgb, var(--gold) 4%, color-mix(in srgb, var(--paper-deep) 65%, var(--paper)));
   margin-top: 0;
   padding: 48px 0;
 }
