@@ -1407,7 +1407,7 @@ void main() {
       height = Math.max(1, container.clientHeight)
       renderer.dpr = Math.min(
         window.devicePixelRatio || 1,
-        2,
+        1.5,
         Math.sqrt(PIXEL_BUDGET / (width * height)),
       )
       renderer.setSize(width, height)

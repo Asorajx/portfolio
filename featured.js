@@ -181,7 +181,7 @@ function setupCrystalRenderer(crystal) {
       color: lightTheme ? '#c8bd83' : '#8cb994',
       theme: 'dark',
       size: 0.94,
-      particleCount: 5000,
+      particleCount: 2500,
       crackle: 0.65,
       glow: 0.75,
       fill: 0.32,
@@ -224,7 +224,7 @@ function setupCrystalEffect(crystal, drawBackground) {
   const size = 300
   canvas.width = size
   canvas.height = size
-  const particles = Array.from({ length: 117 }, () => ({
+  const particles = Array.from({ length: 70 }, () => ({
     angle: Math.random() * Math.PI * 2,
     radius: Math.sqrt(Math.random()) * 95,
     phaseX: Math.random() * Math.PI * 2,
@@ -254,7 +254,7 @@ function setupCrystalEffect(crystal, drawBackground) {
 
   function measureBackground() {
     if (!backgroundCanvas) return
-    backgroundRatio = Math.min(window.devicePixelRatio || 1, 2)
+    backgroundRatio = Math.min(window.devicePixelRatio || 1, 1.5)
     backgroundBounds = {
       width: backgroundCanvas.clientWidth,
       height: backgroundCanvas.clientHeight,
