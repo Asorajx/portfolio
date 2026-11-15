@@ -203,6 +203,7 @@ function setupCrystalRenderer(crystal) {
   })
 }
 
+
 /* =========================
    Crystal Ball Animation
    ========================= */

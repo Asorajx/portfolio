@@ -289,6 +289,7 @@ if (themeButton) {
   })
 })()
 
+
 /* =========================
    Book Zoom Arrival
    ========================= */
@@ -430,17 +431,22 @@ const projectContainer = document.getElementById('projectSlider')
 const overlay = document.getElementById('projectOverlay')
 const popup = document.getElementById('projectPopup')
 const reducedProjectMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-const bookLiftDuration = 580
+const bookPulloutDuration = 580
+const bookTurnDuration = 1100
+const bookTurnEasing = 'cubic-bezier(.45, .05, .25, 1)'
 const bookOpenDuration = 440
 const bookZoomDuration = 760
 const bookEasing = 'cubic-bezier(.22, 1, .36, 1)'
 let popupOpen = false
 let bookOperation = 0
-let flightBook
-let flightAnimation
+let pulloutBook
+let pulloutSpine
+let pulloutDuration = bookPulloutDuration
+let pulloutEasing = bookEasing
+let pulloutAnimation
 let flipAnimation
 let zoomAnimations = []
-let flightFrames
+let pulloutFrames
 let landingTransform
 let lastFocusedCard
 
@@ -472,16 +478,28 @@ function setBookPreview(card) {
   })
 }
 
-/* Create Flying Book */
-function createFlyingBook(card) {
+/* Pullout Start */
+/* Spine Pullout Size */
+const coverSizes = { slim: [116, 198], regular: [148, 214], wide: [194, 228] }
+function getPulloutBounds(card) {
   const bounds = card.getBoundingClientRect()
+  if (!card.classList.contains('is-spine')) return bounds
+  const [width, height] = coverSizes[card.dataset.bookSize] || coverSizes.regular
+  const left = bounds.left + bounds.width / 2 - width / 2
+  const top = bounds.bottom - height
+  return { left, top, width, height, right: left + width, bottom: bounds.bottom }
+}
+
+/* Create Book Pullout */
+function createBookPullout(card) {
+  const bounds = getPulloutBounds(card)
   const copy = document.createElement('div')
   const front = card.cloneNode(true)
   const inside = document.createElement('div')
   const watermark = document.createElement('span')
   const styles = getComputedStyle(card)
 
-  copy.className = 'project-flying-book'
+  copy.className = 'book-pullout'
   copy.setAttribute('aria-hidden', 'true')
   copy.style.left = `${bounds.left}px`
   copy.style.top = `${bounds.top}px`
@@ -491,22 +509,70 @@ function createFlyingBook(card) {
   copy.style.setProperty('--book-ink', styles.getPropertyValue('--book-ink'))
 
   /* Cover Faces */
-  front.classList.add('project-flying-book__front')
+  front.classList.remove('is-spine')
+  front.classList.add('book-pullout__front')
   front.removeAttribute('href')
   front.tabIndex = -1
   front.style.boxShadow = styles.boxShadow
   front.style.filter = styles.filter
-  inside.className = 'project-flying-book__inside'
+  inside.className = 'book-pullout__inside'
   watermark.className = 'popup-cover-watermark'
   inside.append(watermark)
   copy.append(front, inside)
   bookCamera.append(copy)
-  card.classList.add('is-lifted')
+  card.classList.add('is-pulled-out')
+
+  /* Spine Box */
+  pulloutSpine = null
+  if (card.classList.contains('is-spine')) {
+    const spine = card.getBoundingClientRect()
+    const startScale = spine.width / bounds.height
+    const thickness = spine.height / startScale
+    const face = (className, css) => {
+      const side = document.createElement('div')
+      side.className = `book-pullout__side ${className}`
+      Object.assign(side.style, css)
+      copy.append(side)
+      return side
+    }
+
+    /* Spine Face */
+    const spineFace = face('book-pullout__spine', {
+      left: `${-thickness}px`,
+      width: `${thickness}px`,
+      height: `${bounds.height}px`,
+      transformOrigin: '100% 50%',
+      transform: 'rotateY(-90deg)',
+    })
+    const spineCard = card.cloneNode(true)
+    spineCard.classList.remove('is-pulled-out')
+    spineCard.querySelector('.spine-peek')?.remove()
+    spineCard.removeAttribute('href')
+    spineCard.tabIndex = -1
+    Object.assign(spineCard.style, {
+      position: 'absolute',
+      left: '0',
+      top: '0',
+      width: `${spine.width}px`,
+      minWidth: '0',
+      maxWidth: 'none',
+      height: `${spine.height}px`,
+      margin: '0',
+      transition: 'none',
+      transform: `translateX(${thickness}px) rotate(90deg) scale(${1 / startScale})`,
+      transformOrigin: '0 0',
+    })
+    spineFace.append(spineCard)
+    face('book-pullout__edge', { top: `${-thickness}px`, width: `${bounds.width}px`, height: `${thickness}px`, transformOrigin: '50% 100%', transform: 'rotateX(90deg)' })
+    face('book-pullout__edge', { top: `${bounds.height}px`, width: `${bounds.width}px`, height: `${thickness}px`, transformOrigin: '50% 0', transform: 'rotateX(-90deg)' })
+    face('book-pullout__pages', { left: `${bounds.width}px`, width: `${thickness}px`, height: `${bounds.height}px`, transformOrigin: '0 50%', transform: 'rotateY(90deg)' })
+    pulloutSpine = { x: spine.left + spine.width / 2, y: spine.top + spine.height / 2, startScale, thickness }
+  }
   return { copy, bounds }
 }
 
-/* Lift Book */
-function liftBook(bounds) {
+/* Pull Out Book */
+function pullOutBook(bounds) {
   const maxWidth = window.innerWidth - 56
   const maxHeight = window.innerHeight - 120
   const scale = Math.max(1, Math.min(
@@ -523,28 +589,53 @@ function liftBook(bounds) {
   const moveX = endX - bounds.left
   const moveY = endY - bounds.top
 
-  /* Lift Keyframe */
-  function frame(progress, rise) {
-    const currentScale = 1 + (scale - 1) * progress
+  /* Pullout Keyframe */
+  const turnAway = Boolean(pulloutSpine)
+  const startScale = turnAway ? pulloutSpine.startScale : 1
+  const pivotY = bounds.height / 2
+  const thickness = turnAway ? pulloutSpine.thickness : 0
+  const startX = turnAway ? pulloutSpine.x - bounds.left : 0
+  const startY = turnAway ? pulloutSpine.y - bounds.top - startScale * pivotY : 0
+  function frame(progress, rise, position = progress, pull = 1, turn = 0, roll = turn) {
+    if (!turnAway) {
+      const currentScale = 1 + (scale - 1) * progress
+      return { offset: progress, transform: `translate3d(${moveX * progress}px, ${moveY * progress - rise}px, 0) scale(${currentScale})` }
+    }
+    const x = startX + (moveX - startX) * position
+    const y = startY + (moveY - startY) * position - rise
+    const currentScale = (startScale + (scale - startScale) * position) * pull
+    const lift = (thickness / 2) * (turn / 90)
+
+    /* Spine Pivot */
     return {
       offset: progress,
-      transform: `translate3d(${moveX * progress}px, ${moveY * progress - rise}px, 0) scale(${currentScale})`,
+      transform: `translate3d(${x}px, ${y}px, 0) scale(${currentScale}) translate3d(0, ${pivotY}px, ${lift - thickness / 2}px) perspective(1400px) rotateZ(${roll}deg) rotateY(${turn}deg) translate3d(0, ${-pivotY}px, ${thickness / 2}px)`,
     }
   }
 
-  flightFrames = [
-    frame(0, 0),
-    frame(.3, 26),
-    frame(.75, 12),
-    frame(1, 0),
-  ]
-  landingTransform = flightFrames[flightFrames.length - 1].transform
+  pulloutFrames = turnAway
+    ? [
+      frame(0, 0, 0, 1, 90, -90),
+      frame(.2, 0, .03, 1.1, 90, -90),
+      frame(.7, 16, .7, 1.02, 20, -20),
+      frame(1, 0, 1, 1, 0),
+    ]
+    : [
+      frame(0, 0),
+      frame(.3, 26),
+      frame(.75, 12),
+      frame(1, 0),
+    ]
+  pulloutDuration = turnAway ? bookTurnDuration : bookPulloutDuration
+  pulloutEasing = turnAway ? bookTurnEasing : bookEasing
+  landingTransform = `translate3d(${moveX}px, ${moveY}px, 0) scale(${scale})`
+
   popup.style.setProperty('--popup-start-width', `${width}px`)
   popup.style.setProperty('--popup-start-height', `${height}px`)
 
-  return flightBook.animate(flightFrames, {
-    duration: bookLiftDuration,
-    easing: bookEasing,
+  return pulloutBook.animate(pulloutFrames, {
+    duration: pulloutDuration,
+    easing: pulloutEasing,
     fill: 'both',
   })
 }
@@ -573,17 +664,17 @@ function zoomIntoPage() {
 
 /* Reset Book */
 function resetProjectBook() {
-  flightAnimation?.cancel()
+  pulloutAnimation?.cancel()
   flipAnimation?.cancel()
   zoomAnimations.forEach(animation => animation.cancel())
   zoomAnimations = []
-  flightAnimation = null
+  pulloutAnimation = null
   flipAnimation = null
-  flightFrames = null
+  pulloutFrames = null
   landingTransform = null
-  flightBook?.remove()
-  flightBook = null
-  lastFocusedCard?.classList.remove('is-lifted')
+  pulloutBook?.remove()
+  pulloutBook = null
+  lastFocusedCard?.classList.remove('is-pulled-out')
   overlay?.classList.remove('zooming', 'flipped', 'arrived', 'open')
   overlay?.setAttribute('aria-hidden', 'true')
   document.body.classList.remove('popup-open')
@@ -607,23 +698,23 @@ async function openProject(card) {
   lastFocusedCard = card
   setBookPreview(card)
 
-  const { copy, bounds } = createFlyingBook(card)
-  flightBook = copy
+  const { copy, bounds } = createBookPullout(card)
+  pulloutBook = copy
 
   overlay.classList.add('open')
   overlay.setAttribute('aria-hidden', 'false')
   document.body.classList.add('popup-open')
 
-  flightAnimation = liftBook(bounds)
   /* Size Preview */
   window.ProjectSkeleton?.sizeBookPreview(popup.querySelector('.project-page-skeleton--shared'))
-  try { await flightAnimation.finished } catch { return }
+  pulloutAnimation = pullOutBook(bounds)
+  try { await pulloutAnimation.finished } catch { return }
   if (bookOperation !== operation) return
 
   /* Landed */
   copy.style.transform = landingTransform
-  flightAnimation.cancel()
-  flightAnimation = null
+  pulloutAnimation.cancel()
+  pulloutAnimation = null
   overlay.classList.add('arrived')
 
   /* Open Cover */
@@ -670,24 +761,24 @@ async function closeProject() {
     if (bookOperation !== operation) return
     flipAnimation.cancel()
     flipAnimation = null
-    flightBook.style.transform = landingTransform
+    pulloutBook.style.transform = landingTransform
     overlay.classList.remove('flipped', 'arrived')
   }
 
-  /* Reverse Lift */
-  if (flightAnimation) {
-    flightAnimation.reverse()
-  } else if (flightFrames) {
-    flightAnimation = flightBook.animate(flightFrames, {
-      duration: bookLiftDuration,
+  /* Reverse Pullout */
+  if (pulloutAnimation) {
+    pulloutAnimation.reverse()
+  } else if (pulloutFrames) {
+    pulloutAnimation = pulloutBook.animate(pulloutFrames, {
+      duration: pulloutDuration,
       direction: 'reverse',
-      easing: bookEasing,
+      easing: pulloutEasing,
       fill: 'both',
     })
   }
 
-  if (flightAnimation) {
-    try { await flightAnimation.finished } catch {}
+  if (pulloutAnimation) {
+    try { await pulloutAnimation.finished } catch {}
   }
   if (bookOperation !== operation) return
 
@@ -737,140 +828,6 @@ window.addEventListener('pageshow', event => {
   ++bookOperation
   resetProjectBook()
 })
-
-
-/* =========================
-   Contact Form
-   ========================= */
-
-const contactModal = document.getElementById('contactModal')
-const contactDialog = document.getElementById('contactDialog')
-const contactClose = document.getElementById('contactClose')
-const contactForm = document.getElementById('contactForm')
-const contactOpeners = document.querySelectorAll('[data-open-contact]')
-let contactFormOpen = false
-let lastContactTrigger
-
-/* Open the form and move keyboard focus into the dialog. */
-function openContactForm(trigger) {
-  if (!contactModal || contactFormOpen) return
-  contactFormOpen = true
-  lastContactTrigger = trigger
-  contactModal.classList.add('open')
-  contactModal.setAttribute('aria-hidden', 'false')
-  document.body.classList.add('popup-open')
-  document.getElementById('contactName')?.focus()
-}
-
-/* Close the form and return focus to the button that opened it. */
-function closeContactForm() {
-  if (!contactModal || !contactFormOpen) return
-  contactFormOpen = false
-  contactModal.classList.remove('open')
-  contactModal.setAttribute('aria-hidden', 'true')
-  document.body.classList.remove('popup-open')
-  lastContactTrigger?.focus()
-}
-
-contactOpeners.forEach(button => {
-  button.addEventListener('click', () => openContactForm(button))
-})
-
-/* Contact Nav: jump to the contact section, then open the form. */
-document.querySelectorAll('[data-contact-nav]').forEach(link => {
-  link.addEventListener('click', () => {
-    if (contactModal) {
-      setTimeout(() => openContactForm(link), 450)
-      return
-    }
-    try { sessionStorage.setItem('portfolio-open-contact', 'ready') } catch {}
-  })
-})
-
-try {
-  if (contactModal && sessionStorage.getItem('portfolio-open-contact')) {
-    sessionStorage.removeItem('portfolio-open-contact')
-    setTimeout(() => openContactForm(document.querySelector('[data-contact-nav]')), 700)
-  }
-} catch {}
-
-contactClose?.addEventListener('click', closeContactForm)
-
-contactModal?.addEventListener('click', event => {
-  if (event.target === contactModal) closeContactForm()
-})
-
-contactDialog?.addEventListener('click', event => event.stopPropagation())
-
-/* Keep Tab focus inside the open contact dialog. */
-contactDialog?.addEventListener('keydown', event => {
-  if (event.key !== 'Tab') return
-
-  const focusable = [
-    ...contactDialog.querySelectorAll(
-      'button:not([disabled]), input:not([disabled]), textarea:not([disabled]), a[href]',
-    ),
-  ]
-
-  if (!focusable.length) return
-
-  const first = focusable[0]
-  const last = focusable[focusable.length - 1]
-
-  if (event.shiftKey && document.activeElement === first) {
-    event.preventDefault()
-    last.focus()
-  } else if (!event.shiftKey && document.activeElement === last) {
-    event.preventDefault()
-    first.focus()
-  }
-})
-
-
-/* Submit the contact form without leaving the portfolio. */
-contactForm?.addEventListener('submit', async event => {
-  event.preventDefault()
-
-  const submitButton = contactForm.querySelector('.contact-submit')
-  const formNote = document.getElementById('contactFormNote')
-
-  if (submitButton.disabled) return
-
-  /* Prepare the form and prevent duplicate submissions. */
-  const formData = new FormData(contactForm)
-  const originalButtonText = 'Send message'
-
-  submitButton.disabled = true
-  submitButton.textContent = 'Sending...'
-  formNote.textContent = 'Sending your message...'
-
-  try {
-    /* Send the message to Formspree in the background. */
-    const response = await fetch(contactForm.action, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        Accept: 'application/json',
-      },
-    })
-
-    if (!response.ok) {
-      throw new Error('Form submission failed')
-    }
-
-    /* Clear the fields only after Formspree confirms success. */
-    contactForm.reset()
-    formNote.textContent = 'Message sent successfully! Thank you for reaching out.'
-    submitButton.textContent = 'Message sent!'
-  } catch (error) {
-    /* Preserve the form inputs so visitors can try again. */
-    formNote.textContent = 'Unable to send your message. Please try again.'
-    submitButton.textContent = originalButtonText
-  } finally {
-    submitButton.disabled = false
-  }
-})
-
 
 
 /* =========================
@@ -966,6 +923,7 @@ document.querySelectorAll('.footer-back-link').forEach(link => {
 
   sections.forEach(element => {
     if (element.closest('.about-page') && !preference.matches) return
+
     /* Hide elements up front so they never flash in before their fade starts. */
     element.classList.add('apothecary-pending')
     observer.observe(element)
@@ -995,6 +953,7 @@ document.querySelectorAll('.footer-back-link').forEach(link => {
 
   const words = phrase.dataset.words.split('|')
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+
   /* The timings live in home.css (--phrase-time and --phrase-hold) so they are changed in one place. */
   const style = getComputedStyle(phrase)
   const slideTime = parseFloat(style.getPropertyValue('--phrase-time')) || 420

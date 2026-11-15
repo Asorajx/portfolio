@@ -75,6 +75,7 @@
   /* Book Preview Size */
   function sizeBookPreview(preview) {
     if (!preview || !preview.closest('.popup-back')) return
+
     /* Screen-Width Layout */
     const documentWidth = innerWidth
     const pageWidth = preview.clientWidth

@@ -2,8 +2,8 @@
    Project Book Rendering
    ========================= */
 
-/* Relative widths used when deciding how many books fit on one shelf row. */
-const bookUnits = { slim: 1, regular: 2, wide: 3 }
+/* Stack Size */
+const stackSize = 2
 
 /* Small helper to avoid repeating createElement/className/textContent setup. */
 const makeElement = (tag, className, text = '') => {
@@ -11,6 +11,29 @@ const makeElement = (tag, className, text = '') => {
   element.className = className
   element.textContent = text
   return element
+}
+
+/* Spine */
+function createSpine(project, number) {
+  const spine = makeElement('span', 'book-spine')
+  const label = makeElement('span', 'spine-label')
+  const title = makeElement('span', 'spine-title', project.bookTitle || project.title)
+  const team = project.team === 'group' ? 'group' : 'solo'
+  if (project.featured) title.append(makeElement('span', 'project-featured-star', '✦'))
+  label.append(makeElement('span', 'spine-type', project.type), title)
+  spine.append(
+    makeElement('span', 'spine-number', number),
+    label,
+    makeElement('span', `spine-team spine-team--${team}`, team === 'group' ? 'Group' : 'Solo'),
+  )
+  return spine
+}
+
+/* Peek Note */
+function createPeek(project) {
+  const peek = makeElement('span', 'spine-peek')
+  peek.append(makeElement('span', 'spine-peek-focus', project.focus || project.summary || ''))
+  return peek
 }
 
 /* Build one accessible project book and store popup data on its dataset. */
@@ -52,6 +75,9 @@ function createProjectCard(project, index) {
     content,
     makeElement('span', 'project-view', 'Open'),
   )
+  card.classList.add('is-spine')
+  card.prepend(createSpine(project, number))
+  card.append(createPeek(project))
   return card
 }
 
@@ -63,34 +89,8 @@ function createShelfRow() {
   return { row, books }
 }
 
-/* Pack books into shelf rows according to their configured size. */
-function renderProjects(container) {
-  if (!container) return
-  container.replaceChildren()
-
-  /* Wide screens fit more books per shelf; phones keep the smaller row. */
-  const phoneWidth = window.matchMedia('(max-width: 680px)')
-  const capacity = phoneWidth.matches ? 6 : 8
-  if (!container.dataset.repackOnResize) {
-    container.dataset.repackOnResize = 'true'
-    phoneWidth.addEventListener('change', () => renderProjects(container))
-  }
-  let used = 0
-  let shelf = createShelfRow()
-  container.appendChild(shelf.row)
-
-  window.portfolioProjects.forEach((project, index) => {
-    const units = bookUnits[project.bookSize] || bookUnits.regular
-    if (used && used + units > capacity) {
-      shelf = createShelfRow()
-      container.appendChild(shelf.row)
-      used = 0
-    }
-    shelf.books.appendChild(createProjectCard(project, index))
-    used += units
-  })
-
-  /* Shelf Sprites */
+/* Shelf Sprites */
+function addShelfSprites(container) {
   const sprites = makeElement('div', 'shelf-sprites')
   sprites.setAttribute('aria-hidden', 'true')
   ;['slime', 'mushroom', 'potion'].forEach(name => {
@@ -99,7 +99,56 @@ function renderProjects(container) {
     sprite.alt = ''
     sprites.appendChild(sprite)
   })
-  container.querySelector('.shelf-row')?.appendChild(sprites)
+  container.querySelector('.shelf-row .shelf-books')?.appendChild(sprites)
+}
+
+/* Shelf Props */
+function addShelfProps(container) {
+  const props = makeElement('div', 'shelf-props')
+  props.setAttribute('aria-hidden', 'true')
+  ;['mortar', 'bottle-gold', 'bottle-violet'].forEach(name => {
+    const prop = makeElement('img', `shelf-sprite shelf-sprite--${name}`)
+    prop.src = `assets/shelf/${name}.svg`
+    prop.alt = ''
+    props.appendChild(prop)
+  })
+  container.querySelector('.shelf-row:last-child .shelf-books')?.appendChild(props)
+}
+
+/* Spine Shelves */
+function renderSpineShelves(container) {
+  const compactWidth = window.matchMedia('(max-width: 1060px)')
+  if (!container.dataset.repackOnResize) {
+    container.dataset.repackOnResize = 'true'
+    compactWidth.addEventListener('change', () => renderProjects(container))
+  }
+  const projects = window.portfolioProjects
+  const stacks = []
+
+  for (let start = 0; start < projects.length; start += stackSize) {
+    const stack = makeElement('div', 'book-stack')
+    projects.slice(start, start + stackSize).forEach((project, offset) => {
+      stack.appendChild(createProjectCard(project, start + offset))
+    })
+    stacks.push(stack)
+  }
+
+  const stacksPerShelf = compactWidth.matches ? 1 : 2
+  for (let start = 0; start < stacks.length; start += stacksPerShelf) {
+    const shelf = createShelfRow()
+    shelf.books.append(...stacks.slice(start, start + stacksPerShelf))
+    container.appendChild(shelf.row)
+  }
+  addShelfSprites(container)
+  addShelfProps(container)
+}
+
+/* Render Projects */
+function renderProjects(container) {
+  if (!container) return
+  container.replaceChildren()
+  container.classList.add('is-spine-layout')
+  renderSpineShelves(container)
 }
 
 /* Share project rendering and featured entries with the page scripts. */
@@ -107,6 +156,7 @@ window.ProjectManager = {
   render: renderProjects,
   getFeatured: () => window.portfolioProjects.filter(project => project.featured),
 }
+
 
 /* =========================
    Hanging Sign

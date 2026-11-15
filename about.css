@@ -108,6 +108,7 @@
       0 0 6px color-mix(in srgb, var(--glow-gold) 65%, transparent),
       0 0 20px 2px color-mix(in srgb, var(--glow-sage) 45%, transparent);
   }
+
   /* A glow fades into a pale page, so light mode uses a dark inner shadow instead. */
   /* Multiply deepens the page beneath, which reads like ink rather than a faded glow. */
   [data-theme='light'] .about-border-glow { mix-blend-mode: multiply; }
@@ -448,6 +449,7 @@
   text-transform: uppercase;
 }
 
+
 /* =========================
    Responsive CSS
    ========================= */
@@ -503,7 +505,6 @@
 @media (prefers-reduced-motion: reduce) {
   .album-vinyl-label { animation: none; }
 }
-
 
 
 /* =========================

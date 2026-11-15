@@ -5,7 +5,6 @@
 const projectDetails = window.portfolioProjects
 
 
-
 /* =========================
    Project Collection
    ========================= */
@@ -159,6 +158,7 @@ const projectDetails = window.portfolioProjects
     track.addEventListener('scroll', update, { passive: true })
     ;[track, controls].forEach(area => {
       ;['pointermove', 'pointerdown', 'focusin'].forEach(name => area.addEventListener(name, wakeCount))
+
       /* A mouse leaving hides the counter at once; touch relies on the timer. */
       area.addEventListener('pointerleave', event => {
         if (event.pointerType === 'touch') return wakeCount()

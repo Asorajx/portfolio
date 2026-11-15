@@ -79,6 +79,7 @@
       passages.forEach(passage => passage.classList.add('about-text-settling'))
       layer.classList.add('about-text-settling')
     }, 1900)
+
     /* Start the glow as the last letters land rather than after the fade. */
     setTimeout(() => {
       if (!motion.matches) playAboutBorderGlow(motion)
@@ -164,7 +165,6 @@ function playAboutBorderGlow(motion) {
   window.addEventListener('pagehide', stop, { once: true })
   animation = requestAnimationFrame(draw)
 }
-
 
 
 /* =========================

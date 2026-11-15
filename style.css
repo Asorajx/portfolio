@@ -3,13 +3,13 @@
    ========================= */
 
 :root {
-  --paper: #f3eedf;
-  --paper-deep: #e9e0c9;
-  --surface: #faf6e9;
-  --surface-2: #f0ead8;
+  --paper: #e9dfc6;
+  --paper-deep: #dccfb0;
+  --surface: #f1e8d2;
+  --surface-2: #e6dac0;
   --ink: #25312b;
   --muted: #5c645b;
-  --line: #c9c2ad;
+  --line: #c2b694;
   --green: #536f52;
   --green-deep: #344c3d;
   --plum: #7a4855;
@@ -33,8 +33,8 @@
   --shelf-dark: #46382c;
   --shelf-back: #5f4d3c;
   --shelf-back-deep: #4d3e31;
-  --projects-bg: #e5ddcf;
-  --projects-bg-deep: #d8cdbc;
+  --projects-bg: #dccfb3;
+  --projects-bg-deep: #cfc0a1;
   --projects-accent: #927f72;
   --magic: #a56d43;
   --magic-glow: rgba(165, 109, 67, .18);
@@ -806,6 +806,7 @@ html[data-page-transition="ready"] {
   }
 }
 
+
 /* =========================
    Shimmer Text
    ========================= */
@@ -856,6 +857,7 @@ html[data-page-transition="ready"] {
 /* =========================
    Shared Interaction Details
    ========================= */
+
 .apothecary-note:hover,
 .apothecary-note:focus-within {
   border-color: var(--gold);

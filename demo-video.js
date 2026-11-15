@@ -150,6 +150,7 @@
     ;['pointermove', 'pointerdown', 'keydown', 'focusin'].forEach(name => player.addEventListener(name, wakeControls))
     player.addEventListener('pointerleave', event => {
       pointerOverControls = false
+
       /* A mouse leaving hides the controls at once; touch relies on the timer. */
       if (event.pointerType === 'touch' || controlsBusy()) {
         wakeControls()
