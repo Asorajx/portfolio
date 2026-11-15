@@ -37,8 +37,9 @@
         localStorage.getItem('portfolio-theme') ||
         (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
 
-      if (sessionStorage.getItem('portfolio-page-transition')) {
-        document.documentElement.dataset.pageTransition = 'ready';
+      if (sessionStorage.getItem('portfolio-iris-transition')) {
+        document.documentElement.dataset.irisTransition = 'closed';
+        sessionStorage.removeItem('portfolio-iris-transition');
       }
     } catch (error) {}
 
@@ -63,65 +64,6 @@
 
 <body>
   <a class="skip-link" href="#main">Skip to Content</a>
-
-
-  <!-- =========================
-       Page Transition
-       ========================= -->
-
-  <div class="page-transition" aria-hidden="true">
-    <svg class="page-transition__filter-defs" aria-hidden="true">
-      <filter id="pageTransitionWaterSoft" x="-12%" y="-55%" width="124%" height="210%">
-        <feTurbulence
-          type="turbulence"
-          baseFrequency="0.006 0.009"
-          numOctaves="2"
-          seed="4"
-          result="turbulence"
-        >
-          <animate
-            attributeName="baseFrequency"
-            dur="3.2s"
-            values="0.006 0.009; 0.011 0.014; 0.006 0.009"
-            repeatCount="indefinite"
-          ></animate>
-        </feTurbulence>
-        <feDisplacementMap
-          in="SourceGraphic"
-          in2="turbulence"
-          scale="11"
-          xChannelSelector="R"
-          yChannelSelector="G"
-        ></feDisplacementMap>
-      </filter>
-
-      <filter id="pageTransitionWaterStrong" x="-12%" y="-55%" width="124%" height="210%">
-        <feTurbulence
-          type="turbulence"
-          baseFrequency="0.008 0.011"
-          numOctaves="2"
-          seed="8"
-          result="turbulence"
-        >
-          <animate
-            attributeName="baseFrequency"
-            dur="2.4s"
-            values="0.008 0.011; 0.014 0.018; 0.009 0.013; 0.008 0.011"
-            repeatCount="indefinite"
-          ></animate>
-        </feTurbulence>
-        <feDisplacementMap
-          in="SourceGraphic"
-          in2="turbulence"
-          scale="0"
-          xChannelSelector="R"
-          yChannelSelector="G"
-        ></feDisplacementMap>
-      </filter>
-    </svg>
-
-
-  </div>
 
 
   <!-- =========================

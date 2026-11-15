@@ -6,7 +6,7 @@
 window.portfolioProjects = [
   {
     // Bookshelf
-    id: 'secure-data-sharing',
+    id: 'mosaic',
     bookTitle: 'Mosaic',
     bookSize: 'wide',
     // Project Switcher

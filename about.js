@@ -67,7 +67,8 @@
     layer.remove()
   }
 
-  const delay = document.documentElement.dataset.pageTransition === 'ready' ? 350 : 0
+  /* The words wait for the iris transition to mostly open. */
+  const delay = document.documentElement.dataset.irisTransition ? 500 : 0
   setTimeout(() => {
     if (motion.matches) {
       finish()

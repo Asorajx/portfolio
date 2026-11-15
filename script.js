@@ -134,110 +134,29 @@ if (themeButton) {
 
 
 /* =========================
-   Page Transition
+   Iris Transition
    ========================= */
 
-;(function setupPageTransition() {
-  const transition = document.querySelector('.page-transition')
+;(function setupIrisTransition() {
   const transitionLinks = document.querySelectorAll(
     'a[href="about.html"], a[href^="index.html"], a.featured-display-link',
   )
-  const softDisplacement = document.querySelector(
-    '#pageTransitionWaterSoft feDisplacementMap',
-  )
-  const strongDisplacement = document.querySelector(
-    '#pageTransitionWaterStrong feDisplacementMap',
-  )
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  const arrivingFromTransition =
-    document.documentElement.dataset.pageTransition === 'ready'
-  const coverDuration = 380
-  const revealDuration = 300
+  const irisTransitionCloseDuration = 340
+  const irisTransitionOpenDuration = 650
 
-  if (!transition) {
-    window.navigateWithPageTransition = destination => {
-      window.location.href = destination
-    }
-    return
+  /* Arrival: open the iris transition once the new page is ready. */
+  if (document.documentElement.dataset.irisTransition === 'closed') {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      document.documentElement.dataset.irisTransition = 'open'
+    }))
+    setTimeout(() => {
+      document.documentElement.removeAttribute('data-iris-transition')
+    }, irisTransitionOpenDuration + 160)
   }
 
-  /* Update the strength of the liquid distortion. */
-  function setDisplacement(displacement, value) {
-    if (!displacement) return
-    displacement.setAttribute('scale', value.toFixed(2))
-  }
-
-  /* Animate the liquid distortion through each strength. */
-  function animateDisplacement(displacement, values, duration) {
-    if (!displacement) return Promise.resolve()
-
-    return new Promise(resolve => {
-      let startTime = null
-      const segmentCount = values.length - 1
-
-      setDisplacement(displacement, values[0])
-
-      function update(timestamp) {
-        if (startTime === null) startTime = timestamp
-
-        const progress = Math.min((timestamp - startTime) / duration, 1)
-        const scaledProgress = progress * segmentCount
-        const segment = Math.min(Math.floor(scaledProgress), segmentCount - 1)
-        const segmentProgress = scaledProgress - segment
-
-        /* Ease each change so the effect stays smooth. */
-        const easedProgress = segmentProgress * segmentProgress * (3 - 2 * segmentProgress)
-        const startValue = values[segment]
-        const endValue = values[segment + 1]
-        const value = startValue + (endValue - startValue) * easedProgress
-
-        setDisplacement(displacement, value)
-
-        if (progress < 1) {
-          requestAnimationFrame(update)
-          return
-        }
-
-        setDisplacement(displacement, values[values.length - 1])
-        resolve()
-      }
-
-      requestAnimationFrame(update)
-    })
-  }
-
-  function clearArrivalState() {
-
-    /* Reset the liquid effect before clearing the transition. */
-    setDisplacement(softDisplacement, 0)
-    document.documentElement.removeAttribute('data-page-transition')
-    document.documentElement.classList.remove('page-transition-active')
-    transition.classList.remove('is-revealing')
-  }
-
-  if (arrivingFromTransition) {
-    try {
-      sessionStorage.removeItem('portfolio-page-transition')
-    } catch {}
-
-    if (reducedMotion) {
-      clearArrivalState()
-    } else {
-      requestAnimationFrame(() => {
-        transition.classList.add('is-revealing')
-
-        /* Ease the liquid effect back to normal. */
-        animateDisplacement(softDisplacement, [11, 5, 0], revealDuration)
-          .then(clearArrivalState)
-      })
-
-      /* Clean up if the animation is interrupted. */
-      setTimeout(clearArrivalState, revealDuration + 120)
-    }
-  }
-
-  /* Reuse the same liquid transition for scripted project navigation. */
-  function navigateWithPageTransition(destinationHref) {
+  /* Close the iris, then go to the destination page. */
+  function navigateWithIrisTransition(destinationHref) {
     const destination = new URL(destinationHref, window.location.href)
 
     if (reducedMotion) {
@@ -246,20 +165,14 @@ if (themeButton) {
     }
 
     try {
-      sessionStorage.setItem('portfolio-page-transition', 'ready')
+      sessionStorage.setItem('portfolio-iris-transition', 'ready')
     } catch {}
 
-    document.documentElement.classList.add('page-transition-active')
-    transition.classList.add('is-covering')
-
-    /* Build the liquid effect quickly, then ease it toward the arrival strength. */
-    animateDisplacement(strongDisplacement, [0, 18, 11], coverDuration)
-      .then(() => {
-        window.location.href = destination.href
-      })
+    document.documentElement.dataset.irisTransition = 'close'
+    setTimeout(() => {
+      window.location.href = destination.href
+    }, irisTransitionCloseDuration)
   }
-
-  window.navigateWithPageTransition = navigateWithPageTransition
 
   transitionLinks.forEach(link => {
     link.addEventListener('click', event => {
@@ -284,7 +197,7 @@ if (themeButton) {
       }
 
       event.preventDefault()
-      navigateWithPageTransition(destination.href)
+      navigateWithIrisTransition(destination.href)
     })
   })
 })()
@@ -313,15 +226,7 @@ if (themeButton) {
 window.addEventListener('pageshow', event => {
   if (!event.persisted) return
 
-  const transition = document.querySelector('.page-transition')
-
-  try {
-    sessionStorage.removeItem('portfolio-page-transition')
-  } catch {}
-
-  document.documentElement.removeAttribute('data-page-transition')
-  document.documentElement.classList.remove('page-transition-active')
-  transition?.classList.remove('is-covering', 'is-revealing')
+  document.documentElement.removeAttribute('data-iris-transition')
 })
 
 
@@ -927,7 +832,10 @@ document.querySelectorAll('.footer-back-link').forEach(link => {
 
     /* Hide elements up front so they never flash in before their fade starts. */
     element.classList.add('apothecary-pending')
-    observer.observe(element)
+
+    /* After the iris, so the page is not animating twice at once. */
+    if (document.documentElement.dataset.irisTransition) setTimeout(() => observer.observe(element), 500)
+    else observer.observe(element)
     element.addEventListener('animationend', event => {
       if (event.animationName !== 'apothecary-arrive') return
       element.classList.remove('apothecary-arrive')

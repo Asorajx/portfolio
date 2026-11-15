@@ -455,49 +455,54 @@ img { max-width: 100%; }
 
 
 /* =========================
-   Page Transition
+   Iris Transition
    ========================= */
 
-.page-transition {
+/* Home and About close in like an iris, wipe blank, then open onto the next page. */
+@property --iris-radius {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 65vmax;
+}
+
+/* Iris sheet: blank paper with a round hole, edged with a thin gold ring */
+html[data-iris-transition]::after {
+  content: "";
   position: fixed;
-  z-index: 1000;
   inset: 0;
-  visibility: hidden;
+  z-index: 2000;
   pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 50%,
+    transparent calc(var(--iris-radius) - 2px),
+    var(--gold) var(--iris-radius),
+    var(--paper) calc(var(--iris-radius) + 3px)
+  );
 }
 
-.page-transition__filter-defs {
-  position: absolute;
-  width: 0;
-  height: 0;
+/* Close: the hole shrinks from the screen edges to the centre. */
+html[data-iris-transition="close"]::after { animation: iris-transition-close 340ms cubic-bezier(.55, 0, .45, 1) both; }
+
+/* Arrival: the new page stays blank until the script starts the reveal. */
+html[data-iris-transition="closed"]::after {
+  --iris-radius: 0px;
+  animation: iris-transition-open 400ms 1600ms ease-out both;
 }
 
-/* Apply the stronger liquid distortion while leaving the current page. */
-html.page-transition-active .site-header,
-html.page-transition-active main,
-html.page-transition-active .site-footer {
-  filter: url("#pageTransitionWaterStrong");
-  will-change: filter;
+/* Open: the hole grows to reveal the page. */
+html[data-iris-transition="open"]::after { animation: iris-transition-open 650ms cubic-bezier(.2, .7, .2, 1) both; }
+
+@keyframes iris-transition-close {
+  from { --iris-radius: 65vmax; }
+  to { --iris-radius: 0px; }
+}
+@keyframes iris-transition-open {
+  from { --iris-radius: 0px; }
+  to { --iris-radius: 65vmax; }
 }
 
-/* Keep a softer liquid distortion while the destination page settles in. */
-html[data-page-transition="ready"] .site-header,
-html[data-page-transition="ready"] main,
-html[data-page-transition="ready"] .site-footer {
-  filter: url("#pageTransitionWaterSoft");
-  will-change: filter;
-}
-
-.page-transition.is-covering,
-.page-transition.is-revealing,
-html[data-page-transition="ready"] .page-transition {
-  visibility: visible;
-  pointer-events: auto;
-}
-
-html.page-transition-active,
-html[data-page-transition="ready"] {
-  overflow: hidden;
+@media (prefers-reduced-motion: reduce) {
+  html[data-iris-transition]::after { display: none; }
 }
 
 
