@@ -1022,6 +1022,15 @@
   .book-spine-content { width: calc(100% - 8px); padding: 5px 3px 6px; border-width: 1.5px; }
   .project-type { margin-bottom: 4px; padding-bottom: 3px; white-space: normal; }
   .project-card h3 { font-size: 13px; }
+
+  /* The pulled-out cover keeps the full book size instead of the shelf's flex and max-width limits. */
+  .book-pullout .book-pullout__front {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    aspect-ratio: auto;
+  }
 }
 
 /* Bottle Hover */

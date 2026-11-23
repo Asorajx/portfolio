@@ -3,7 +3,6 @@
    ========================= */
 
 .about-page {
-  min-height: calc(100vh - 130px);
   padding-top: 96px;
   padding-bottom: 16px;
 }
