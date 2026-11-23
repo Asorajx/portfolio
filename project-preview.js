@@ -120,7 +120,7 @@
     assign('projectRecordType', project.type)
     assign('projectFocus', project.focus)
     assign('projectDescription', project.description)
-    assign('projectReason', project.reason)
+    assign('projectStory', project.story)
 
     const featured = preview.querySelector('[data-source-id="projectFeaturedStatus"]')
     if (featured) featured.hidden = !project.featured

@@ -22,21 +22,27 @@ window.portfolioProjects = [
     github: 'https://github.com/fyp-26-s3-07/secure-data-sharing-platform',
     documentation: '',
     // Project Record
-    date: 'July 2026 - Present',
+    date: 'July 2026 - November 2026',
     focus: 'Secure collaborative research',
     // Overview
     description: 'A secure research collaboration platform designed for controlled data sharing and privacy protection. Collaborated in a 5-member team to design and implement the system.',
     tech: {
-      frontend: [],
-      backend: [],
-      tools: [],
+      frontend: ['React', 'TypeScript'],
+      backend: ['Python', 'FastAPI', 'PostgreSQL', 'SQLAlchemy', 'scikit-learn', 'liboqs', 'Argon2', 'PyOTP'],
+      tools: ['Vite', 'Docker', 'Supabase', 'Cloudflare Pages', 'Resend', 'pytest', 'GitHub Actions CI/CD'],
     },
     // Demo
     hasDemo: true,
     videoDemo: '',
-    // Reason
-    reasonTitle: '',
-    reason: '',
+    demoImages: [
+      'assets/previews/Mosaic-Preview1.png',
+      'assets/previews/Mosaic-Preview2.png',
+      'assets/previews/Mosaic-Preview3.png',
+      'assets/previews/Mosaic-Preview4.png',
+    ],
+    // Story
+    storyTitle: '',
+    story: '',
   },
 
   {
@@ -69,9 +75,9 @@ window.portfolioProjects = [
     // Demo
     hasDemo: false,
     videoDemo: '',
-    // Reason
-    reasonTitle: '',
-    reason: 'I wanted to learn more about how honeypots work, so I decided to try setting one up myself. I deployed a honeypot server to capture and monitor SSH login attempts, and analysed the activity it received. It was mainly a hands-on way for me to explore how honeypots are used to observe potential cyber threats.',
+    // Story
+    storyTitle: 'Why this project',
+    story: 'I wanted to learn more about how honeypots work, so I decided to try setting one up myself. I deployed a honeypot server to capture and monitor SSH login attempts, and analysed the activity it received. It was mainly a hands-on way for me to explore how honeypots are used to observe potential cyber threats.',
   },
 
   {
@@ -90,7 +96,7 @@ window.portfolioProjects = [
     // Buttons
     liveDemo: 'https://asorajx.github.io/writepretty/',
     github: 'https://github.com/Asorajx/writepretty',
-    documentation: 'https://github.com/Asorajx/writepretty/blob/main/P02-writepretty.pdf',
+    documentation: 'https://github.com/Asorajx/writepretty/blob/main/docs/P02-writepretty.md',
     // Project Record
     date: 'September 2026',
     updated: 'November 2026',
@@ -108,9 +114,9 @@ window.portfolioProjects = [
     // Then & Now
     oldImage: 'assets/images/WritePretty-v1.png',
     thenNowNote: 'The original version hid the cleanup controls in a separate panel away from the text, and its punctuation rule could wrongly alter names like “Fuse.js”. The updated version keeps the controls beside the editor as an icon rail and refines the rules to leave such names intact, so the tool is easier to use and more reliable.',
-    // Reason
-    reasonTitle: '',
-    reason: 'I work with a lot of documents and reports for school, and I often find myself spending time fixing small formatting issues, especially when copying text from different sources. I wanted a quick way to clean things up without having to rely on AI every time. So I decided to build WritePretty, a tool that lets users quickly clean up their text and choose which formatting they want to remove, while keeping the original content unchanged.',
+    // Story
+    storyTitle: 'Why this project',
+    story: 'I work with a lot of documents and reports for school, and I often find myself spending time fixing small formatting issues, especially when copying text from different sources. I wanted a quick way to clean things up without having to rely on AI every time. So I decided to build WritePretty, a tool that lets users quickly clean up their text and choose which formatting they want to remove, while keeping the original content unchanged.',
   },
   {
     // Bookshelf
@@ -128,7 +134,7 @@ window.portfolioProjects = [
     // Buttons
     liveDemo: 'https://loop-duzg.onrender.com/',
     github: 'https://github.com/Asorajx/LOOP',
-    documentation: 'https://github.com/Asorajx/LOOP/blob/main/P03-LOOP-v2.pdf',
+    documentation: 'https://github.com/Asorajx/LOOP/blob/main/docs/P03-LOOP-v2.md',
     // Project Record
     date: 'October 2026',
     updated: 'November 2026',
@@ -143,9 +149,9 @@ window.portfolioProjects = [
     // Demo
     hasDemo: true,
     videoDemo: 'assets/previews/LOOP-Demo2.mp4',
-    // Reason
-    reasonTitle: '',
-    reason: 'I built LOOP as a way to practise and reinforce what I\'d learnt about Python OOP in school, while also creating something that could help other students understand these concepts better. I wanted to make it easier to visualise how objects interact, how methods run, and how their states change in real time.',
+    // Story
+    storyTitle: 'Why this project',
+    story: 'I built LOOP as a way to practise and reinforce what I\'d learnt about Python OOP in school, while also creating something that could help other students understand these concepts better. I wanted to make it easier to visualise how objects interact, how methods run, and how their states change in real time.',
     // Then & Now
     oldDemo: 'assets/previews/LOOP-Demo1.mp4',
     thenNowNote: 'The original interface was cluttered, making the source code difficult to follow. The updated version has a cleaner, more intuitive layout, with clearer code visualization and brief explanations of each concept, so Python OOP is easier to understand.',
@@ -160,13 +166,13 @@ window.portfolioProjects = [
     // Hero
     title: 'Starjot',
     type: 'Web Application',
-    featured: true,
+    featured: false,
     team: 'solo',
     summary: 'A local workspace for notes and project planning.',
     // Buttons
     liveDemo: 'https://asorajx.github.io/starjot/#home',
     github: 'https://github.com/Asorajx/starjot',
-    documentation: 'https://github.com/Asorajx/starjot/blob/main/P04-starjot.pdf',
+    documentation: 'https://github.com/Asorajx/starjot/blob/main/docs/P04-starjot.md',
     // Project Record
     date: 'October 2026 - November 2026',
     focus: 'Note-taking and planning',
@@ -180,9 +186,9 @@ window.portfolioProjects = [
     // Demo
     hasDemo: true,
     videoDemo: 'assets/previews/Starjot-Demo.mp4',
-    // Reason
-    reasonTitle: '',
-    reason: 'I use note-taking apps a lot for school and projects, mainly Notion, but lately I\'ve found it a little too bloated with features I don\'t really need. I was curious about what a simpler alternative could look like, so I decided to experiment with building my own workspace for notes and project work. I also wanted to explore the idea of local data storage rather than relying entirely on the cloud. This led me to build Starjot.',
+    // Story
+    storyTitle: 'Why this project',
+    story: 'I use note-taking apps a lot for school and projects, mainly Notion, but lately I\'ve found it a little too bloated with features I don\'t really need. I was curious about what a simpler alternative could look like, so I decided to experiment with building my own workspace for notes and project work. I also wanted to explore the idea of local data storage rather than relying entirely on the cloud. This led me to build Starjot.',
   },
   {
     // Bookshelf
@@ -219,9 +225,43 @@ window.portfolioProjects = [
       'assets/previews/ExcelDex-Preview2.png',
       'assets/previews/ExcelDex-Preview3.png',
     ],
-    // Reason
-    reasonTitle: '',
-    reason: 'I wanted to get better at Excel, and building a quick reference for it was a way to go through the functions and shortcuts I wasn\'t familiar with. My family also finds Excel confusing sometimes, so I made it something they could use too.',
+    // Story
+    storyTitle: 'Why this project',
+    story: 'I wanted to get better at Excel, and building a quick reference for it was a way to go through the functions and shortcuts I wasn\'t familiar with. My family also finds Excel confusing sometimes, so I made it something they could use too.',
+  },
+  {
+    // Bookshelf
+    id: 'tenax',
+    bookTitle: 'Tenax',
+    bookSize: 'regular',
+    // Project Switcher
+    shortTitle: 'Tenax',
+    // Hero
+    title: 'Tenax',
+    type: 'Desktop Application',
+    featured: true,
+    team: 'solo',
+    summary: 'Windows cybersecurity toolkit that explains its findings.',
+    // Buttons
+    liveDemo: '',
+    github: 'https://github.com/Asorajx/tenax',
+    documentation: 'https://github.com/Asorajx/tenax/blob/main/docs/P06-tenax.md',
+    // Project Record
+    date: 'November 2026',
+    focus: 'Windows security checks',
+    // Overview
+    description: 'A Windows desktop cybersecurity toolkit with ten tools across passwords, scams and phishing, networks, and device security. Each tool explains what it found, why it matters, and what to do next, without security scores or claims that anything is safe. Checks run on the device wherever possible.',
+    tech: {
+      frontend: ['React', 'TypeScript', 'CSS'],
+      backend: ['Rust'],
+      tools: ['Tauri', 'Vite', 'GitHub Actions CI/CD'],
+    },
+    // Demo
+    hasDemo: true,
+    videoDemo: 'assets/previews/Tenax-Demo.mp4',
+    // Story
+    storyTitle: 'Why this project',
+    story: 'After studying cybersecurity, I became interested in how security analysis actually works, so I wanted to try building some tools myself. I also wanted something light that I could use to check my own PC every now and then. That led me to build Tenax, a small Windows app that brings a few security checks together and explains what it finds and what to do next.',
   },
 ]
 
@@ -236,7 +276,7 @@ window.syncProjectSections = function syncProjectSections(root, project) {
 
   const fields = {
     projectDemoSection: !!project.hasDemo,
-    projectReasonSection: !!project.reason,
+    projectStorySection: !!project.story,
     projectThenNowSection: !!(project.oldDemo || project.oldImage || project.thenNowNote),
     projectDemo: !!project.liveDemo,
     projectGithub: !!project.github,
@@ -248,9 +288,9 @@ window.syncProjectSections = function syncProjectSections(root, project) {
     if (element) element.hidden = !visible
   })
 
-  const reasonTitle = root.querySelector('[id="projectReasonTitle"], [data-source-id="projectReasonTitle"]')
-  if (reasonTitle) {
-    reasonTitle.textContent = project.reasonTitle || 'Why this project'
+  const storyTitle = root.querySelector('[id="projectStoryTitle"], [data-source-id="projectStoryTitle"]')
+  if (storyTitle) {
+    storyTitle.textContent = project.storyTitle || 'More about this project'
   }
 
   /* Chapter Numbers */

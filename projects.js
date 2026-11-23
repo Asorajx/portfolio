@@ -55,7 +55,7 @@ const projectDetails = window.portfolioProjects
     recordType: document.getElementById('projectRecordType'),
     focus: document.getElementById('projectFocus'),
     description: document.getElementById('projectDescription'),
-    reason: document.getElementById('projectReason'),
+    story: document.getElementById('projectStory'),
     documentation: document.getElementById('projectDocumentation'),
     demoFrame: document.getElementById('projectDemoSection')?.querySelector('.project-demo-frame'),
     oldDemo: document.getElementById('projectOldDemo'),
@@ -195,7 +195,7 @@ const projectDetails = window.portfolioProjects
       fields.recordType.textContent = project.type
       fields.focus.textContent = project.focus
       fields.description.textContent = project.description
-      fields.reason.textContent = project.reason
+      fields.story.textContent = project.story
 
       /* Links */
       if (project.liveDemo) fields.liveDemo.href = project.liveDemo
