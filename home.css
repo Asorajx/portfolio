@@ -2,8 +2,6 @@
    Home Hero
    ========================= */
 
-.hero { position: relative; min-height: 610px; padding: 82px 0 44px; overflow: hidden; }
-.hero > .container { position: relative; z-index: 2; }
 .hero-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(390px, 0.86fr);
@@ -307,20 +305,8 @@
   80% { transform: translate(-.8px, -.35px) rotate(-.18deg); }
 }
 
-.hero h1 {
-  margin: 0;
-  font-family: var(--font-serif);
-  font-size: clamp(72px, 11vw, 126px);
-  font-weight: 600;
-  line-height: 0.82;
-  letter-spacing: -0.055em;
-}
-.hero-actions { display: flex; align-items: center; gap: 12px; margin-top: 30px; }
-.hero-actions-minimal { margin-top: 40px; }
-
 /* Hero button size; the look is shared in style.css. */
-.primary-button,
-.hero-actions .text-link {
+.primary-button {
   min-height: 44px;
   padding: 11px 18px;
   font-size: 14px;
@@ -399,7 +385,7 @@
   background: color-mix(in srgb, var(--surface-2) 52%, transparent);
   color: var(--ink);
   cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  transition: transform 160ms ease, border-color 300ms ease, background 160ms ease, color 300ms ease;
 }
 
 .contact-copy-button:hover {
@@ -424,9 +410,67 @@
   stroke-linejoin: round;
 }
 
-.contact-copy-button .copy-check { display: none; }
-.contact-copy-button.is-copied .copy-symbol { display: none; }
-.contact-copy-button.is-copied .copy-check { display: block; }
+/* Copying: the two pages draw themselves away and a tick is drawn in their place, with a soft ring. */
+.contact-copy-button { position: relative; }
+.contact-copy-button svg { grid-area: 1 / 1; overflow: visible; }
+
+.copy-symbol :is(rect, path) {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 200ms cubic-bezier(.2, .8, .2, 1) 100ms;
+}
+
+.copy-symbol { transition: transform 220ms cubic-bezier(.2, .8, .2, 1) 80ms; }
+
+.copy-check path {
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 110ms ease-in;
+}
+
+.contact-copy-button::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 50%, transparent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.contact-copy-button.is-copied .copy-symbol { transform: scale(.65) rotate(-12deg); transition-delay: 0ms; }
+
+.contact-copy-button.is-copied .copy-symbol :is(rect, path) {
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 160ms cubic-bezier(.5, 0, .75, 0);
+}
+
+.contact-copy-button.is-copied .copy-check path {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 250ms cubic-bezier(.2, .8, .2, 1) 130ms;
+}
+
+.contact-copy-button.is-copied .copy-check { animation: copy-pop 360ms 130ms cubic-bezier(.2, .8, .2, 1) both; }
+.contact-copy-button.is-copied::after { animation: copy-ring 420ms 130ms ease-out; }
+
+@keyframes copy-pop {
+  from { transform: scale(.55) rotate(14deg); }
+  55% { transform: scale(1.18) rotate(-4deg); }
+  to { transform: scale(1) rotate(0); }
+}
+
+@keyframes copy-ring {
+  from { opacity: .9; box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 50%, transparent); }
+  to { opacity: 0; box-shadow: 0 0 0 9px transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .copy-symbol,
+  .copy-symbol :is(rect, path),
+  .copy-check path { transition: none !important; }
+
+  .contact-copy-button.is-copied .copy-check,
+  .contact-copy-button.is-copied::after { animation: none; }
+}
 
 .contact-copy-button.is-copied {
   color: var(--green-deep);
@@ -449,12 +493,6 @@
   cursor: pointer;
 }
 
-.contact-form-button span {
-  display: inline-block;
-  transition: transform 160ms ease;
-}
-
-.contact-form-button:hover span { transform: translateX(3px); }
 
 
 /* =========================
@@ -466,14 +504,16 @@
   z-index: 300;
   inset: 0;
   display: grid;
-  place-items: center;
+  align-items: safe center;
+  justify-items: center;
+  overflow-y: auto;
   padding: 24px;
   background: rgba(18, 24, 21, .54);
   backdrop-filter: blur(8px);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 180ms ease, visibility 180ms ease;
+  transition: opacity 260ms ease, visibility 260ms ease;
 }
 
 .contact-modal.open {
@@ -482,62 +522,69 @@
   pointer-events: auto;
 }
 
+/* The form is a paper note. It grows out of the button that opened it, and folds back into it. */
 .contact-dialog {
   position: relative;
   width: min(100%, 470px);
-  padding: 26px;
+  padding: 30px 28px 28px;
   border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--surface) 96%, var(--paper));
-  box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
-  transform: translateY(12px) rotate(.35deg);
-  transition: transform 180ms ease;
+  background: var(--surface);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .3);
+  opacity: 0;
+  transform: translate(var(--from-x, 0), var(--from-y, 30px)) scale(.5) rotate(-5deg);
+  transition: transform 300ms cubic-bezier(.5, 0, .75, 0), opacity 220ms ease;
 }
 
 .contact-modal.open .contact-dialog {
-  transform: translateY(0) rotate(.35deg);
-}
-
-/* Reserve room for the close control so it never covers the topline label. */
-.contact-dialog > .note-topline {
-  padding-right: 48px;
+  opacity: 1;
+  transform: rotate(-.4deg);
+  transition: transform 560ms cubic-bezier(.2, .9, .2, 1), opacity 240ms ease;
 }
 
 .contact-dialog-close {
   position: absolute;
   z-index: 2;
-  top: 14px;
-  right: 16px;
-  width: 28px;
-  height: 28px;
+  top: 18px;
+  right: 18px;
+  width: 36px;
+  height: 36px;
   display: grid;
   place-items: center;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--line) 84%, transparent);
-  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
-  color: var(--ink);
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
   cursor: pointer;
+  transition: background 220ms ease, color 220ms ease;
 }
 
-.contact-dialog-close:hover {
-  border-color: color-mix(in srgb, var(--plum) 58%, var(--line));
+.contact-dialog-close:hover,
+.contact-dialog-close:focus-visible {
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+  color: var(--ink);
 }
 
 .contact-dialog-close:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--green) 64%, #fff);
-  outline-offset: 3px;
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .contact-dialog-close svg {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.7;
+  stroke-width: 1.6;
   stroke-linecap: round;
+  transition: transform 320ms cubic-bezier(.2, .8, .2, 1);
 }
 
+.contact-dialog-close:hover svg,
+.contact-dialog-close:focus-visible svg { transform: rotate(90deg); }
+
 .contact-dialog-heading {
-  padding: 24px 0 20px;
+  padding: 6px 0 22px;
 }
 
 .contact-dialog-heading .eyebrow { margin-bottom: 8px; }
@@ -556,12 +603,36 @@
 }
 
 .contact-field {
+  position: relative;
   display: grid;
   gap: 7px;
 }
 
+/* On focus, a stroke of ink is drawn along the line, tapering like a brush. */
+.contact-field::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--below, 0px) - 2px);
+  left: 0;
+  height: 6px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms ease-in, opacity 240ms ease;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M0 3.3 Q12 1.6 30 2.3 T66 2.1 T100 2.9 L100 3.2 Q82 4.5 58 3.9 T22 4 T0 3.6 Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 6' preserveAspectRatio='none'%3E%3Cpath d='M0 3.3 Q12 1.6 30 2.3 T66 2.1 T100 2.9 L100 3.2 Q82 4.5 58 3.9 T22 4 T0 3.6 Z'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.contact-field:focus-within::after {
+  transform: scaleX(1);
+  transition: transform 640ms cubic-bezier(.2, .8, .2, 1);
+}
+
 .contact-field span {
   color: var(--muted);
+  transition: color 240ms ease;
   font-size: var(--text-micro);
   font-weight: 700;
   letter-spacing: .15em;
@@ -571,21 +642,62 @@
 .contact-field input,
 .contact-field textarea {
   width: 100%;
-  padding: 11px 12px;
-  border: 1px solid var(--line);
+  padding: 9px 2px;
+  border: 0;
+  border-bottom: 1px solid var(--line);
   border-radius: 0;
   outline: 0;
-  background: color-mix(in srgb, var(--surface-2) 62%, transparent);
+  background: transparent;
   color: var(--ink);
   font: inherit;
   resize: vertical;
-  transition: border-color 160ms ease, background 160ms ease;
 }
 
-.contact-field input:focus,
-.contact-field textarea:focus {
-  border-color: var(--green);
-  background: color-mix(in srgb, var(--surface) 86%, transparent);
+.contact-field textarea { min-height: 112px; }
+
+.contact-field:focus-within span { color: var(--ink); }
+
+/* A missing or wrong field: the line turns red and says what is needed. */
+.contact-error {
+  position: absolute;
+  bottom: 0;
+  left: 2px;
+  color: #b3402f;
+  font-size: 12.5px;
+  line-height: 1.4;
+  animation: contact-error-in 220ms ease-out;
+}
+
+[data-theme="dark"] .contact-error { color: #e8998b; }
+
+.contact-error[hidden] { display: none; }
+
+.contact-field.has-error {
+  --below: 22px;
+  padding-bottom: 22px;
+}
+
+.contact-field.has-error input,
+.contact-field.has-error textarea { border-bottom-color: color-mix(in srgb, #b3402f 55%, var(--line)); }
+
+.contact-field.has-error::after {
+  background: #b3402f;
+  transform: scaleX(1);
+}
+
+[data-theme="dark"] .contact-field.has-error::after { background: #e8998b; }
+
+@keyframes contact-error-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-field::after,
+  .contact-field:focus-within::after { transition: none; }
+
+  .contact-error { animation: none; }
+  .contact-dialog-close svg { transition: none; }
 }
 
 .contact-form-note {
@@ -601,17 +713,47 @@
   cursor: pointer;
 }
 
+/* While sending, the button pulses softly. */
+.contact-submit[aria-busy="true"] { animation: contact-sending 1s ease-in-out infinite alternate; cursor: progress; }
+
+@keyframes contact-sending {
+  from { opacity: .6; }
+  to { opacity: 1; }
+}
+
+.contact-form-note.is-error { color: #b3402f; }
+[data-theme="dark"] .contact-form-note.is-error { color: #e8998b; }
+
+/* Sent: the button itself says so, in green, until it settles back. */
+.contact-submit.is-sent {
+  --sent: #3f7a58;
+  border-color: var(--sent);
+  background-color: var(--sent);
+  color: #fff;
+  cursor: default;
+}
+
+[data-theme="dark"] .contact-submit.is-sent {
+  --sent: #8fbf99;
+  color: #101214;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-dialog,
+  .contact-modal.open .contact-dialog {
+    transform: none;
+    transition: opacity 160ms ease;
+  }
+
+  .contact-submit[aria-busy="true"] { animation: none; }
+}
+
 
 /* =========================
    Responsive CSS
    ========================= */
 
 @media (max-width: 840px) {
-  .hero {
-    min-height: auto;
-    padding-top: 56px;
-  }
-
   .hero-grid {
     grid-template-columns: 1fr;
     gap: 44px;
@@ -619,15 +761,6 @@
 }
 
 @media (max-width: 680px) {
-  .hero { padding-top: 44px; }
-  .hero h1 { font-size: clamp(68px, 23vw, 94px); }
-
-  .hero-actions {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 16px;
-  }
-
   .hero-note-wrap {
     width: 100%;
     min-height: 0;
@@ -778,4 +911,905 @@
 /* On narrow phones the longest phrase would wrap, so keep two lines and the tagline never changes height. */
 @media (max-width: 420px) {
   .hero-tagline__line { display: block; }
+}
+
+
+/* =========================
+   Cabinet
+   ========================= */
+
+/* A painted cabinet in the palette's accent: plum in light mode, sage in dark. The drawers sit in it like a herbal chest. */
+#cabinet {
+  --cab-body: #4f323c;
+  --cab-body-hi: #5e3b47;
+  --cab-face: #6a4452;
+  --cab-face-hi: #7a4f5e;
+  --cab-cavity: #26151c;
+  --cab-metal: #d6c496;
+  --cab-label: #f0e8d6;
+  --cab-label-ink: #2a1f24;
+  --cab-label-muted: #6b5a5f;
+  --cab-cream: #efe6d3;
+  --cab-cream-muted: #bfaeb0;
+  padding: 104px 0 72px;
+  overflow: visible;
+}
+
+[data-theme="dark"] #cabinet {
+  --cab-body: #1f2822;
+  --cab-body-hi: #28342c;
+  --cab-face: #34443a;
+  --cab-face-hi: #40524a;
+  --cab-cavity: #0f1512;
+  --cab-metal: #c9b985;
+  --cab-label: #d9d1bd;
+  --cab-label-ink: #1d2420;
+  --cab-label-muted: #55605a;
+  --cab-cream: #e4dfd0;
+  --cab-cream-muted: #a9b0a5;
+}
+
+.cabinet-heading {
+  margin: 0 0 44px;
+  font-family: var(--font-serif);
+  font-size: clamp(44px, 7vw, 80px);
+  font-weight: 600;
+  line-height: .95;
+  letter-spacing: -.035em;
+}
+
+.cabinet {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 22px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, var(--cab-body-hi), var(--cab-body));
+  box-shadow:
+    inset 0 0 0 2px rgba(0, 0, 0, .35),
+    inset 0 3px 0 3px rgba(255, 255, 255, .07),
+    inset 0 -30px 60px rgba(0, 0, 0, .25),
+    0 34px 60px -24px rgba(20, 12, 16, .55);
+}
+
+
+/* =========================
+   Drawer
+   ========================= */
+
+.drawer {
+  --drawer-h: 214px;
+  position: relative;
+  display: block;
+  height: var(--drawer-h);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.drawer:focus-visible { outline: 2px solid var(--cab-metal); outline-offset: 4px; }
+
+/* What is inside shows once the front is pulled: a dark cavity with the focus and dates. */
+.drawer-inside {
+  position: absolute;
+  inset: 0 3px;
+  padding: 9px 14px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--cab-cavity);
+  box-shadow: inset 0 6px 12px rgba(0, 0, 0, .5);
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+
+.drawer-note { display: grid; gap: 1px; }
+
+.drawer-note strong {
+  color: var(--cab-cream);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.drawer-note span {
+  color: var(--cab-cream-muted);
+  font-size: 11px;
+}
+
+/* A faint track along the edge of the reveal. Scrolling down on the open drawer fills it, and a full line opens the project. */
+.drawer-progress {
+  position: absolute;
+  right: 0;
+  bottom: calc(var(--drawer-h) * .76 + 2px);
+  left: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, .12);
+}
+
+.drawer-progress::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--cab-metal);
+  transform: scaleX(var(--intent, 0));
+  transform-origin: left;
+}
+
+/* The drawer front: a bevelled painted panel. */
+.drawer-front {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 12px 10px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, var(--cab-face-hi), var(--cab-face));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .16),
+    inset 0 -3px 0 rgba(0, 0, 0, .22),
+    inset 0 0 0 1px rgba(0, 0, 0, .3),
+    0 2px 3px rgba(0, 0, 0, .35);
+  transition: transform 420ms cubic-bezier(.2, .7, .2, 1), box-shadow 420ms ease, opacity 300ms ease;
+}
+
+/* The paper label in its brass holder. */
+.drawer-label {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 14px 10px;
+  background: var(--cab-label);
+  color: var(--cab-label-ink);
+  box-shadow: 0 0 0 3px var(--cab-metal), 0 0 0 4px rgba(0, 0, 0, .4), inset 0 1px 3px rgba(0, 0, 0, .12);
+}
+
+.drawer-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Featured heads leave room for the star. */
+.drawer.is-featured .drawer-head { padding-right: 14px; }
+
+.drawer-logo {
+  flex: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, .18);
+}
+
+.drawer-titles { min-width: 0; }
+
+.drawer-titles strong {
+  display: block;
+  overflow: hidden;
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drawer-kind {
+  display: block;
+  margin-top: 3px;
+  color: var(--cab-label-muted);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.drawer-text {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--cab-label-ink);
+  font-size: 13px;
+  line-height: 1.45;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Solo or group sits at the bottom of the label. */
+.drawer-team {
+  margin-top: auto;
+  color: var(--cab-label-muted);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+/* The ring pull. */
+.drawer-pull {
+  flex: none;
+  align-self: center;
+  width: 20px;
+  height: 20px;
+  margin: 3px 0 0;
+  border: 3px solid var(--cab-metal);
+  border-radius: 50%;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, .45), inset 0 1px 1px rgba(0, 0, 0, .35);
+}
+
+/* The open drawer comes forward, above its neighbours. */
+.drawer.is-open { z-index: 3; }
+.drawer.is-open .drawer-inside { opacity: 1; }
+
+.drawer.is-open .drawer-front {
+  transform: translateY(24%) scale(1.015);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .16),
+    inset 0 -3px 0 rgba(0, 0, 0, .22),
+    inset 0 0 0 1px rgba(0, 0, 0, .3),
+    0 24px 34px rgba(0, 0, 0, .5);
+}
+
+/* Once a project opens full page, the front drops away. */
+.drawer.is-expanded .drawer-front {
+  transform: translateY(190%);
+  opacity: 0;
+}
+
+/* Featured projects have a fine amber shine that travels slowly round the edge of the drawer, and carry a small star. */
+@property --shine {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.drawer.is-featured .drawer-front::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  padding: 1.5px;
+  border-radius: 3px;
+  background: conic-gradient(from var(--shine), transparent 0deg, transparent 250deg, #ffb55c 320deg, #fff0cc 340deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  animation: drawer-shine 6s linear infinite;
+}
+
+@keyframes drawer-shine {
+  to { --shine: 360deg; }
+}
+
+.drawer-star {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: #d9922e;
+  font-size: 14px;
+}
+
+/* One drawer is left for later, with a label that says so. */
+.drawer-empty { pointer-events: none; }
+
+.drawer-empty .drawer-label {
+  display: grid;
+  place-items: center;
+  background: color-mix(in srgb, var(--cab-label) 58%, var(--cab-face));
+}
+
+.drawer-soon {
+  color: var(--cab-label-ink);
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 600;
+  opacity: .7;
+}
+
+
+/* =========================
+   Full Page Project
+   ========================= */
+
+html.drawer-locked { overflow: hidden; padding-right: var(--scrollbar-gap, 0); }
+
+.drawer-view {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  background: var(--paper);
+}
+
+.drawer-view[hidden] { display: none; }
+
+.drawer-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--paper);
+}
+
+/* A line at the top says how to close. It shows only while the project is at the very top, and fills as you scroll up. */
+.drawer-hint {
+  position: fixed;
+  z-index: 2;
+  top: 14px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 4px 10px;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-50%);
+  transition: opacity 250ms ease, color 200ms ease;
+}
+
+.drawer-view.is-top .drawer-hint { opacity: 1; pointer-events: auto; }
+.drawer-hint:is(:hover, :focus-visible) { color: var(--ink); }
+.drawer-hint:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.drawer-hint::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 3px;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transform: scaleX(var(--pull, 0));
+}
+
+.drawer-chevron {
+  width: 7px;
+  height: 7px;
+  border-top: 1.5px solid currentColor;
+  border-left: 1.5px solid currentColor;
+  transform: translateY(1px) rotate(45deg);
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+@media (max-width: 960px) {
+  .cabinet { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* With no hover on touch screens, a tap opens the project straight away. */
+@media (hover: none) {
+  .drawer.is-open .drawer-front { transform: none; }
+  .drawer-inside { display: none; }
+}
+
+@media (max-width: 560px) {
+  .cabinet { grid-template-columns: 1fr; padding: 14px; }
+  .drawer { --drawer-h: 190px; }
+  .drawer-empty { display: none; }
+  #cabinet { padding-bottom: 56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drawer.is-featured .drawer-front::after { animation: none; }
+
+  .drawer-front,
+  .drawer-inside { transition: none; }
+
+  .drawer.is-open .drawer-front { transform: none; }
+  .drawer.is-open .drawer-inside { position: absolute; z-index: 2; inset: 0; }
+  .drawer.is-expanded .drawer-front { transform: none; opacity: 1; }
+}
+
+
+/* =========================
+   Hero Layout
+   ========================= */
+
+/* The hero is exactly one screen tall, so the desk always fits, and it stays pinned while the desk tilts up and grows. */
+:root {
+  --hero-h: max(100vh, 440px);
+  --desk-far: #dfe7f2;
+}
+
+[data-theme="dark"] { --desk-far: #1b2230; }
+
+@supports (height: 100svh) {
+  :root { --hero-h: max(100svh, 440px); }
+}
+
+.hero-track {
+  height: calc(var(--hero-h) + 70vh);
+}
+
+.hero-desk {
+  position: sticky;
+  top: 0;
+  height: var(--hero-h);
+  padding-top: clamp(92px, 20vh, 176px);
+  overflow: hidden;
+}
+
+.hero-desk > .container {
+  position: relative;
+  z-index: 3;
+  /* The text lifts a little so the growing desk never touches it. */
+  translate: 0 calc(var(--hero-scroll, 0) * max(-56px, -6vh));
+}
+
+/* =========================
+   Hero Text
+   ========================= */
+
+.hero-desk .hero-grid { align-items: start; }
+.hero-desk .hero-copy { padding: 0; }
+
+.hero-desk h1 {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: clamp(48px, min(9vw, 13vh), 108px);
+  font-weight: 600;
+  line-height: .82;
+  letter-spacing: -.055em;
+}
+
+.hero-desk .hero-tagline { margin-top: clamp(16px, 4vh, 34px); }
+
+.hero-aside {
+  width: min(100%, 520px);
+  justify-self: end;
+}
+
+/* A wider right-hand column, so the brief wraps more loosely. */
+@media (min-width: 841px) {
+  /* The left column is always wide enough for the longest tagline, so "Securely." never drops to a second line. */
+  .hero-desk .hero-grid { grid-template-columns: minmax(440px, 1fr) minmax(0, 520px); }
+  .hero-desk .hero-tagline { white-space: nowrap; }
+  .hero-aside { width: 100%; }
+  .hero-brief { margin-right: clamp(0px, 5vw, 64px); }
+}
+
+.hero-brief {
+  margin: 0;
+  padding-left: 28px;
+  border-left: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  color: color-mix(in srgb, var(--ink) 78%, transparent);
+  font-size: clamp(14px, 2.2vh, 19px);
+  line-height: 1.55;
+}
+
+@media (max-width: 840px) {
+  .hero-aside { justify-self: start; }
+}
+
+/* On short screens the brief makes way for the desk. */
+@media (max-height: 620px) {
+  .hero-brief { display: none; }
+}
+
+@media (max-width: 840px) and (max-height: 780px) {
+  .hero-brief { display: none; }
+}
+
+
+/* =========================
+   Desk
+   ========================= */
+
+/* The desk is a tilted plane seen in perspective, narrow at the far edge and wider than the page near you. Everything on it lies in the same plane. Its near colour is the page colour, so it simply becomes the page below. */
+.desk {
+  position: absolute;
+  inset: auto 0 0;
+  /* The desk grows upwards as you scroll, taking more of the screen. */
+  height: calc(36% + var(--hero-scroll, 0) * 24%);
+  --k: 1;
+  z-index: 2;
+  perspective: 1000px;
+  perspective-origin: 50% -20%;
+}
+
+.desk-plane {
+  position: absolute;
+  top: 0;
+  right: 6%;
+  left: 6%;
+  height: 900px;
+  transform-origin: 50% 0;
+  /* The view tips up slightly as you scroll. */
+  --tilt: calc(62deg - var(--hero-scroll, 0) * 28deg);
+  transform: rotateX(var(--tilt));
+  transform-style: preserve-3d;
+}
+
+.desk-surface {
+  position: absolute;
+  inset: 0;
+  border-radius: 40px 40px 0 0;
+  background: var(--grain), linear-gradient(180deg, var(--desk-far) 0%, var(--paper) 38%);
+  box-shadow: 0 -8px 28px rgba(30, 50, 90, .14);
+}
+
+
+/* On shorter screens everything on the desk shrinks to keep fitting. --k is that scale. */
+@media (max-height: 760px) {
+  .desk { --k: .82; }
+}
+
+@media (max-height: 640px) {
+  .desk { --k: .68; }
+}
+
+/* Hovering a badge dims the whole desk, leaving only the badges and the preview. */
+.desk-surface::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--desk-dim);
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.desk.is-focused .desk-surface::after { opacity: 1; }
+
+.desk-title,
+.desk-sub,
+.desk-hint {
+  position: absolute;
+  margin: 0;
+  transform: translateZ(1px);
+  transition: opacity 300ms ease, filter 400ms ease, letter-spacing 500ms ease;
+}
+
+.desk-title,
+.desk-sub {
+  left: 6%;
+  text-align: left;
+}
+
+.desk-title {
+  top: calc(36px * var(--k));
+  font-family: var(--font-serif);
+  font-size: calc(54px * var(--k));
+  font-weight: 600;
+  line-height: 1;
+}
+
+.desk-sub {
+  top: calc(100px * var(--k));
+  color: var(--muted);
+  font-size: calc(17px * var(--k));
+}
+
+.desk.is-focused .desk-title,
+.desk.is-focused .desk-sub { opacity: 0; }
+
+/* The hint sits at the top right of the desk. Its wording slides over to "Click to see more" when a badge is hovered, the way the tagline changes words. */
+.desk-hint {
+  top: calc(44px * var(--k));
+  right: 6%;
+  display: grid;
+  overflow: hidden;
+  font-family: var(--font-serif);
+  font-size: calc(26px * var(--k));
+  font-style: italic;
+  line-height: 1.35;
+}
+
+.hint-idle,
+.hint-active {
+  grid-area: 1 / 1;
+  justify-self: end;
+  white-space: nowrap;
+  transition: transform 450ms var(--ease-out), opacity 300ms ease, filter 400ms ease;
+}
+
+.hint-idle { color: var(--muted); }
+
+.hint-active {
+  color: #fff;
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateY(100%);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--accent) 70%, transparent), 0 1px 2px rgba(0, 0, 0, .3);
+}
+
+.desk.is-focused .hint-idle {
+  opacity: 0;
+  filter: blur(4px);
+  transform: translateY(-100%);
+}
+
+.desk.is-focused .hint-active {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+
+/* =========================
+   Desk Props
+   ========================= */
+
+/* Marks on the desk lie in the same plane, and dim with the desk when a badge is hovered. */
+.desk-props {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.desk.is-focused .desk-props { opacity: .2; }
+
+.desk-props > * {
+  position: absolute;
+  transform: translateZ(1px);
+}
+
+/* A shallow groove for pens, carved along the far edge. */
+.desk-groove {
+  top: calc(16px * var(--k));
+  right: 4%;
+  left: 4%;
+  height: calc(7px * var(--k));
+  border-radius: 4px;
+  background: linear-gradient(180deg, rgba(10, 16, 28, .2), rgba(10, 16, 28, .05));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+[data-theme="dark"] .desk-groove {
+  background: linear-gradient(180deg, rgba(0, 0, 0, .5), rgba(0, 0, 0, .12));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, .07);
+}
+
+
+/* =========================
+   Badges
+   ========================= */
+
+.desk-items {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+}
+
+/* Each badge is a thick token lying on the desk. Hovering lifts it off the surface. */
+.desk-badge {
+  --lift: 0px;
+  position: absolute;
+  left: var(--x);
+  top: calc(var(--y) * var(--k));
+  width: calc(54px * var(--k));
+  height: calc(54px * var(--k));
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  transform: translateZ(var(--lift)) rotateZ(var(--r));
+  transform-style: preserve-3d;
+  transition: transform 300ms var(--ease-out);
+}
+
+.desk-badge:is(:hover, :focus-visible, .is-active) { --lift: 34px; }
+
+.desk-badge-face,
+.desk-badge-edge,
+.desk-badge-shadow {
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+}
+
+.desk-badge-face {
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--ink);
+  font: 600 calc(28px * var(--k))/1 var(--font-serif);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 16%, transparent);
+  transform: translateZ(8px);
+}
+
+.desk-badge-face img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A few stacked layers give the badge its thickness. */
+.desk-badge-edge {
+  background: #2b3037;
+  transform: translateZ(calc(var(--layer) * 2px));
+}
+
+.desk-badge-shadow {
+  inset: 4px;
+  background: rgba(10, 16, 28, .5);
+  filter: blur(7px);
+  transform: translateZ(calc(var(--lift) * -1)) translate(5px, 7px);
+  transition: transform 300ms var(--ease-out), opacity 300ms ease;
+}
+
+.desk-badge:is(:hover, :focus-visible, .is-active) .desk-badge-shadow {
+  opacity: .6;
+  transform: translateZ(calc(var(--lift) * -1)) translate(16px, 22px) scale(1.15);
+}
+
+.desk-badge:focus-visible { outline: var(--focus-ring); outline-offset: 10px; border-radius: 26px; }
+
+
+/* =========================
+   Preview
+   ========================= */
+
+/* A copy of the project card lies on the desk on the right, at the same angle as the desk. */
+.desk-preview {
+  position: absolute;
+  top: calc(122px * var(--k));
+  left: 55%;
+  width: min(38%, calc(380px * var(--k)));
+  display: grid;
+  gap: calc(10px * var(--k));
+  padding: calc(14px * var(--k));
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  box-shadow: 0 22px 44px rgba(10, 16, 28, .4);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateZ(8px);
+  transition: opacity 300ms ease, transform 380ms var(--ease-out);
+}
+
+.desk-preview.is-visible {
+  opacity: 1;
+  transform: translateZ(26px);
+}
+
+.desk-preview-copy { min-width: 0; }
+
+.desk-preview-type {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: calc(13px * var(--k));
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.desk-preview-title {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: calc(32px * var(--k));
+  font-weight: 600;
+  line-height: 1;
+}
+
+.desk-preview-text {
+  margin: calc(6px * var(--k)) 0 0;
+  color: var(--muted);
+  font-size: calc(13px * var(--k));
+  line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desk-badge,
+  .desk-badge-shadow,
+  .desk-preview,
+  .desk-hint,
+  .hint-idle,
+  .hint-active { transition: none; }
+}
+
+
+/* =========================
+   Contact Section
+   ========================= */
+
+/* While the desk is dimmed, the cabinet below it dims too, so there is no change of tone where they meet. */
+#cabinet::before {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  background: var(--desk-dim);
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+.desk-focused #cabinet::before { opacity: 1; }
+
+/* The note and buttons sit on the left, the magic circle on the right, all on the plain page. */
+.contact-section {
+  position: relative;
+  padding: 16px 0 32px;
+}
+
+.contact-section .hero-copy { padding: 0; }
+
+.contact-section .contact-note {
+  width: min(100%, 360px);
+  margin: 0 0 0 44px;
+}
+
+.contact-section .hero-note-wrap {
+  width: 100%;
+  min-height: 0;
+  justify-self: center;
+  place-items: center;
+}
+
+.contact-section .hero-note-wrap::after { display: none; }
+
+.contact-section .magic-circle-stage {
+  position: relative;
+  top: auto;
+  right: auto;
+}
+
+
+/* =========================
+   Responsive
+   ========================= */
+
+/* On narrower screens the hero is still one pinned screen: the text on top and the desk filling the space below it. */
+@media (max-width: 840px) {
+  .hero-desk {
+    display: flex;
+    flex-direction: column;
+    padding-top: clamp(124px, 16vh, 150px);
+  }
+
+  .hero-desk > .container { translate: none; }
+
+  .desk {
+    --k: .7;
+    position: relative;
+    inset: auto;
+    flex: 1;
+    height: auto;
+    min-height: 260px;
+    margin-top: 20px;
+  }
+
+  .desk-plane {
+    right: 4%;
+    left: 4%;
+    height: 640px;
+  }
+
+  .desk-preview {
+    left: 42%;
+    width: min(48%, calc(380px * var(--k)));
+  }
+
+  .desk-hint {
+    top: calc(124px * var(--k));
+    right: 4%;
+  }
+
+  .contact-section { padding: 8px 0 24px; }
+  .contact-section .contact-note { margin-left: 0; }
 }

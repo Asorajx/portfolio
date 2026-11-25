@@ -67,8 +67,6 @@
     layer.remove()
   }
 
-  /* The words wait for the iris transition to mostly open. */
-  const delay = document.documentElement.dataset.irisTransition ? 500 : 0
   setTimeout(() => {
     if (motion.matches) {
       finish()
@@ -86,10 +84,10 @@
       if (!motion.matches) playAboutBorderGlow(motion)
     }, 1700)
     setTimeout(finish, 2300)
-  }, delay)
+  }, 0)
 })()
 
-/* Send two lights around the viewport after the introduction settles. */
+/* Send two lights around the sheet after the introduction settles. */
 function playAboutBorderGlow(motion) {
   const overlay = document.createElement('div')
   overlay.className = 'about-border-glow'
@@ -103,6 +101,17 @@ function playAboutBorderGlow(motion) {
   document.body.appendChild(overlay)
 
   const frame = overlay.querySelector('.about-glow-frame')
+
+  /* The lights run round the sheet, trimmed to what is on screen. */
+  const sheet = document.querySelector('.about-sheet')
+  const box = sheet?.getBoundingClientRect()
+
+  if (box) {
+    const top = Math.max(box.top, 0)
+    const bottom = Math.min(box.bottom, window.innerHeight)
+
+    frame.style.cssText = `inset: auto; left: ${box.left}px; top: ${top}px; width: ${box.width}px; height: ${bottom - top}px;`
+  }
   const beams = overlay.querySelectorAll('.about-glow-beam')
   const duration = 700
   const radius = parseFloat(getComputedStyle(overlay).getPropertyValue('--glow-radius')) || 0
@@ -115,7 +124,8 @@ function playAboutBorderGlow(motion) {
     const horizontal = Math.max(0, width / 2 - corner)
     const vertical = Math.max(0, height - 2 * corner)
     const arc = Math.PI * corner / 2
-    let distance = progress * (2 * horizontal + vertical + 2 * arc)
+    /* Along the top and down the side only, so the bottom of the screen stays clear. */
+    let distance = progress * (horizontal + arc + vertical)
 
     if (distance < horizontal) return [width / 2 + distance, 0]
     distance -= horizontal
@@ -124,14 +134,7 @@ function playAboutBorderGlow(motion) {
       return [width - corner + corner * Math.sin(angle), corner - corner * Math.cos(angle)]
     }
     distance -= arc
-    if (distance < vertical) return [width, corner + distance]
-    distance -= vertical
-    if (distance < arc) {
-      const angle = distance / Math.max(corner, .001)
-      return [width - corner + corner * Math.cos(angle), height - corner + corner * Math.sin(angle)]
-    }
-    distance -= arc
-    return [Math.max(width / 2, width - corner - distance), height]
+    return [width, Math.min(corner + distance, height - corner)]
   }
 
   function stop() {

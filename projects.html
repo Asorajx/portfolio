@@ -38,27 +38,21 @@
   <meta name="twitter:image" content="https://asorajx.github.io/portfolio/assets/icons/share-preview.png">
 
   <script>
+    if (/[?&]embed=1/.test(location.search)) document.documentElement.dataset.embed = '1';
+  </script>
+  <script>
     try {
       document.documentElement.dataset.theme =
         localStorage.getItem('portfolio-theme') ||
         (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-
-      if (sessionStorage.getItem('portfolio-iris-transition')) {
-        document.documentElement.dataset.irisTransition = 'closed';
-        sessionStorage.removeItem('portfolio-iris-transition');
-      }
-
-      /* Book Zoom Arrival */
-      if (sessionStorage.getItem('portfolio-book-transition')) {
-        document.documentElement.dataset.bookTransition = 'ready';
-      }
     } catch (error) {}
   </script>
 
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="projects.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="sky.css">
   <link rel="stylesheet" href="demo-video.css">
-  <link rel="stylesheet" href="project-preview.css">
   <meta name="theme-color" content="#f3eedf" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#19211d" media="(prefers-color-scheme: dark)">
 </head>
@@ -79,7 +73,7 @@
       </a>
 
       <nav class="nav-links" aria-label="Primary navigation">
-        <a class="active" href="index.html#projects">Projects</a>
+        <a class="active" href="index.html#cabinet">Projects</a>
         <a href="about.html">About</a>
         <a href="index.html#contact" data-contact-nav>Contact</a>
       </nav>
@@ -131,24 +125,11 @@
 
 
         <!-- =========================
-             Project Navigation
-             ========================= -->
-
-        <section class="project-collection" aria-label="Project navigation">
-          <a class="project-back-link" href="index.html#bookshelf">← Back to projects</a>
-
-          <div class="project-switcher" role="tablist" aria-label="Project collection">
-              <!-- projects.js builds the tabs from project-data.js. -->
-          </div>
-        </section>
-
-
-        <!-- =========================
              Active Project
              ========================= -->
 
         <!-- projects.js fills these fields from project-data.js; the first project is the default. -->
-        <div id="projectContent" class="project-content" role="tabpanel" aria-label="Project details">
+        <div id="projectContent" class="project-content">
           <header class="project-detail-hero">
             <div class="project-detail-intro">
               <div class="project-title-meta">
@@ -327,10 +308,12 @@
         </div>
 
 
-        <nav class="project-bottom-navigation" aria-label="Page navigation">
-          <a class="project-back-link" href="index.html#bookshelf">← Back to projects</a>
-          <a id="projectBackToTop" class="project-back-link" href="#projectDetail">Back to top <span class="fly-arrow fly-arrow--up" aria-hidden="true"><span>↑</span><span>↑</span></span></a>
-        </nav>
+
+        <!-- Shown only when the project opens from the cabinet. -->
+        <div class="embed-bar">
+          <button id="embedTop" class="project-detail-button" type="button">Back to Top</button>
+          <button id="embedReturn" class="project-detail-button" type="button">Return</button>
+        </div>
       </div>
     </article>
   </main>

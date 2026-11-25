@@ -31,15 +31,12 @@
       document.documentElement.dataset.theme =
         localStorage.getItem('portfolio-theme') ||
         (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-
-      if (sessionStorage.getItem('portfolio-iris-transition')) {
-        document.documentElement.dataset.irisTransition = 'closed';
-        sessionStorage.removeItem('portfolio-iris-transition');
-      }
     } catch (error) {}
   </script>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="about.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="sky.css">
   <meta name="theme-color" content="#f3eedf" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#19211d" media="(prefers-color-scheme: dark)">
 </head>
@@ -60,7 +57,7 @@
       </a>
 
       <nav class="nav-links" aria-label="Primary navigation">
-        <a href="index.html#projects">Projects</a>
+        <a href="index.html#cabinet">Projects</a>
         <a class="active" href="about.html">About</a>
         <a href="index.html#contact" data-contact-nav>Contact</a>
       </nav>
@@ -108,17 +105,30 @@
        About Content
        ========================= -->
 
-    <section id="about" class="about-page section">
-      <div class="container about-page-grid">
-        <h1>I build what I’m <span class="about-accent">passionate</span> about.</h1>
+    <div class="hero-sky about-sky" aria-hidden="true">
+      <span class="sky-stars"></span>
+      <span class="sky-cloud sky-cloud-1"></span>
+      <span class="sky-cloud sky-cloud-2"></span>
+      <span class="sky-cloud sky-cloud-3"></span>
+      <span class="sky-cloud sky-cloud-4"></span>
+    </div>
 
-        <div class="about-intro">
-          <div class="about-summary">
-            <p>I mostly spend my time building apps and websites, from small tools I end up using every day to ideas I just want to see come to life.</p>
-            <p>The part I enjoy most is the design: working out how something should look and feel, and refining the small details until it feels right to use.</p>
-            <p>Alongside that, I'm studying cybersecurity. It's given me a habit of looking past the surface and asking how things actually work.</p>
+    <div class="about-lantern-spot"></div>
+
+    <div class="about-sheet">
+    <section id="about" class="about-page section">
+      <div class="container">
+        <h1>I build what I’m <span class="about-accent">passionate</span> about.</h1>
+      </div>
+
+      <div class="container about-page-grid">
+          <div class="about-intro">
+            <div class="about-summary">
+              <p>I mostly spend my time building apps and websites, from small tools I end up using every day to ideas I just want to see come to life.</p>
+              <p>The part I enjoy most is the design: working out how something should look and feel, and refining the small details until it feels right to use.</p>
+              <p>Alongside that, I'm studying cybersecurity. It's given me a habit of looking past the surface and asking how things actually work.</p>
+            </div>
           </div>
-        </div>
 
         <aside class="album-player listening-note" aria-labelledby="listeningTitle">
           <!-- Section Sticky Note -->
@@ -268,10 +278,9 @@
           </ul>
         </div>
       </div>
-
-      <a class="text-link about-back-link" href="index.html">← Back to home</a>
     </div>
   </section>
+    </div>
   </main>
 
 
@@ -307,6 +316,7 @@
   <!-- Shared theme, spirit-light, and utility interactions -->
   <script src="script.js"></script>
   <script src="contact.js"></script>
+  <script src="lantern.js"></script>
 
 </body>
 </html>

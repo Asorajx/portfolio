@@ -3,24 +3,10 @@
    ========================= */
 
 :root {
-  --paper: #e9dfc6;
-  --paper-deep: #dccfb0;
-  --surface: #f1e8d2;
-  --surface-2: #e6dac0;
-  --ink: #25312b;
-  --muted: #5c645b;
-  --line: #c2b694;
-  --green: #536f52;
-  --green-deep: #344c3d;
-  --plum: #7a4855;
-  --plum-deep: #5e3440;
-  --button-accent: var(--green);
   --gold: #9a7b45;
   --max-width: 1120px;
   --text-micro: 12px;
   --text-sm: 14px;
-  --text-base: 16px;
-  --text-lg: 20px;
   --hit-target: 44px;
   --btn-lift: translateY(-2px);
   --ease-out: cubic-bezier(.22, 1, .36, 1);
@@ -28,24 +14,6 @@
   --focus-ring-offset: 5px;
   --font-serif: "Cormorant Garamond", Georgia, serif;
   --font-sans: "DM Sans", system-ui, sans-serif;
-  --shadow: 0 18px 50px rgba(63, 54, 37, 0.08);
-  --shelf: #725b46;
-  --shelf-dark: #46382c;
-  --shelf-back: #5f4d3c;
-  --shelf-back-deep: #4d3e31;
-  --projects-bg: #dccfb3;
-  --projects-bg-deep: #cfc0a1;
-  --projects-accent: #927f72;
-  --magic: #a56d43;
-  --magic-glow: rgba(165, 109, 67, .18);
-  --toggle-day-bg: #819279;
-  --toggle-night-bg: #26342f;
-  --toggle-sun: #c7a869;
-  --toggle-moon: #e2dccd;
-  --toggle-moon-spot: #8f7c74;
-  --toggle-stars: #e9e0c9;
-  --toggle-cloud: #f3eedf;
-  --toggle-cloud-back: #c9c2ad;
   --spirit-a: #754354;
   --spirit-b: #7fae70;
   --spirit-c: #245b55;
@@ -53,41 +21,13 @@
   --demo-video-skeleton-a: #2b2a27;
   --demo-video-skeleton-b: #403e39;
   --demo-video-shade: #0d0c0b;
+  /* A very faint film grain laid over the page surfaces, but never the sky: fine noise at 6% strength. */
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='.011' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
 /* Dark mode overrides the shared theme colors above. */
 [data-theme="dark"] {
-  --paper: #19211d;
-  --paper-deep: #202a24;
-  --surface: #232e28;
-  --surface-2: #29362f;
-  --ink: #eee9da;
-  --muted: #b7b9ad;
-  --line: #465249;
-  --green: #90aa7f;
-  --green-deep: #bfd0a6;
-  --plum: #c07c8f;
-  --plum-deep: #d59aae;
-  --button-accent: var(--green-deep);
   --gold: #c7a869;
-  --shadow: 0 18px 55px rgba(0, 0, 0, 0.24);
-  --shelf: #4d4136;
-  --shelf-dark: #2f2822;
-  --shelf-back: #40362d;
-  --shelf-back-deep: #332b24;
-  --projects-bg: #292724;
-  --projects-bg-deep: #332d2c;
-  --projects-accent: #8f7c74;
-  --magic: #d18a54;
-  --magic-glow: rgba(209, 138, 84, .28);
-  --toggle-day-bg: #819279;
-  --toggle-night-bg: #26342f;
-  --toggle-sun: #d0b474;
-  --toggle-moon: #eee9da;
-  --toggle-moon-spot: #8f7c74;
-  --toggle-stars: #eee9da;
-  --toggle-cloud: #d9d4c5;
-  --toggle-cloud-back: #92998f;
   --spirit-a: #95556b;
   --spirit-b: #9acb85;
   --spirit-c: #4f8c82;
@@ -233,7 +173,6 @@ img { max-width: 100%; }
    ========================= */
 
 .theme-switch {
-  --toggle-size: 12px;
   --container-width: 5.625em;
   --container-height: 2.5em;
   --container-radius: 6.25em;
@@ -455,89 +394,8 @@ img { max-width: 100%; }
 
 
 /* =========================
-   Iris Transition
-   ========================= */
-
-/* Home and About close in like an iris, wipe blank, then open onto the next page. */
-@property --iris-radius {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 65vmax;
-}
-
-/* Iris sheet: blank paper with a round hole, edged with a thin gold ring */
-html[data-iris-transition]::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 2000;
-  pointer-events: none;
-  background: radial-gradient(
-    circle at 50% 50%,
-    transparent calc(var(--iris-radius) - 2px),
-    var(--gold) var(--iris-radius),
-    var(--paper) calc(var(--iris-radius) + 3px)
-  );
-}
-
-/* Close: the hole shrinks from the screen edges to the centre. */
-html[data-iris-transition="close"]::after { animation: iris-transition-close 340ms cubic-bezier(.55, 0, .45, 1) both; }
-
-/* Arrival: the new page stays blank until the script starts the reveal. */
-html[data-iris-transition="closed"]::after {
-  --iris-radius: 0px;
-  animation: iris-transition-open 400ms 1600ms ease-out both;
-}
-
-/* Open: the hole grows to reveal the page. */
-html[data-iris-transition="open"]::after { animation: iris-transition-open 650ms cubic-bezier(.2, .7, .2, 1) both; }
-
-@keyframes iris-transition-close {
-  from { --iris-radius: 65vmax; }
-  to { --iris-radius: 0px; }
-}
-@keyframes iris-transition-open {
-  from { --iris-radius: 0px; }
-  to { --iris-radius: 65vmax; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html[data-iris-transition]::after { display: none; }
-}
-
-
-/* =========================
-   Cabinet Colours
-   ========================= */
-
-/* Bookshelf and project book tabs */
-:root {
-  --cabinet-line: #2e1d12;
-  --cabinet-wood: #74503a;
-  --cabinet-wood-light: #86603f;
-  --cabinet-back: #3a2a1e;
-  --cabinet-back-deep: #2f2218;
-  --cabinet-label: #c8b892;
-  --cabinet-label-shade: #b2a07b;
-  --cabinet-pages: #c4b48f;
-}
-[data-theme="dark"] {
-  --cabinet-line: #1a110a;
-  --cabinet-wood: #553c2a;
-  --cabinet-wood-light: #644733;
-  --cabinet-back: #2a1f16;
-  --cabinet-back-deep: #221911;
-  --cabinet-label: #a39577;
-  --cabinet-label-shade: #8f8164;
-  --cabinet-pages: #a19374;
-}
-
-
-/* =========================
    Shared Components
    ========================= */
-
-.text-link { color: var(--plum); font-size: 14px; font-weight: 700; }
 
 /* Shared sticky note used for contact/profile notes. */
 .apothecary-note {
@@ -628,17 +486,15 @@ html[data-iris-transition="open"]::after { animation: iris-transition-open 650ms
   inset: -4px;
 }
 
-/* Keep the bookshelf's lights sparse on smaller screens. */
+/* Keep the cabinet's lights sparse on smaller screens. */
 @media (max-width: 680px) {
-  #bookshelf .spirit-light:not(:nth-child(3n + 1)) { display: none; }
-  #projects .spirit-light:nth-child(even) { display: none; }
+  #cabinet .spirit-light:not(:nth-child(3n + 1)) { display: none; }
   #background .spirit-light:nth-child(even) { display: none; }
 }
 
-/* Off-screen sections hold their lights and shelf sprites mid-motion. */
+/* Off-screen sections hold their lights mid-motion. */
 .is-offscreen .spirit-light,
-.is-offscreen .spirit-light::before,
-.is-offscreen .shelf-sprite {
+.is-offscreen .spirit-light::before {
   animation-play-state: paused;
 }
 
@@ -896,12 +752,21 @@ a:is(:hover, :focus-visible) .fly-arrow > span:last-child {
 a:is(:hover, :focus-visible) .fly-arrow--up > span:first-child { transform: translateY(-150%); }
 a:is(:hover, :focus-visible) .fly-arrow--up > span:last-child { transform: translateY(0); }
 
+/* Rightward variant for buttons that lead on, such as Contact me. */
+.fly-arrow--right > span:last-child { transform: translateX(-150%); }
+:is(a, button):is(:hover, :focus-visible) .fly-arrow--right > span:first-child {
+  transition: transform 300ms ease-in-out;
+  transform: translateX(150%);
+}
+:is(a, button):is(:hover, :focus-visible) .fly-arrow--right > span:last-child {
+  transition: transform 300ms ease-in-out 100ms;
+  transform: translateX(0);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .fly-arrow > span { transition: none !important; }
 }
 .primary-button:focus-visible,
-.text-link:focus-visible,
-.featured-display-link:focus-visible,
 .project-detail-button:focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-ring-offset);
@@ -914,7 +779,7 @@ a:is(:hover, :focus-visible) .fly-arrow--up > span:last-child { transform: trans
     60% { filter: blur(0); }
     to { opacity: 1; translate: 0 0; filter: blur(0); }
   }
-  .primary-button:active, .hero-actions .text-link:active { transform: translateY(1px) scale(.98); }
+  .primary-button:active { transform: translateY(1px) scale(.98); }
 }
 
 
@@ -924,7 +789,6 @@ a:is(:hover, :focus-visible) .fly-arrow--up > span:last-child { transform: trans
 
 /* Pill buttons: an outline that fills on hover. Primary buttons start filled. */
 .primary-button,
-.hero-actions .text-link,
 .project-detail-button {
   display: inline-flex;
   align-items: center;
@@ -943,7 +807,6 @@ a:is(:hover, :focus-visible) .fly-arrow--up > span:last-child { transform: trans
 }
 
 .primary-button:is(:hover, :focus-visible),
-.hero-actions .text-link:is(:hover, :focus-visible),
 .project-detail-button:is(:hover, :focus-visible) {
   transform: var(--btn-lift);
   border-color: var(--button-accent);
@@ -954,7 +817,6 @@ a:is(:hover, :focus-visible) .fly-arrow--up > span:last-child { transform: trans
 /* Squircle: smoother corners where supported; other browsers show the same 16px rounded corners. */
 @supports (corner-shape: squircle) {
   .primary-button,
-  .hero-actions .text-link,
   .project-detail-button {
     corner-shape: squircle;
   }
@@ -1007,11 +869,8 @@ html[data-theme="dark"] { color-scheme: dark; }
 .nav-links a,
 .contact-copy-button,
 .contact-dialog-close,
-.featured-dialog-close,
 .contact-form-button,
-.featured-display-link,
-.contact-email-address,
-.project-back-link {
+.contact-email-address {
   position: relative;
 }
 
@@ -1019,11 +878,8 @@ html[data-theme="dark"] { color-scheme: dark; }
 .nav-links a::before,
 .contact-copy-button::before,
 .contact-dialog-close::before,
-.featured-dialog-close::before,
 .contact-form-button::before,
-.featured-display-link::before,
-.contact-email-address::before,
-.project-back-link::before {
+.contact-email-address::before {
   content: "";
   position: absolute;
   top: 50%;

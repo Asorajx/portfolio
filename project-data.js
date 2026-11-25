@@ -5,10 +5,8 @@
 /* Project Details (fields follow the page order) */
 window.portfolioProjects = [
   {
-    // Bookshelf
+    // Cabinet
     id: 'mosaic',
-    bookTitle: 'Mosaic',
-    bookSize: 'wide',
     // Project Switcher
     shortTitle: 'Mosaic',
     // Hero
@@ -46,10 +44,8 @@ window.portfolioProjects = [
   },
 
   {
-    // Bookshelf
+    // Cabinet
     id: 'honeypot',
-    bookTitle: 'Honeypot Simulation',
-    bookSize: 'wide',
     // Project Switcher
     shortTitle: 'Honeypot',
     // Hero
@@ -81,10 +77,8 @@ window.portfolioProjects = [
   },
 
   {
-    // Bookshelf
+    // Cabinet
     id: 'writepretty',
-    bookTitle: 'WritePretty',
-    bookSize: 'regular',
     // Project Switcher
     shortTitle: 'WritePretty',
     // Hero
@@ -119,10 +113,8 @@ window.portfolioProjects = [
     story: 'I work with a lot of documents and reports for school, and I often find myself spending time fixing small formatting issues, especially when copying text from different sources. I wanted a quick way to clean things up without having to rely on AI every time. So I decided to build WritePretty, a tool that lets users quickly clean up their text and choose which formatting they want to remove, while keeping the original content unchanged.',
   },
   {
-    // Bookshelf
+    // Cabinet
     id: 'loop',
-    bookTitle: 'LOOP',
-    bookSize: 'regular',
     // Project Switcher
     shortTitle: 'LOOP',
     // Hero
@@ -157,10 +149,8 @@ window.portfolioProjects = [
     thenNowNote: 'The original interface was cluttered, making the source code difficult to follow. The updated version has a cleaner, more intuitive layout, with clearer code visualization and brief explanations of each concept, so Python OOP is easier to understand.',
   },
   {
-    // Bookshelf
+    // Cabinet
     id: 'starjot',
-    bookTitle: 'Starjot',
-    bookSize: 'regular',
     // Project Switcher
     shortTitle: 'Starjot',
     // Hero
@@ -191,10 +181,8 @@ window.portfolioProjects = [
     story: 'I use note-taking apps a lot for school and projects, mainly Notion, but lately I\'ve found it a little too bloated with features I don\'t really need. I was curious about what a simpler alternative could look like, so I decided to experiment with building my own workspace for notes and project work. I also wanted to explore the idea of local data storage rather than relying entirely on the cloud. This led me to build Starjot.',
   },
   {
-    // Bookshelf
+    // Cabinet
     id: 'exceldex',
-    bookTitle: 'ExcelDex',
-    bookSize: 'regular',
     // Project Switcher
     shortTitle: 'ExcelDex',
     // Hero
@@ -230,10 +218,8 @@ window.portfolioProjects = [
     story: 'I wanted to get better at Excel, and building a quick reference for it was a way to go through the functions and shortcuts I wasn\'t familiar with. My family also finds Excel confusing sometimes, so I made it something they could use too.',
   },
   {
-    // Bookshelf
+    // Cabinet
     id: 'tenax',
-    bookTitle: 'Tenax',
-    bookSize: 'regular',
     // Project Switcher
     shortTitle: 'Tenax',
     // Hero
@@ -337,20 +323,10 @@ window.syncProjectSections = function syncProjectSections(root, project) {
 
 
 /* =========================
-   Project Book Stack
+   Project Manager
    ========================= */
 
-/* Book Stack Placement */
-window.stackProjectTabs = function stackProjectTabs(tabs, projects) {
-  const featuredColumns = Math.ceil(projects.filter(project => project.featured).length / 3)
-  let featuredIndex = 0
-  let otherIndex = 0
-
-  tabs.forEach((tab, index) => {
-    const project = projects[index]
-    const stackIndex = project.featured ? featuredIndex++ : otherIndex++
-    const firstColumn = project.featured ? 1 : featuredColumns + 1
-    tab.style.gridColumn = String(firstColumn + Math.floor(stackIndex / 3))
-    tab.style.gridRow = String(3 - stackIndex % 3)
-  })
+/* Shares the featured entries with the page scripts. */
+window.ProjectManager = {
+  getFeatured: () => window.portfolioProjects.filter(project => project.featured),
 }

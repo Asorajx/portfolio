@@ -36,11 +36,6 @@
       document.documentElement.dataset.theme =
         localStorage.getItem('portfolio-theme') ||
         (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-
-      if (sessionStorage.getItem('portfolio-iris-transition')) {
-        document.documentElement.dataset.irisTransition = 'closed';
-        sessionStorage.removeItem('portfolio-iris-transition');
-      }
     } catch (error) {}
 
     /* Jump straight to a linked section instead of smooth-scrolling the whole page on arrival. */
@@ -52,12 +47,10 @@
     }
   </script>
   <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="home.css">
-  <link rel="stylesheet" href="shelf.css">
-  <link rel="stylesheet" href="featured.css">
   <!-- Book Preview Styles -->
-  <link rel="stylesheet" href="projects.css">
-  <link rel="stylesheet" href="project-preview.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="stylesheet" href="sky.css">
+  <link rel="stylesheet" href="home.css">
   <meta name="theme-color" content="#f3eedf" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#19211d" media="(prefers-color-scheme: dark)">
 </head>
@@ -70,6 +63,13 @@
        Header and Navigation
        ========================= -->
 
+  <!-- Sideways blur used while the lantern flies. -->
+  <svg width="0" height="0" style="position: absolute" aria-hidden="true" focusable="false">
+    <filter id="motionBlur" x="-30%" y="-10%" width="160%" height="120%">
+      <feGaussianBlur id="motionBlurFx" stdDeviation="0 0"/>
+    </filter>
+  </svg>
+
   <header class="site-header">
     <div class="container nav-wrapper">
       <a class="logo" href="#home" aria-label="Jun Xiang home">
@@ -78,8 +78,8 @@
       </a>
 
       <nav class="nav-links" aria-label="Primary navigation">
-        <a class="active" href="#projects">Projects</a>
-        <a href="about.html">About</a>
+        <a class="active" href="#cabinet">Projects</a>
+        <a href="./about.html">About</a>
         <a href="#contact" data-contact-nav>Contact</a>
       </nav>
 
@@ -121,23 +121,102 @@
 
   <main id="main" tabindex="-1">
 
-
   <!-- =========================
-       Hero and Contact
+       Hero and Desk
        ========================= -->
 
-    <section id="home" class="hero">
+    <div class="hero-track">
+    <section id="home" class="hero-desk" aria-labelledby="heroTitle">
+      <div class="hero-sky" aria-hidden="true">
+        <span class="sky-stars"></span>
+        <span class="sky-cloud sky-cloud-1"></span>
+        <span class="sky-cloud sky-cloud-2"></span>
+        <span class="sky-cloud sky-cloud-3"></span>
+        <span class="sky-cloud sky-cloud-4"></span>
+      </div>
+
       <div class="container hero-grid">
         <div class="hero-copy">
-          <h1>Jun Xiang</h1>
+          <h1 id="heroTitle">Jun Xiang</h1>
           <p class="hero-tagline"><span class="hero-tagline__line">Building <button class="hero-tagline__phrase" type="button" aria-label="Better Experiences, press for the next phrase" data-words="Better Experiences.|Web Apps.|Useful Tools.|Clean Interfaces."><span class="hero-tagline__word is-current">Better Experiences.</span></button></span> <span class="hero-tagline__line">Securely.</span></p>
-          <div class="hero-actions hero-actions-minimal">
-            <a class="primary-button" href="#projects">View projects</a>
-            <a class="text-link" href="about.html">About me <span class="fly-arrow" aria-hidden="true"><span>↗</span><span>↗</span></span></a>
-          </div>
         </div>
 
-        <div id="contact" class="hero-note-wrap">
+        <div class="hero-aside">
+          <p class="hero-brief">Cybersecurity student who builds apps and websites. I care most about design and the small details that make something feel right to use.</p>
+
+          <a class="hero-lantern" href="./about.html" aria-label="About me">
+            <span class="lantern-glow" aria-hidden="true"></span>
+            <svg class="lantern-art" viewBox="0 0 110 106" aria-hidden="true" focusable="false"><defs><radialGradient id="lanternPaper" cx=".5" cy=".78" r=".85"><stop offset="0" style="stop-color: var(--lantern-core)"/><stop offset=".4" style="stop-color: var(--lantern-mid)"/><stop offset="1" style="stop-color: var(--lantern-edge)"/></radialGradient><linearGradient id="lanternShade" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7a3d14" stop-opacity=".3"/><stop offset=".3" stop-color="#7a3d14" stop-opacity="0"/><stop offset=".7" stop-color="#7a3d14" stop-opacity="0"/><stop offset="1" stop-color="#7a3d14" stop-opacity=".36"/></linearGradient><radialGradient id="lanternInner" cx=".5" cy=".8" r=".55"><stop offset="0" stop-color="#fff9e3" stop-opacity=".85"/><stop offset="1" stop-color="#fff2c2" stop-opacity="0"/></radialGradient></defs><path class="lantern-flame" d="M55 92 C50 98 51 103 55 105 C59 103 60 98 55 92 Z"/><path class="lantern-core" d="M55 96 C53 99 53.4 102 55 103 C56.6 102 57 99 55 96 Z"/><path class="lantern-body" d="M30 28 H80 C92 36 102 46 104 58 C100 68 92 76 86 82 H24 C18 76 10 68 6 58 C8 46 18 36 30 28 Z"/><path class="lantern-shade" d="M30 28 H80 C92 36 102 46 104 58 C100 68 92 76 86 82 H24 C18 76 10 68 6 58 C8 46 18 36 30 28 Z"/><path class="lantern-inner" d="M30 28 H80 C92 36 102 46 104 58 C100 68 92 76 86 82 H24 C18 76 10 68 6 58 C8 46 18 36 30 28 Z"/><path class="lantern-lozenge" d="M19 52 L24 60 L19 68 L14 60 Z"/><path class="lantern-lozenge" d="M91 52 L96 60 L91 68 L86 60 Z"/><path class="lantern-line" d="M37 28 C30 44 27 62 30 82 M73 28 C80 44 83 62 80 82"/><path class="lantern-frame" d="M30 28 H80 C92 36 102 46 104 58 C100 68 92 76 86 82 H24 C18 76 10 68 6 58 C8 46 18 36 30 28 Z M33 31 C21 38 13 47 11 58 C15 67 21 74 27 79 H83 C89 74 95 67 99 58 C97 47 89 38 77 31 Z" fill-rule="evenodd"/><path class="lantern-frame" d="M55 1.5 L58.5 6.5 L55 11.5 L51.5 6.5 Z M54 11 H56 V16 H54 Z"/><path class="lantern-frame" d="M37 17 Q55 8 73 17 L80 24 H30 Z M28 24 H82 V29 H28 Z"/><path class="lantern-frame" d="M18 81 H92 V87 H18 Z M22 87 H88 L83 95 H27 Z"/><g aria-hidden="true"><path id="lanternLine0" d="M36 55 Q55 58.5 74 55" fill="none"/><path id="lanternLine1" d="M44 71 Q55 73.5 66 71" fill="none"/><text class="lantern-text" font-size="14.5" text-anchor="middle"><textPath href="#lanternLine0" startOffset="50%">About</textPath></text><text class="lantern-text" font-size="14.5" text-anchor="middle"><textPath href="#lanternLine1" startOffset="50%">me</textPath></text></g></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="desk">
+        <div class="desk-plane">
+          <div class="desk-surface" aria-hidden="true"></div>
+          <p class="desk-title" aria-hidden="true">Featured Work</p>
+          <p class="desk-sub" aria-hidden="true">A few I'm proud of, hand-picked from the cabinet below</p>
+          <p class="desk-hint" aria-hidden="true"><span class="hint-idle">Hover any badge</span><span class="hint-active">Click to see more</span></p>
+          <div class="desk-props" aria-hidden="true">
+            <span class="desk-groove"></span>
+          </div>
+          <div class="desk-items" role="group" aria-label="Featured projects"></div>
+        </div>
+      </div>
+    </section>
+    </div>
+
+
+  <!-- =========================
+       Cabinet
+       ========================= -->
+
+    <section id="cabinet" class="section" aria-labelledby="cabinetTitle">
+      <div class="container">
+        <h2 id="cabinetTitle" class="cabinet-heading">Projects I've Worked On</h2>
+        <!-- cabinet.js builds the drawers from project-data.js. -->
+        <div class="cabinet"></div>
+      </div>
+    </section>
+
+
+  <!-- =========================
+       Magic Circle and Contact
+       ========================= -->
+
+    <section id="contact" class="contact-section">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <aside class="apothecary-note contact-note" aria-label="Contact information">
+            <div class="note-topline">
+              <span>Contact</span>
+              <span>Details</span>
+            </div>
+
+            <div class="contact-note-body contact-note-compact">
+
+              <div class="contact-email-block">
+                <span class="contact-detail-label">Email</span>
+                <div class="contact-email-line">
+
+                  <a class="contact-email-address" href="mailto:xaranjin@gmail.com">xaranjin@gmail.com</a>
+                  <button class="contact-copy-button" type="button" data-copy-email="xaranjin@gmail.com" aria-label="Copy email address" title="Copy email address">
+                    <svg class="copy-symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="1.5" pathLength="1"></rect><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-10A1.5 1.5 0 0 0 3 5.5v10A1.5 1.5 0 0 0 4.5 17H8" pathLength="1"></path></svg>
+                    <svg class="copy-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10" pathLength="1"></path></svg>
+                  </button>
+
+                </div>
+              </div>
+
+              <button class="contact-form-button" type="button" data-open-contact>
+                Contact me <span class="fly-arrow fly-arrow--right" aria-hidden="true"><span>→</span><span>→</span></span>
+              </button>
+
+            </div>
+          </aside>
+        </div>
+
+        <div class="hero-note-wrap">
           <div class="magic-circle-stage" aria-label="Contact links">
             <svg class="magic-circle" viewBox="0 0 360 360" aria-hidden="true" focusable="false">
               <defs>
@@ -215,102 +294,6 @@
             </div>
           </div>
 
-          <aside class="apothecary-note contact-note" aria-label="Contact information">
-            <div class="note-topline">
-              <span>Contact</span>
-              <span>Details</span>
-            </div>
-
-            <div class="contact-note-body contact-note-compact">
-
-              <div class="contact-email-block">
-                <span class="contact-detail-label">Email</span>
-                <div class="contact-email-line">
-
-                  <a class="contact-email-address" href="mailto:xaranjin@gmail.com">xaranjin@gmail.com</a>
-                  <button class="contact-copy-button" type="button" data-copy-email="xaranjin@gmail.com" aria-label="Copy email address" title="Copy email address">
-                    <svg class="copy-symbol" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="1.5"></rect><path d="M16 8V5.5A1.5 1.5 0 0 0 14.5 4h-10A1.5 1.5 0 0 0 3 5.5v10A1.5 1.5 0 0 0 4.5 17H8"></path></svg>
-                    <svg class="copy-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"></path></svg>
-                  </button>
-
-                </div>
-              </div>
-
-              <button class="contact-form-button" type="button" data-open-contact>
-                Contact me <span aria-hidden="true">→</span>
-              </button>
-
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-
-  <!-- =========================
-       Projects
-       ========================= -->
-
-    <section id="projects" class="featured-work section" aria-labelledby="featuredWorkTitle">
-      <div class="featured-gallery">
-        <div class="featured-work-heading">
-          <h2 id="featuredWorkTitle" data-shimmer data-wave="false" data-duration="1">Featured Work</h2>
-          <p class="featured-work-subtitle">A few I'm proud of, hand-picked from the shelf below</p>
-        </div>
-
-        <article class="featured-display">
-          <canvas class="featured-background-canvas" aria-hidden="true"></canvas>
-          <span class="featured-expansion" aria-hidden="true"></span>
-          <div class="featured-list"></div>
-          <div id="featuredDetails" class="featured-display-record" aria-labelledby="featuredProjectTitle" aria-hidden="true" inert>
-            <button class="featured-dialog-close" type="button" aria-label="Close project details">×</button>
-            <p class="eyebrow"></p>
-            <h3 id="featuredProjectTitle"></h3>
-            <p class="featured-description"></p>
-            <a class="featured-display-link" href="#">Explore project <span class="fly-arrow" aria-hidden="true"><span>↗</span><span>↗</span></span></a>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="bookshelf" class="section projects-section">
-      <div class="projects-cabinet">
-        <div class="bookshelf-stage">
-          <div class="bookshelf" aria-label="Project bookshelf">
-            <div class="bookshelf-sign">
-              <div class="bookshelf-sign-board"><h2>Projects I've Worked On</h2></div>
-              <img class="shelf-sprite shelf-sprite--cat" src="assets/shelf/cat.svg" alt="" aria-hidden="true">
-            </div>
-            <div class="shelf-potions" aria-hidden="true">
-              <div class="potion-fixture potion-top-left">
-                <span class="potion-bracket potion-bracket-short"></span>
-                <img class="potion-bottle potion-round" src="assets/shelf/bottle-teal.svg" alt="">
-              </div>
-
-              <div class="potion-fixture potion-upper-right">
-                <span class="potion-vial-bracket"></span>
-                <img class="potion-bottle potion-vial" src="assets/shelf/bottle-lilac.svg" alt="">
-              </div>
-
-              <div class="potion-fixture potion-mid-left">
-                <span class="potion-ledge"></span>
-                <img class="potion-bottle potion-pear" src="assets/shelf/bottle-amber.svg" alt="">
-              </div>
-
-              <div class="potion-fixture potion-mid-right">
-                <span class="potion-flask-stand"></span>
-                <img class="potion-bottle potion-flask" src="assets/shelf/bottle-blue.svg" alt="">
-              </div>
-
-              <div class="potion-fixture potion-lower-left">
-                <span class="potion-cage"></span>
-                <img class="potion-bottle potion-tube" src="assets/shelf/bottle-ruby.svg" alt="">
-              </div>
-            </div>
-
-            <!-- Project books are generated from the shared project data. -->
-            <div id="projectSlider" class="project-library" aria-live="polite"></div>
-          </div>
         </div>
       </div>
     </section>
@@ -356,11 +339,6 @@
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"></path></svg>
       </button>
 
-      <div class="note-topline">
-        <span>Message</span>
-        <span>Contact</span>
-      </div>
-
       <div class="contact-dialog-heading">
         <p class="eyebrow">Get in touch</p>
         <h2 id="contactDialogTitle">Contact me</h2>
@@ -371,20 +349,24 @@
         class="contact-form"
         action="https://formspree.io/f/mljgjpdq"
         method="POST"
+        novalidate
       >
         <label class="contact-field">
           <span>Name</span>
-          <input id="contactName" name="name" type="text" autocomplete="name" required>
+          <input id="contactName" name="name" type="text" autocomplete="name" required aria-describedby="contactNameError">
+          <small id="contactNameError" class="contact-error" hidden></small>
         </label>
 
         <label class="contact-field">
           <span>Email</span>
-          <input name="email" type="email" autocomplete="email" required>
+          <input name="email" type="email" autocomplete="email" required aria-describedby="contactEmailError">
+          <small id="contactEmailError" class="contact-error" hidden></small>
         </label>
 
         <label class="contact-field">
           <span>Message</span>
-          <textarea name="message" rows="5" required></textarea>
+          <textarea name="message" rows="5" required aria-describedby="contactMessageError"></textarea>
+          <small id="contactMessageError" class="contact-error" hidden></small>
         </label>
 
         <p
@@ -399,22 +381,7 @@
 
         <button class="primary-button contact-submit" type="submit">Send message</button>
       </form>
-    </div>
-  </div>
 
-
-  <!-- =========================
-       Project Preview Overlay
-       ========================= -->
-
-  <div id="projectOverlay" class="project-overlay" aria-hidden="true">
-    <div id="projectPopup" class="project-popup" role="dialog" aria-modal="true" aria-label="Opening project">
-      <div id="popupInner" class="popup-inner">
-        <!-- Book Page -->
-        <div class="popup-face popup-back">
-          <!-- Book Page Preview -->
-        </div>
-      </div>
     </div>
   </div>
 
@@ -425,11 +392,10 @@
 
   <!-- Project data/renderer loads before the shared interaction script. -->
   <script src="project-data.js"></script>
-  <script src="shelf.js"></script>
-  <script src="crystal-ball.js"></script>
-  <script src="featured.js"></script>
-  <script src="project-preview.js"></script>
   <script src="script.js"></script>
   <script src="contact.js"></script>
+  <script src="cabinet.js"></script>
+  <script src="lantern.js"></script>
+  <script src="desk.js"></script>
 </body>
 </html>

@@ -1,0 +1,207 @@
+/* =========================
+   Sky Colours
+   ========================= */
+
+/* Shared by the Home and About pages. */
+:root {
+  --sky-top: #7fb0e6;
+  --sky-bottom: #e3eefa;
+  --cloud: rgba(255, 255, 255, .95);
+  --cloud-soft: rgba(255, 255, 255, .55);
+}
+
+[data-theme="dark"] {
+  --sky-top: #070c1c;
+  --sky-bottom: #1b2a4a;
+  --cloud: rgba(120, 140, 190, .5);
+  --cloud-soft: rgba(120, 140, 190, .22);
+}
+
+
+/* =========================
+   Sky
+   ========================= */
+
+.hero-sky {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, var(--sky-top), var(--sky-bottom));
+}
+
+/* Clouds are soft radial blobs, so no blur filter is needed. They lift gently as you scroll. */
+.sky-cloud {
+  position: absolute;
+  width: var(--cloud-width);
+  height: calc(var(--cloud-width) * .38);
+  background:
+    radial-gradient(ellipse 26% 40% at 28% 58%, var(--cloud) 0%, transparent 100%),
+    radial-gradient(ellipse 26% 40% at 52% 42%, var(--cloud) 0%, transparent 100%),
+    radial-gradient(ellipse 24% 40% at 74% 58%, var(--cloud) 0%, transparent 100%),
+    radial-gradient(ellipse 48% 44% at 50% 55%, var(--cloud-soft) 0%, transparent 100%);
+  translate: 0 calc(var(--hero-scroll, 0) * var(--depth) * -2vh);
+  animation: sky-drift 70s ease-in-out infinite alternate;
+}
+
+.sky-cloud-1 { --cloud-width: 56vw; --depth: 10; top: 3%; right: -8vw; }
+.sky-cloud-2 { --cloud-width: 46vw; --depth: 16; top: 30%; left: -10vw; animation-duration: 90s; animation-delay: -30s; }
+.sky-cloud-3 { --cloud-width: 40vw; --depth: 22; top: 12%; left: 30vw; animation-duration: 100s; animation-delay: -10s; opacity: .7; }
+.sky-cloud-4 { --cloud-width: 50vw; --depth: 14; top: 38%; right: -4vw; animation-duration: 80s; animation-delay: -50s; opacity: .8; }
+
+@keyframes sky-drift {
+  from { transform: translateX(-4vw); }
+  to { transform: translateX(5vw); }
+}
+
+/* Stars only appear at night. */
+.sky-stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background-image:
+    radial-gradient(1.2px 1.2px at 40px 60px, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 180px 130px, rgba(255, 255, 255, .8) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 290px 40px, #fff 50%, transparent 100%),
+    radial-gradient(1px 1px at 110px 220px, rgba(255, 255, 255, .7) 50%, transparent 100%),
+    radial-gradient(1.2px 1.2px at 340px 250px, rgba(255, 255, 255, .9) 50%, transparent 100%);
+  background-size: 380px 300px;
+}
+
+[data-theme="dark"] .sky-stars { opacity: .85; }
+
+@media (prefers-reduced-motion: reduce) {
+  .sky-cloud { animation: none; }
+}
+
+
+/* =========================
+   Sky Lantern
+   ========================= */
+
+/* A paper sky lantern drifts under the brief. It links to the About page, and flies off across the sky when clicked. */
+.hero-lantern {
+  --lantern-accent: var(--accent, var(--plum));
+  --lantern-size: clamp(96px, 17vh, 150px);
+  /* It shrinks as the desk tips up, to keep clear of it. */
+  --lantern-h: calc(var(--lantern-size) * (1 - var(--hero-scroll, 0) * .42));
+  /* The frame stays plum in both themes. */
+  --lantern-frame: color-mix(in srgb, #7a4855 52%, #1b0e13);
+  --lantern-core: #fff7dc;
+  --lantern-mid: #ffe2a0;
+  --lantern-edge: #f0b45a;
+  position: relative;
+  display: block;
+  width: calc(var(--lantern-h) * 1.04);
+  height: var(--lantern-h);
+  margin: clamp(8px, 1.8vh, 18px) 0 0 auto;
+  animation: lantern-bob 5.6s ease-in-out infinite alternate;
+  transition: filter 300ms ease;
+}
+
+[data-theme="dark"] .hero-lantern {
+  --lantern-core: #fff0bd;
+  --lantern-mid: #ffd270;
+  --lantern-edge: #ee9f3f;
+}
+
+.lantern-glow {
+  position: absolute;
+  inset: -30% -55% -35%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 206, 132, .5) 0%,
+    rgba(255, 194, 112, .3) 28%,
+    rgba(255, 184, 100, .13) 56%,
+    rgba(255, 176, 96, .04) 80%,
+    transparent 100%
+  );
+  filter: blur(10px);
+  opacity: .55;
+  animation: lantern-glow 3.4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+[data-theme="dark"] .lantern-glow { opacity: 1; }
+
+.lantern-art {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 6px rgba(255, 190, 100, .55)) drop-shadow(0 0 18px rgba(255, 170, 80, .3));
+}
+
+.lantern-inner { fill: url(#lanternInner); }
+.lantern-body { fill: url(#lanternPaper); }
+.lantern-shade { fill: url(#lanternShade); }
+.lantern-core { fill: #fff3c0; }
+
+/* A dark carved frame holds the glowing panels. */
+.lantern-frame { fill: var(--lantern-frame); }
+.lantern-line { fill: none; stroke: var(--lantern-frame); stroke-linecap: round; stroke-width: 1.6; }
+.lantern-lozenge { fill: var(--lantern-frame); fill-opacity: .28; }
+
+.lantern-flame {
+  fill: #ffb45c;
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  animation: lantern-flame 900ms ease-in-out infinite alternate;
+}
+
+/* The words are painted on the paper, curving round the lantern like its ribs. */
+.lantern-text {
+  fill: #8a3f2f;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  letter-spacing: .02em;
+  opacity: .88;
+  mix-blend-mode: multiply;
+}
+
+.hero-lantern:is(:hover, :focus-visible) {
+  filter: drop-shadow(0 0 14px rgba(255, 200, 120, .8));
+}
+
+.hero-lantern:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 10px;
+  border-radius: 16px;
+}
+
+/* Embers left behind while it flies. */
+.lantern-ember {
+  position: fixed;
+  z-index: 199;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* On the About page the lantern rests in the sky at its full size, as a way back. */
+.about-lantern { margin: 0; }
+
+.hero-lantern.is-flying {
+  animation: none;
+  pointer-events: none;
+}
+
+@keyframes lantern-bob {
+  from { transform: translateY(0) rotate(-1.5deg); }
+  to { transform: translateY(-7px) rotate(1.5deg); }
+}
+
+@keyframes lantern-glow {
+  from { transform: scale(.94); }
+  to { transform: scale(1.08); }
+}
+
+@keyframes lantern-flame {
+  from { transform: scale(.85, .92); }
+  to { transform: scale(1.1, 1.1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-lantern,
+  .lantern-glow,
+  .lantern-flame { animation: none; }
+}

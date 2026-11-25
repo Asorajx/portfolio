@@ -6,45 +6,13 @@ const projectDetails = window.portfolioProjects
 
 
 /* =========================
-   Project Collection
+   Project Content
    ========================= */
 
-;(function setupProjectCollection() {
-  const switcher = document.querySelector('.project-switcher')
+;(function setupProjectContent() {
   const content = document.getElementById('projectContent')
 
-  if (!switcher || !content || !projectDetails.length) return
-
-  /* Build the collection from the same data used by the bookshelf. */
-  const tabs = projectDetails.map((project, index) => {
-    const tab = document.createElement('button')
-    tab.type = 'button'
-    tab.className = `project-switcher-card project-switcher-card--${index % 8 + 1}`
-    tab.classList.toggle('is-featured', !!project.featured)
-    tab.setAttribute('role', 'tab')
-    tab.setAttribute('aria-selected', 'false')
-    tab.setAttribute('aria-controls', 'projectContent')
-    tab.tabIndex = -1
-    tab.dataset.projectTab = project.id
-
-    const number = document.createElement('span')
-    number.className = 'project-switcher-number'
-    number.textContent = String(index + 1).padStart(2, '0')
-    const title = document.createElement('strong')
-    title.className = 'project-switcher-title'
-    title.textContent = project.shortTitle || project.title
-    if (project.featured) {
-      const star = document.createElement('span')
-      star.className = 'project-switcher-featured'
-      star.setAttribute('aria-hidden', 'true')
-      star.textContent = '✦'
-      title.append(' ', star)
-    }
-    tab.append(number, title)
-    return tab
-  })
-  window.stackProjectTabs(tabs, projectDetails)
-  switcher.replaceChildren(...tabs)
+  if (!content || !projectDetails.length) return
 
   const fields = {
     type: document.getElementById('projectType'),
@@ -65,16 +33,6 @@ const projectDetails = window.portfolioProjects
   }
 
   let switchTimer
-
-  /* Only the selected tab belongs in the normal keyboard tab order. */
-  function updateTabSelection(projectId) {
-    tabs.forEach(tab => {
-      const selected = tab.dataset.projectTab === projectId
-      tab.classList.toggle('is-active', selected)
-      tab.setAttribute('aria-selected', String(selected))
-      tab.tabIndex = selected ? 0 : -1
-    })
-  }
 
   /* Find the requested project, or fall back to the first one. */
   function getProject(projectId) {
@@ -108,8 +66,8 @@ const projectDetails = window.portfolioProjects
     controls.className = 'project-demo-controls'
     controls.innerHTML = `
       <span class="project-demo-count" aria-live="polite"></span>
-      <button class="project-demo-arrow project-demo-arrow--previous" type="button" aria-label="Previous preview"><span aria-hidden="true">‹</span><span aria-hidden="true">‹</span></button>
-      <button class="project-demo-arrow project-demo-arrow--next" type="button" aria-label="Next preview"><span aria-hidden="true">›</span><span aria-hidden="true">›</span></button>
+      <button class="project-demo-arrow project-demo-arrow--previous" type="button" aria-label="Previous preview"><span class="arrow-mark" aria-hidden="true"></span></button>
+      <button class="project-demo-arrow project-demo-arrow--next" type="button" aria-label="Next preview"><span class="arrow-mark" aria-hidden="true"></span></button>
       <div class="project-demo-dots"></div>
     `
     const [previous, next] = controls.querySelectorAll('.project-demo-arrow')
@@ -265,8 +223,6 @@ const projectDetails = window.portfolioProjects
       /* Optional Sections */
       window.syncProjectSections(content, project)
 
-      updateTabSelection(project.id)
-
       document.title = `${project.shortTitle} | Jun Xiang`
 
       const metaDescription = document.querySelector('meta[name="description"]')
@@ -282,32 +238,6 @@ const projectDetails = window.portfolioProjects
     }, 110)
   }
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      showProject(tab.dataset.projectTab)
-    })
-
-    /* Arrow keys cycle through books; Home and End reach either end. */
-    tab.addEventListener('keydown', event => {
-      const keys = ['ArrowLeft', 'ArrowRight', 'Home', 'End']
-      if (!keys.includes(event.key)) return
-
-      event.preventDefault()
-      const currentIndex = tabs.indexOf(tab)
-      let nextIndex = currentIndex
-
-      if (event.key === 'Home') nextIndex = 0
-      if (event.key === 'End') nextIndex = tabs.length - 1
-      if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length
-      if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length
-
-      const nextTab = tabs[nextIndex]
-      nextTab.focus()
-      updateTabSelection(nextTab.dataset.projectTab)
-      showProject(nextTab.dataset.projectTab)
-    })
-  })
-
   /* Only project IDs should change the selected project. */
   window.addEventListener('hashchange', () => {
     const projectId = window.location.hash.slice(1)
@@ -316,12 +246,22 @@ const projectDetails = window.portfolioProjects
     }
   })
 
-  /* Scroll without changing the project URL or triggering the tab switcher. */
-  document.getElementById('projectBackToTop')?.addEventListener('click', event => {
-    event.preventDefault()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  })
-
-  updateTabSelection(getProject(window.location.hash.slice(1)).id)
   showProject(window.location.hash.slice(1), !window.location.hash)
+})()
+
+
+/* =========================
+   Opened From the Cabinet
+   ========================= */
+
+/* Inside the cabinet's frame, the bottom buttons scroll to the top or put the project back. */
+;(function setupEmbeddedButtons() {
+  if (document.documentElement.dataset.embed !== '1') return
+
+  const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+
+  document.getElementById('embedTop')?.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: motion.matches ? 'auto' : 'smooth' })
+  })
+  document.getElementById('embedReturn')?.addEventListener('click', () => window.parent.DrawerCabinet?.close())
 })()
